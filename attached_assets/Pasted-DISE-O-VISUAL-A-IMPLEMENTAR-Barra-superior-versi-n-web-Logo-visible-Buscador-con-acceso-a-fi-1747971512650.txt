@@ -1,0 +1,73 @@
+DISEÑO VISUAL A IMPLEMENTAR:
+🔝 Barra superior (versión web):
+Logo visible
+
+Buscador con acceso a filtro avanzado (como ventana flotante)
+
+Íconos: Home, Explorador, Contratación en tiempo real, Blog, Favoritos, Notificaciones, Chat, Perfil
+
+🧱 Distribución principal de columnas (tipo LinkedIn):
+Izquierda (angosta):
+
+Mini perfil (foto, nombre, tipo de cuenta)
+
+Accesos rápidos: Elementos guardados, Grupos, Suscripciones, Eventos
+
+Centro (ancha):
+
+Sección de "Crear publicación" como en LinkedIn:
+
+No debe ser un botón. Usa una caja que invite a escribir con la frase “¿Qué quieres compartir hoy?”
+
+Íconos/botones: 📸 Foto/Video, 🎉 Evento, 🌟 Recomendación, 📝 Blog, ✏️ Post
+
+Cada opción abre un mini formulario o redirige a una vista de publicación.
+
+Las opciones visibles deben adaptarse al tipo de usuario (Artista, Empresa, Persona).
+
+Contenido reciente de favoritos (artistas, empresas, blog)
+
+Últimas entradas del blog con botón "Ver más"
+
+Derecha (angosta):
+
+Artistas sugeridos
+
+Eventos sugeridos
+
+Sitios destacados
+
+Banner rotativo con anuncios culturales
+
+📱 Diseño móvil:
+Barra inferior con íconos: Home, Explorador, Tiempo Real, Favoritos, Perfil
+
+Banner inicial con 3 slides (desaparece al hacer scroll)
+
+Secciones verticales (con carruseles horizontales): artistas, eventos, sitios, blog, publicaciones recientes
+
+⚡ Contratación en Tiempo Real:
+Web: Ventana emergente con buscador, chat y contraofertas
+
+Móvil: estilo InDriver (simple ➜ buscar ➜ ofrecer ➜ negociar)
+
+🧭 Explorador:
+Título grande: "Buscart: [Artistas | Eventos | Sitios | Recomendaciones]"
+
+Tarjetas deslizables (clic en web, swipe en móvil)
+
+Cada tarjeta con imagen, descripción, botones de acción, favoritos (con función de comparación)
+
+Filtro avanzado como ventana flotante
+
+👤 Perfil:
+Estilo Instagram
+
+Feed, calendario, servicios, eventos, ofertas, fans, blog
+
+🔐 Inicio de sesión / Registro:
+Web: Dos columnas (izquierda imagen artística / derecha formulario)
+
+Móvil: Centrado, limpio, campos grandes
+
+Registro con selector de tipo de usuario y formulario dinámico

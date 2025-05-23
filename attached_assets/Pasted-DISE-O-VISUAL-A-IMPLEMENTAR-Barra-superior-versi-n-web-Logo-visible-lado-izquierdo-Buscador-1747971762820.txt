@@ -1,0 +1,107 @@
+DISEÑO VISUAL A IMPLEMENTAR:
+🔝 Barra superior (versión web):
+Logo visible (lado izquierdo)
+Buscador caja (lado izquierdo )
+Íconos: Home, Explorador, Contratación en tiempo real, Blog, Favoritos, Notificaciones, Chat, Perfil (todo alado derecho)
+
+
+🧱 Distribución principal de columnas (tipo LinkedIn) para el HOME:
+Izquierda (angosta):
+
+
+Mini perfil (foto, nombre, tipo de cuenta)
+
+
+Accesos rápidos: Elementos guardados, Grupos, Suscripciones, Eventos
+
+
+Centro (ancha):
+
+
+Iimplementa una sección inicial fija en el área central de contenido, al estilo de LinkedIn.
+Esta sección debe mostrar un cuadro editable con la frase “¿Qué quieres compartir hoy?” y botones íconicos debajo que permitan elegir entre distintos tipos de publicación:
+Foto/Video
+
+
+Evento
+
+
+Entrada de Blog
+
+
+Recomendación
+
+
+Post escrito
+
+
+La funcionalidad debe adaptarse según el tipo de usuario:
+DESPUES DE ESTO:
+
+
+Contenido reciente de favoritos (artistas, empresas, blog)
+
+
+Últimas entradas del blog con botón "Ver más"
+
+
+Derecha (angosta):
+
+
+Artistas sugeridos
+
+
+Eventos sugeridos
+
+
+Sitios destacados
+
+
+Banner rotativo con anuncios culturales
+
+
+📱 Diseño móvil:
+Barra inferior con íconos: Home, Explorador, Tiempo Real, Favoritos, Perfil
+
+
+Banner inicial con 3 slides (desaparece al hacer scroll)
+
+
+Secciones verticales (con carruseles horizontales): artistas, eventos, sitios, blog, publicaciones recientes
+
+
+⚡ Contratación en Tiempo Real:
+Web: Ventana emergente con buscador, chat y contraofertas
+
+
+Móvil: estilo InDriver (simple ➜ buscar ➜ ofrecer ➜ negociar)
+
+
+🧭 Explorador:
+Título grande: "Buscart: [Artistas | Eventos | Sitios | Recomendaciones]"
+
+
+Tarjetas deslizables (clic en web, swipe en móvil)
+
+
+Cada tarjeta con imagen, descripción, botones de acción, favoritos (con función de comparación)
+
+
+Filtro avanzado como ventana flotante
+
+
+👤 Perfil:
+Estilo Instagram
+
+
+Feed, calendario, servicios, eventos, ofertas, fans, blog
+
+
+🔐 Inicio de sesión / Registro:
+Web: Dos columnas (izquierda imagen artística / derecha formulario)
+
+
+Móvil: Centrado, limpio, campos grandes
+
+
+Registro con selector de tipo de usuario y formulario dinámico
