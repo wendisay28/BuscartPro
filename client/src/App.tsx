@@ -12,6 +12,7 @@ import Landing from "@/pages/auth/landing";
 import Home from "@/pages/dashboard/home";
 
 // Explorer pages
+import Explorer from "@/pages/explorer";
 import ExploreArtists from "@/pages/explorer/artists";
 import ExploreEvents from "@/pages/explorer/events";
 import ExploreVenues from "@/pages/explorer/venues";
@@ -42,7 +43,7 @@ function Router() {
           <Route path="/" component={Home} />
           
           {/* Explorer routes */}
-          <Route path="/explorer" component={ExploreArtists} />
+          <Route path="/explorer" component={Explorer} />
           <Route path="/explorer/artists" component={ExploreArtists} />
           <Route path="/explorer/events" component={ExploreEvents} />
           <Route path="/explorer/venues" component={ExploreVenues} />
