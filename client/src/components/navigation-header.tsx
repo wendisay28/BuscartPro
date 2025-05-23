@@ -374,18 +374,9 @@ export default function NavigationHeader() {
                     <DropdownMenuContent align="end" className="w-80">
                       <div className="p-2">
                         <h4 className="font-semibold text-sm mb-2">Notificaciones</h4>
-                        {notifications && notifications.length > 0 ? (
-                          notifications.slice(0, 5).map((notification: any) => (
-                            <div key={notification.id} className="p-2 hover:bg-gray-50 rounded-md cursor-pointer">
-                              <p className="text-sm">{notification.message}</p>
-                              <p className="text-xs text-gray-500">{notification.createdAt}</p>
-                            </div>
-                          ))
-                        ) : (
-                          <p className="text-sm text-gray-500 text-center py-4">
-                            No hay notificaciones nuevas
-                          </p>
-                        )}
+                        <p className="text-sm text-gray-500 text-center py-4">
+                          No hay notificaciones nuevas
+                        </p>
                       </div>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -436,9 +427,9 @@ export default function NavigationHeader() {
               }`}
             >
               <Avatar className="h-5 w-5">
-                <AvatarImage src={user?.profileImageUrl} alt={`${user?.firstName} ${user?.lastName}`} />
+                <AvatarImage src="" alt="Usuario" />
                 <AvatarFallback className="text-xs">
-                  {getInitials(user?.firstName, user?.lastName)}
+                  U
                 </AvatarFallback>
               </Avatar>
               <span className="text-xs font-medium">Perfil</span>
@@ -447,16 +438,7 @@ export default function NavigationHeader() {
         </div>
       )}
 
-      {/* Add padding to body when mobile bottom nav is present */}
-      {isAuthenticated && (
-        <style jsx global>{`
-          @media (max-width: 768px) {
-            body {
-              padding-bottom: 4rem;
-            }
-          }
-        `}</style>
-      )}
+
     </>
   );
 }
