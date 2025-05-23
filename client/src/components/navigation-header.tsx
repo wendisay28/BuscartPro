@@ -55,7 +55,6 @@ export default function NavigationHeader() {
     { href: "/", label: "Home", icon: Home },
     { href: "/explorer", label: "Explorador", icon: Compass },
     { href: "/hiring/realtime", label: "Tiempo Real", icon: Zap },
-    { href: "/community/blog", label: "Blog", icon: BookOpen },
     { href: "/user/favorites", label: "Favoritos", icon: Heart },
   ];
 
@@ -114,15 +113,15 @@ export default function NavigationHeader() {
           </div>
 
           {/* Right Side Actions */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             {isAuthenticated ? (
               <>
                 {/* Favorites */}
                 <Button variant="ghost" size="sm" asChild className="relative">
                   <Link href="/user/favorites">
-                    <Heart className="h-5 w-5" />
+                    <Heart className="h-4 w-4" />
                     {favoritesCount > 0 && (
-                      <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                      <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-xs">
                         {favoritesCount}
                       </Badge>
                     )}
@@ -133,9 +132,9 @@ export default function NavigationHeader() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="sm" className="relative">
-                      <Bell className="h-5 w-5" />
+                      <Bell className="h-4 w-4" />
                       {notificationCount > 0 && (
-                        <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                        <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-xs">
                           {notificationCount}
                         </Badge>
                       )}
@@ -163,7 +162,7 @@ export default function NavigationHeader() {
                 {/* Messages */}
                 <Button variant="ghost" size="sm" asChild>
                   <Link href="/messages">
-                    <MessageCircle className="h-5 w-5" />
+                    <MessageCircle className="h-4 w-4" />
                   </Link>
                 </Button>
 
