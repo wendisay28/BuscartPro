@@ -1,314 +1,444 @@
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import NavigationHeader from "@/components/navigation-header";
-import FavoritesComparison from "@/components/favorites-comparison";
-import ArtistCard from "@/components/artist-card";
-import EventCard from "@/components/event-card";
-import VenueCard from "@/components/venue-card";
-import BlogCard from "@/components/blog-card";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Heart, Calendar, MapPin, BookOpen, Users, Trash2 } from "lucide-react";
-import { apiRequest } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { 
+  Heart, 
+  Star, 
+  MapPin, 
+  DollarSign,
+  Calendar,
+  Users,
+  Building,
+  Music,
+  Camera,
+  Palette,
+  Mic,
+  X,
+  ArrowRight,
+  Eye,
+  MessageCircle,
+  Share2,
+  Compare,
+  Filter
+} from "lucide-react";
 
 export default function Favorites() {
-  const [activeTab, setActiveTab] = useState<'comparison' | 'artists' | 'events' | 'venues' | 'blog'>('comparison');
-  const queryClient = useQueryClient();
-  const { toast } = useToast();
+  const { user } = useAuth();
+  const isMobile = useIsMobile();
+  const [activeTab, setActiveTab] = useState("artists");
+  const [selectedForComparison, setSelectedForComparison] = useState<number[]>([]);
+  const [showComparison, setShowComparison] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
-  const { data: favorites, isLoading } = useQuery({
-    queryKey: ["/api/favorites"],
-  });
-
-  const { data: favoriteArtists } = useQuery({
-    queryKey: ["/api/favorites", { targetType: 'artist' }],
-  });
-
-  const { data: favoriteEvents } = useQuery({
-    queryKey: ["/api/favorites", { targetType: 'event' }],
-  });
-
-  const { data: favoriteVenues } = useQuery({
-    queryKey: ["/api/favorites", { targetType: 'venue' }],
-  });
-
-  const { data: favoriteBlogPosts } = useQuery({
-    queryKey: ["/api/favorites", { targetType: 'blog_post' }],
-  });
-
-  const removeFavoriteMutation = useMutation({
-    mutationFn: async ({ targetType, targetId }: { targetType: string; targetId: number }) => {
-      await apiRequest('DELETE', `/api/favorites/${targetType}/${targetId}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/favorites"] });
-      toast({
-        title: "Favorito eliminado",
-        description: "El elemento ha sido removido de tus favoritos.",
-      });
-    },
-    onError: () => {
-      toast({
-        title: "Error",
-        description: "No se pudo eliminar el favorito. Inténtalo de nuevo.",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const handleRemoveFavorite = (targetType: string, targetId: number) => {
-    removeFavoriteMutation.mutate({ targetType, targetId });
+  // Datos de favoritos realistas
+  const favoriteData = {
+    artists: [
+      {
+        id: 1, name: "María Elena Vásquez", category: "Música", type: "Cantante Folk", 
+        city: "Madrid", rating: 4.8, price: 350, fans: 234,
+        image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop",
+        description: "Especialista en música folk con 10 años de experiencia",
+        availability: "Disponible", verified: true
+      },
+      {
+        id: 2, name: "Carlos Mendoza", category: "Danza", type: "Bailarín Flamenco",
+        city: "Sevilla", rating: 4.9, price: 420, fans: 512,
+        image: "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?w=400&h=300&fit=crop",
+        description: "Maestro de flamenco tradicional y contemporáneo",
+        availability: "Disponible", verified: true
+      },
+      {
+        id: 3, name: "Ana Lucía Torres", category: "Teatro", type: "Actriz Dramática",
+        city: "Barcelona", rating: 4.7, price: 280, fans: 189,
+        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
+        description: "Actriz con formación en teatro clásico y experimental",
+        availability: "Ocupada", verified: true
+      },
+      {
+        id: 4, name: "Diego Martín", category: "Música", type: "Saxofonista Jazz",
+        city: "Valencia", rating: 4.6, price: 300, fans: 310,
+        image: "https://images.unsplash.com/photo-1471478331149-c72f17e33c73?w=400&h=300&fit=crop",
+        description: "Saxofonista profesional especializado en jazz contemporáneo",
+        availability: "Disponible", verified: true
+      }
+    ],
+    events: [
+      {
+        id: 1, title: "Festival de Jazz Barcelona", category: "Música", 
+        date: "2024-06-15", city: "Barcelona", price: 45, attendees: 2500,
+        image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop",
+        description: "El festival de jazz más importante del mediterráneo"
+      },
+      {
+        id: 2, title: "Noche de Flamenco", category: "Danza",
+        date: "2024-05-28", city: "Madrid", price: 35, attendees: 300,
+        image: "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?w=400&h=300&fit=crop",
+        description: "Una noche mágica con los mejores bailaores"
+      }
+    ],
+    venues: [
+      {
+        id: 1, name: "Centro Cultural Recoletos", type: "Galería", 
+        city: "Madrid", rating: 4.5, capacity: 200,
+        image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop",
+        description: "Espacio cultural multidisciplinar en el corazón de Madrid"
+      }
+    ]
   };
 
-  const getCounts = () => {
-    const artistCount = favoriteArtists?.length || 0;
-    const eventCount = favoriteEvents?.length || 0;
-    const venueCount = favoriteVenues?.length || 0;
-    const blogCount = favoriteBlogPosts?.length || 0;
-    
-    return { artistCount, eventCount, venueCount, blogCount };
+  const currentData = favoriteData[activeTab as keyof typeof favoriteData];
+
+  const handleCompareToggle = (id: number) => {
+    setSelectedForComparison(prev => 
+      prev.includes(id) 
+        ? prev.filter(item => item !== id)
+        : prev.length < 3 ? [...prev, id] : prev
+    );
   };
 
-  const { artistCount, eventCount, venueCount, blogCount } = getCounts();
+  const getComparisonData = () => {
+    if (activeTab !== 'artists') return [];
+    return favoriteData.artists.filter(artist => selectedForComparison.includes(artist.id));
+  };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-warm-gray">
-        <NavigationHeader />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="animate-pulse space-y-6">
-            <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-80 bg-gray-200 rounded-xl"></div>
-              ))}
+  const renderArtistCard = (artist: any) => (
+    <Card key={artist.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+      <div className="relative">
+        <img
+          src={artist.image}
+          alt={artist.name}
+          className="w-full h-48 object-cover"
+        />
+        <div className="absolute top-3 right-3 flex gap-2">
+          {artist.verified && (
+            <Badge className="bg-blue-600 text-white">
+              Verificado
+            </Badge>
+          )}
+          <Badge className={`${
+            artist.availability === 'Disponible' 
+              ? 'bg-green-600 text-white' 
+              : 'bg-red-600 text-white'
+          }`}>
+            {artist.availability}
+          </Badge>
+        </div>
+        <Button
+          size="icon"
+          variant="ghost"
+          className="absolute top-3 left-3 bg-white/80 hover:bg-white"
+          onClick={() => {/* Remove from favorites */}}
+        >
+          <Heart className="w-4 h-4 text-red-500 fill-current" />
+        </Button>
+      </div>
+      
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between mb-3">
+          <div>
+            <h3 className="font-semibold text-gray-900">{artist.name}</h3>
+            <p className="text-sm text-gray-600">{artist.type}</p>
+          </div>
+          <div className="text-right">
+            <div className="flex items-center gap-1 text-orange-500">
+              <Star className="w-4 h-4 fill-current" />
+              <span className="text-sm font-medium">{artist.rating}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+          <div className="flex items-center gap-1">
+            <MapPin className="w-3 h-3" />
+            <span>{artist.city}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Users className="w-3 h-3" />
+            <span>{artist.fans} fans</span>
+          </div>
+        </div>
+
+        <p className="text-sm text-gray-700 mb-4 line-clamp-2">{artist.description}</p>
+
+        <div className="flex items-center justify-between">
+          <div className="text-lg font-bold text-orange-600">
+            €{artist.price}/hora
+          </div>
+          <div className="flex gap-2">
+            {activeTab === 'artists' && (
+              <Checkbox
+                checked={selectedForComparison.includes(artist.id)}
+                onCheckedChange={() => handleCompareToggle(artist.id)}
+                disabled={!selectedForComparison.includes(artist.id) && selectedForComparison.length >= 3}
+              />
+            )}
+            <Button size="sm" className="bg-orange-500 hover:bg-orange-600">
+              <MessageCircle className="w-3 h-3 mr-1" />
+              Contactar
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  const renderEventCard = (event: any) => (
+    <Card key={event.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+      <div className="relative">
+        <img
+          src={event.image}
+          alt={event.title}
+          className="w-full h-48 object-cover"
+        />
+        <Button
+          size="icon"
+          variant="ghost"
+          className="absolute top-3 left-3 bg-white/80 hover:bg-white"
+        >
+          <Heart className="w-4 h-4 text-red-500 fill-current" />
+        </Button>
+      </div>
+      
+      <CardContent className="p-4">
+        <h3 className="font-semibold text-gray-900 mb-2">{event.title}</h3>
+        <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+          <div className="flex items-center gap-1">
+            <Calendar className="w-3 h-3" />
+            <span>{event.date}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <MapPin className="w-3 h-3" />
+            <span>{event.city}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Users className="w-3 h-3" />
+            <span>{event.attendees}</span>
+          </div>
+        </div>
+        <p className="text-sm text-gray-700 mb-4 line-clamp-2">{event.description}</p>
+        <div className="flex items-center justify-between">
+          <div className="text-lg font-bold text-orange-600">
+            €{event.price}
+          </div>
+          <Button size="sm" className="bg-orange-500 hover:bg-orange-600">
+            Ver Detalles
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  const renderVenueCard = (venue: any) => (
+    <Card key={venue.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+      <div className="relative">
+        <img
+          src={venue.image}
+          alt={venue.name}
+          className="w-full h-48 object-cover"
+        />
+        <Button
+          size="icon"
+          variant="ghost"
+          className="absolute top-3 left-3 bg-white/80 hover:bg-white"
+        >
+          <Heart className="w-4 h-4 text-red-500 fill-current" />
+        </Button>
+      </div>
+      
+      <CardContent className="p-4">
+        <h3 className="font-semibold text-gray-900 mb-2">{venue.name}</h3>
+        <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+          <div className="flex items-center gap-1">
+            <Building className="w-3 h-3" />
+            <span>{venue.type}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <MapPin className="w-3 h-3" />
+            <span>{venue.city}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Users className="w-3 h-3" />
+            <span>{venue.capacity} personas</span>
+          </div>
+        </div>
+        <p className="text-sm text-gray-700 mb-4 line-clamp-2">{venue.description}</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1 text-orange-500">
+            <Star className="w-4 h-4 fill-current" />
+            <span className="text-sm font-medium">{venue.rating}</span>
+          </div>
+          <Button size="sm" className="bg-orange-500 hover:bg-orange-600">
+            Ver Disponibilidad
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  return (
+    <div className={`min-h-screen bg-gradient-to-br from-orange-50 to-gray-100 ${isMobile ? 'pb-20' : ''}`}>
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b border-orange-100">
+        <div className="max-w-6xl mx-auto px-4 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Mis Favoritos</h1>
+              <p className="text-gray-600">Artistas, eventos y lugares que te gustan</p>
+            </div>
+            <div className="flex gap-3">
+              {selectedForComparison.length >= 2 && (
+                <Button
+                  onClick={() => setShowComparison(true)}
+                  className="bg-orange-500 hover:bg-orange-600"
+                >
+                  <Compare className="w-4 h-4 mr-2" />
+                  Comparar ({selectedForComparison.length})
+                </Button>
+              )}
+              <Button variant="outline" onClick={() => setShowFilters(true)}>
+                <Filter className="w-4 h-4 mr-2" />
+                Filtros
+              </Button>
             </div>
           </div>
         </div>
       </div>
-    );
-  }
 
-  return (
-    <div className="min-h-screen bg-warm-gray">
-      <NavigationHeader />
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="font-heading font-bold text-3xl text-dark mb-2">Mis Favoritos</h1>
-          <p className="text-gray-600">Gestiona y compara tus artistas, eventos y contenido guardado</p>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Card className="card-hover">
-            <CardContent className="p-4 text-center">
-              <Users className="h-8 w-8 text-primary mx-auto mb-2" />
-              <p className="text-2xl font-bold text-primary">{artistCount}</p>
-              <p className="text-sm text-gray-600">Artistas</p>
-            </CardContent>
-          </Card>
-          
-          <Card className="card-hover">
-            <CardContent className="p-4 text-center">
-              <Calendar className="h-8 w-8 text-secondary mx-auto mb-2" />
-              <p className="text-2xl font-bold text-secondary">{eventCount}</p>
-              <p className="text-sm text-gray-600">Eventos</p>
-            </CardContent>
-          </Card>
-          
-          <Card className="card-hover">
-            <CardContent className="p-4 text-center">
-              <MapPin className="h-8 w-8 text-accent mx-auto mb-2" />
-              <p className="text-2xl font-bold text-accent">{venueCount}</p>
-              <p className="text-sm text-gray-600">Espacios</p>
-            </CardContent>
-          </Card>
-          
-          <Card className="card-hover">
-            <CardContent className="p-4 text-center">
-              <BookOpen className="h-8 w-8 text-purple-500 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-purple-500">{blogCount}</p>
-              <p className="text-sm text-gray-600">Artículos</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="comparison">Comparar Artistas</TabsTrigger>
-            <TabsTrigger value="artists">Artistas ({artistCount})</TabsTrigger>
-            <TabsTrigger value="events">Eventos ({eventCount})</TabsTrigger>
-            <TabsTrigger value="venues">Espacios ({venueCount})</TabsTrigger>
-            <TabsTrigger value="blog">Blog ({blogCount})</TabsTrigger>
+      {/* Contenido principal */}
+      <div className="max-w-6xl mx-auto px-4 py-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="grid grid-cols-3 w-full max-w-md mb-6">
+            <TabsTrigger value="artists">
+              Artistas ({favoriteData.artists.length})
+            </TabsTrigger>
+            <TabsTrigger value="events">
+              Eventos ({favoriteData.events.length})
+            </TabsTrigger>
+            <TabsTrigger value="venues">
+              Lugares ({favoriteData.venues.length})
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="comparison">
-            {artistCount > 0 ? (
-              <FavoritesComparison />
-            ) : (
-              <Card>
-                <CardContent className="p-12 text-center">
-                  <Heart className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="font-heading font-semibold text-xl text-dark mb-2">
-                    No tienes artistas favoritos aún
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    Agrega artistas a tus favoritos para poder compararlos aquí
-                  </p>
-                  <Button asChild>
-                    <a href="/explorer/artists">Explorar Artistas</a>
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
-
           <TabsContent value="artists">
-            {favoriteArtists && favoriteArtists.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {favoriteArtists.map((favorite: any) => (
-                  <div key={favorite.id} className="relative">
-                    <ArtistCard artist={favorite} />
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      className="absolute top-2 right-2 z-10"
-                      onClick={() => handleRemoveFavorite('artist', favorite.targetId)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+            {selectedForComparison.length > 0 && (
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-orange-800">
+                      {selectedForComparison.length} artistas seleccionados para comparar
+                    </p>
+                    <p className="text-xs text-orange-600">
+                      Máximo 3 artistas. Haz clic en "Comparar" para ver las diferencias.
+                    </p>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <Card>
-                <CardContent className="p-12 text-center">
-                  <Users className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="font-heading font-semibold text-xl text-dark mb-2">
-                    No tienes artistas favoritos
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    Descubre y guarda tus artistas favoritos para acceder a ellos fácilmente
-                  </p>
-                  <Button asChild>
-                    <a href="/explorer/artists">Explorar Artistas</a>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSelectedForComparison([])}
+                  >
+                    Limpiar
                   </Button>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             )}
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {favoriteData.artists.map(renderArtistCard)}
+            </div>
           </TabsContent>
 
           <TabsContent value="events">
-            {favoriteEvents && favoriteEvents.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {favoriteEvents.map((favorite: any) => (
-                  <div key={favorite.id} className="relative">
-                    <EventCard event={favorite} />
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      className="absolute top-2 right-2 z-10"
-                      onClick={() => handleRemoveFavorite('event', favorite.targetId)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <Card>
-                <CardContent className="p-12 text-center">
-                  <Calendar className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="font-heading font-semibold text-xl text-dark mb-2">
-                    No tienes eventos favoritos
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    Guarda eventos que te interesen para no perderte ninguna oportunidad cultural
-                  </p>
-                  <Button asChild>
-                    <a href="/explorer/events">Explorar Eventos</a>
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {favoriteData.events.map(renderEventCard)}
+            </div>
           </TabsContent>
 
           <TabsContent value="venues">
-            {favoriteVenues && favoriteVenues.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {favoriteVenues.map((favorite: any) => (
-                  <div key={favorite.id} className="relative">
-                    <VenueCard venue={favorite} />
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      className="absolute top-2 right-2 z-10"
-                      onClick={() => handleRemoveFavorite('venue', favorite.targetId)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <Card>
-                <CardContent className="p-12 text-center">
-                  <MapPin className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="font-heading font-semibold text-xl text-dark mb-2">
-                    No tienes espacios favoritos
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    Descubre y guarda espacios culturales para tus futuros eventos
-                  </p>
-                  <Button asChild>
-                    <a href="/explorer/venues">Explorar Espacios</a>
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
-
-          <TabsContent value="blog">
-            {favoriteBlogPosts && favoriteBlogPosts.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {favoriteBlogPosts.map((favorite: any) => (
-                  <div key={favorite.id} className="relative">
-                    <BlogCard post={favorite} />
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      className="absolute top-2 right-2 z-10"
-                      onClick={() => handleRemoveFavorite('blog_post', favorite.targetId)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <Card>
-                <CardContent className="p-12 text-center">
-                  <BookOpen className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="font-heading font-semibold text-xl text-dark mb-2">
-                    No tienes artículos favoritos
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    Guarda artículos interesantes del blog cultural para leer más tarde
-                  </p>
-                  <Button asChild>
-                    <a href="/community/blog">Explorar Blog</a>
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {favoriteData.venues.map(renderVenueCard)}
+            </div>
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Modal de comparación */}
+      <Dialog open={showComparison} onOpenChange={setShowComparison}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Comparar Artistas</DialogTitle>
+          </DialogHeader>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {getComparisonData().map((artist) => (
+              <Card key={artist.id} className="border-2 border-orange-200">
+                <CardHeader className="pb-3">
+                  <div className="relative">
+                    <img
+                      src={artist.image}
+                      alt={artist.name}
+                      className="w-full h-32 object-cover rounded-lg"
+                    />
+                  </div>
+                  <CardTitle className="text-lg">{artist.name}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div>
+                      <span className="text-gray-600">Categoría:</span>
+                      <p className="font-medium">{artist.category}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Tipo:</span>
+                      <p className="font-medium">{artist.type}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Ciudad:</span>
+                      <p className="font-medium">{artist.city}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Rating:</span>
+                      <div className="flex items-center gap-1">
+                        <Star className="w-3 h-3 text-orange-500 fill-current" />
+                        <span className="font-medium">{artist.rating}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Precio/hora:</span>
+                      <p className="font-medium text-orange-600">€{artist.price}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Fans:</span>
+                      <p className="font-medium">{artist.fans}</p>
+                    </div>
+                    <div className="col-span-2">
+                      <span className="text-gray-600">Disponibilidad:</span>
+                      <Badge className={`ml-2 ${
+                        artist.availability === 'Disponible' 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-red-100 text-red-800'
+                      }`}>
+                        {artist.availability}
+                      </Badge>
+                    </div>
+                  </div>
+                  
+                  <Button size="sm" className="w-full bg-orange-500 hover:bg-orange-600">
+                    <MessageCircle className="w-3 h-3 mr-1" />
+                    Contactar
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

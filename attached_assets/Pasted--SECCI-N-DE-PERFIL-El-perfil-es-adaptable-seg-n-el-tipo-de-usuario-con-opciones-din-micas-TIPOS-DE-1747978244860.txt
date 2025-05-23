@@ -1,0 +1,198 @@
+ SECCIÓN DE PERFIL
+El perfil es adaptable según el tipo de usuario, con opciones dinámicas.
+TIPOS DE USUARIO
+Tu app tiene 3 tipos de usuario principales (más el administrador desde el backend):
+1. Usuario General (Explorador / Contratista)
+Cualquier persona interesada en descubrir artistas, eventos, sitios culturales o solicitar recomendaciones.
+2. Usuario Artista
+Persona que ofrece servicios creativos o artísticos y desea ser contratado.
+3. Usuario Empresa / Espacio Cultural
+Instituciones, marcas, casas de cultura o espacios que ofrecen eventos o servicios como locación.
+
+
+🔹 1. PERFIL GENERAL (Contratista)
+Datos visibles:
+Nombre
+
+
+Ciudad
+
+
+Imagen/avatar
+
+
+Bio corta
+
+
+Intereses (categorías favoritas)
+
+
+Funcionalidades:
+✨ Crear eventos gratuitos
+
+
+✍️ Publicar recomendaciones
+
+
+💬 Solicitar recomendaciones
+
+
+❤️ Guardar favoritos (Artistas, Eventos, Sitios, Blogs)
+
+
+👀 Comparar artistas desde favoritos
+
+
+🧾 Historial de contrataciones realizadas
+
+
+📬 Sección de mensajes y solicitudes activas
+Contrataciones en tiempo real
+
+
+🔔 Notificaciones personalizadas (respuestas a recomendaciones, comentarios, contrataciones, etc.)
+
+
+
+🔸 2. PERFIL ARTISTA
+Datos visibles:
+Nombre artístico
+
+
+Categoría de arte
+
+
+Video de presentación o carrusel de imágenes
+
+
+Ciudad base y cobertura
+Feed de imagenes y videos tipo instagram
+
+
+Bio profesional
+
+
+Reseñas
+
+
+Precios por hora (desde)
+
+
+Disponibilidad estimada
+
+
+Etiquetas destacadas
+
+
+Número de Fans (favoritos)
+
+
+Botón de "💬 Enviar oferta en tiempo real"
+
+
+Funcionalidades:
+🎭 Publicar servicios artísticos
+
+
+📹 Subir un video de hasta 45s o 4 imágenes tipo carrusel
+
+
+🎯 Asignar:
+
+
+1 categoría principal
+
+
+2 subcategorías
+
+
+2 etiquetas
+
+
+✍️ Escribir en el Blog
+
+
+📅 Ver y gestionar contrataciones recibidas
+
+
+📬 Responder solicitudes en tiempo real (con contraoferta)
+
+
+💬 Recibir y responder comentarios en servicios o eventos
+
+
+📊 Ver número de veces agregado a favoritos (Fans)
+
+
+📌 Activar disponibilidad visible en el explorador
+
+
+
+🟣 3. PERFIL EMPRESA / SITIO CULTURAL
+Datos visibles:
+Nombre de empresa / espacio cultural
+
+
+Categoría: museo, casa de cultura, sala de conciertos, etc.
+
+
+Ciudad y dirección (opcional)
+
+
+Servicios que ofrece como lugar
+
+
+Bio institucional
+Feed de imagenes y videos tipo instagram
+
+
+Imagen o video de presentación
+
+
+Reseñas y recomendaciones
+
+
+Eventos organizados (pasados y futuros)
+
+
+Funcionalidades:
+🏛 Publicar servicios como espacio cultural
+
+
+🎫 Publicar eventos pagos o gratuitos
+
+
+🌐 Hacer eventos online
+
+
+🧾 Controlar cupos/reservas de eventos
+
+
+📌 Reservar espacios desde la app (si aplica)
+
+
+✍️ Escribir en el Blog
+
+
+💬 Comentar o dar recomendaciones
+
+
+📬 hacer solicitudes de contrataciones en tiempo real 
+🧾 Ver historial de contrataciones realizadas
+
+
+
+🎛 ACCESO DINÁMICO EN PERFIL (todos los tipos de usuario)
+Editar perfil
+
+
+Ver estadísticas personales (número de fans, contrataciones realizadas o recibidas, publicaciones, etc.)
+
+
+Configuración de cuenta y notificaciones
+
+
+Cambiar de rol / activar opción de ofrecer servicios
+
+
+Cerrar sesión
