@@ -1,0 +1,122 @@
+🔁 SECCIÓN EXPLORADOR – DISEÑO WEB
+1. Estructura principal (pantallas grandes):
+Diseño de dos columnas:
+
+
+Centro o izquierda: tarjetas deslizables estilo Tinder.
+
+
+Derecha: columna fija o flotante con filtros avanzados.
+
+
+2. Tarjetas estilo Tinder:
+Rectangulares, esquinas redondeadas.
+
+
+Tamaño recomendado:
+
+
+Ancho: 320–400 px
+
+
+Alto: 500–600 px
+
+
+Swipe real horizontal con mouse o touchpad (no flechas).
+
+
+Una tarjeta visible por vez, con efecto de transición entre ellas.
+
+
+Botones de acción (Me gusta, Comentar, Favorito, Ver más, etc.) deben estar sobrepuestos en la parte derecha de la tarjeta como en reel y tiktok, coloca iconos no palabras. obvio tambie esto debe tener la funcion de conteo.
+
+
+Botones de navegación por sección: quitar la palabra buscar solo poner Artistas | Eventos | Sitios | Recomendar (reducir tamaño de texto y espaciar mejor).
+no olvides poner la barra de navegacion o almenos la opcion que me dirije a otra secciones de la web 
+
+📱 DISEÑO RESPONSIVE – VERSIÓN MÓVIL
+1. Tarjetas swipe:
+Ocupan 90% del ancho de pantalla y aproximadamente 70% de la altura.
+
+
+Swipe táctil natural, igual que en Tinder (no usar flechas).
+
+
+Botones de acción debajo o sobre la parte inferior de la tarjeta.
+
+
+2. Parte superior fija:
+Caja de búsqueda siempre visible arriba.
+
+
+Al lado derecho: ícono de filtros ⚙️ que abre un modal emergente con filtros avanzados.
+
+
+3. Parte inferior (navegación tipo app):
+Aquí debe ir el menú inferior de navegación general que ya hicimos en el home (estilo app).
+
+
+Siempre visible mientras navegas.
+
+
+
+🎨 AJUSTES VISUALES Y FUNCIONALES
+1. Filtros avanzados:
+Web: columna lateral derecha.
+
+
+Móvil: ventana flotante desde el ícono de filtro (⚙️).
+
+
+Incluir todos los filtros que ya te envié: categoría, subcategorías, etiquetas, tipo de artista/evento/sitio, rango de precio, disponibilidad, ciudad, etc.
+
+
+2. Tamaño y armonía visual:
+Reducir tamaño de texto de los botones: 14px en web, 12–13px en móvil.
+
+
+Asegurarse que el buscador sea legible y el diseño general sea armónico.
+
+
+3. Sección Recomendaciones:
+No debe mostrar "sitios recomendados".
+
+
+Debe mostrar solicitudes reales de usuarios, por ejemplo:
+
+
+“¿Alguien conoce un saxofonista para bodas en Bogotá?”
+
+
+En formato tarjeta con:
+
+
+Imagen genérica o ícono.
+
+
+Título corto.
+
+
+Descripción.
+
+
+Ubicación.
+
+
+Botones: Me gusta, Guardar, Comentar.
+
+
+
+✅ RECORDATORIOS FINALES
+Swipe real, no flechas (en web y móvil).
+
+
+Barra de navegación siempre fija, tanto arriba en web como en móvil.
+
+
+En móvil: buscar + filtro arriba, navegación tipo app abajo.
+
+
+Diseño de tarjetas similar a Tinder en proporción y comportamiento, pero con contenido propio (artistas, eventos, etc.).
+
+crea perfiles de prueba de 10 artistas, y 10 eventos, 10 sitios, 10 solicitudes de recomendar. esto es contenido para que la web sea visible el funcionamiento. los colores del app son naranja con negro
