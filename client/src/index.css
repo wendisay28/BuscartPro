@@ -1,0 +1,172 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;500;600&display=swap');
+
+:root {
+  --background: 0 0% 100%; /* #FFFFFF */
+  --foreground: 20 14.3% 4.1%; /* #2C3E50 */
+  --muted: 60 4.8% 95.9%; /* #F8F9FA */
+  --muted-foreground: 25 5.3% 44.7%; /* #6C757D */
+  --popover: 0 0% 100%; /* #FFFFFF */
+  --popover-foreground: 20 14.3% 4.1%; /* #2C3E50 */
+  --card: 0 0% 100%; /* #FFFFFF */
+  --card-foreground: 20 14.3% 4.1%; /* #2C3E50 */
+  --border: 20 5.9% 90%; /* #E9ECEF */
+  --input: 20 5.9% 90%; /* #E9ECEF */
+  --primary: 13 100% 59%; /* #FF6B35 */
+  --primary-foreground: 0 0% 100%; /* #FFFFFF */
+  --secondary: 174 63% 56%; /* #4ECDC4 */
+  --secondary-foreground: 0 0% 100%; /* #FFFFFF */
+  --accent: 50 100% 71%; /* #FFE66D */
+  --accent-foreground: 20 14.3% 4.1%; /* #2C3E50 */
+  --destructive: 0 84.2% 60.2%; /* #EF4444 */
+  --destructive-foreground: 60 9.1% 97.8%; /* #FEFEFE */
+  --ring: 13 100% 59%; /* #FF6B35 */
+  --radius: 0.5rem;
+  
+  /* Cultural colors */
+  --warm-gray: 210 11% 98%; /* #F8F9FA */
+  --dark: 210 11% 15%; /* #2C3E50 */
+  
+  /* Chart colors */
+  --chart-1: 13 100% 59%; /* #FF6B35 */
+  --chart-2: 174 63% 56%; /* #4ECDC4 */
+  --chart-3: 50 100% 71%; /* #FFE66D */
+  --chart-4: 263 85% 60%; /* #8B5CF6 */
+  --chart-5: 346 84% 61%; /* #F43F5E */
+}
+
+.dark {
+  --background: 210 11% 5%; /* #0F172A */
+  --foreground: 0 0% 98%; /* #F8FAFC */
+  --muted: 210 11% 11%; /* #1E293B */
+  --muted-foreground: 215 16% 47%; /* #64748B */
+  --popover: 210 11% 5%; /* #0F172A */
+  --popover-foreground: 0 0% 98%; /* #F8FAFC */
+  --card: 210 11% 5%; /* #0F172A */
+  --card-foreground: 0 0% 98%; /* #F8FAFC */
+  --border: 210 11% 11%; /* #1E293B */
+  --input: 210 11% 11%; /* #1E293B */
+  --primary: 13 100% 59%; /* #FF6B35 */
+  --primary-foreground: 0 0% 100%; /* #FFFFFF */
+  --secondary: 174 63% 56%; /* #4ECDC4 */
+  --secondary-foreground: 0 0% 100%; /* #FFFFFF */
+  --accent: 50 100% 71%; /* #FFE66D */
+  --accent-foreground: 210 11% 5%; /* #0F172A */
+  --destructive: 0 62.8% 30.6%; /* #991B1B */
+  --destructive-foreground: 0 0% 98%; /* #F8FAFC */
+  --ring: 13 100% 59%; /* #FF6B35 */
+  
+  /* Cultural dark colors */
+  --warm-gray: 210 11% 5%; /* #0F172A */
+  --dark: 0 0% 98%; /* #F8FAFC */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+
+  .font-heading {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+
+  .font-body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+
+  .font-accent {
+    font-family: 'Dancing Script', cursive;
+  }
+}
+
+@layer components {
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  }
+  
+  .gradient-overlay {
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.9) 0%, hsl(var(--secondary) / 0.9) 100%);
+  }
+  
+  .cultural-pattern {
+    background-image: radial-gradient(circle at 2px 2px, hsl(var(--primary) / 0.15) 1px, transparent 0);
+    background-size: 20px 20px;
+  }
+
+  .warm-gray {
+    background-color: hsl(var(--warm-gray));
+  }
+
+  .text-dark {
+    color: hsl(var(--dark));
+  }
+
+  .bg-dark {
+    background-color: hsl(var(--dark));
+  }
+
+  .text-primary {
+    color: hsl(var(--primary));
+  }
+
+  .bg-primary {
+    background-color: hsl(var(--primary));
+  }
+
+  .text-secondary {
+    color: hsl(var(--secondary));
+  }
+
+  .bg-secondary {
+    background-color: hsl(var(--secondary));
+  }
+
+  .text-accent {
+    color: hsl(var(--accent));
+  }
+
+  .bg-accent {
+    background-color: hsl(var(--accent));
+  }
+}
+
+@layer utilities {
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse 3s infinite;
+  }
+}
