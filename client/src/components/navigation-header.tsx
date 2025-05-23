@@ -20,7 +20,11 @@ import {
   Calendar,
   MapPin,
   BookOpen,
-  ChevronDown
+  ChevronDown,
+  Home,
+  Compass,
+  Zap,
+  Users
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
@@ -48,10 +52,11 @@ export default function NavigationHeader() {
   };
 
   const navigationItems = [
-    { href: "/", label: "Inicio", icon: null },
-    { href: "/explorer", label: "Explorar", icon: null },
-    { href: "/favorites", label: "Favoritos", icon: Heart },
-    { href: "/blog", label: "Blog", icon: BookOpen },
+    { href: "/", label: "Home", icon: Home },
+    { href: "/explorer", label: "Explorador", icon: Compass },
+    { href: "/hiring/realtime", label: "Tiempo Real", icon: Zap },
+    { href: "/community/blog", label: "Blog", icon: BookOpen },
+    { href: "/user/favorites", label: "Favoritos", icon: Heart },
   ];
 
   const isActive = (href: string) => {
@@ -61,9 +66,11 @@ export default function NavigationHeader() {
   };
 
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <>
+      {/* Desktop Navigation */}
+      <nav className="bg-white shadow-lg sticky top-0 z-50 hidden md:block">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
@@ -112,7 +119,7 @@ export default function NavigationHeader() {
               <>
                 {/* Favorites */}
                 <Button variant="ghost" size="sm" asChild className="relative">
-                  <Link href="/favorites">
+                  <Link href="/user/favorites">
                     <Heart className="h-5 w-5" />
                     {favoritesCount > 0 && (
                       <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
@@ -183,13 +190,13 @@ export default function NavigationHeader() {
                     </div>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link href="/profile">
+                      <Link href="/user/profile">
                         <User className="h-4 w-4 mr-2" />
                         Mi Perfil
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/favorites">
+                      <Link href="/user/favorites">
                         <Heart className="h-4 w-4 mr-2" />
                         Favoritos
                       </Link>
@@ -297,7 +304,7 @@ export default function NavigationHeader() {
                       
                       <div className="space-y-2">
                         <Button asChild variant="outline" className="w-full justify-start">
-                          <Link href="/profile" onClick={() => setMobileMenuOpen(false)}>
+                          <Link href="/user/profile" onClick={() => setMobileMenuOpen(false)}>
                             <User className="h-4 w-4 mr-2" />
                             Mi Perfil
                           </Link>
@@ -327,8 +334,129 @@ export default function NavigationHeader() {
               </SheetContent>
             </Sheet>
           </div>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+
+      {/* Mobile Top Bar */}
+      <nav className="bg-white shadow-lg sticky top-0 z-50 md:hidden">
+        <div className="px-4">
+          <div className="flex justify-between items-center h-14">
+            {/* Logo */}
+            <Link href="/" className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
+                <Palette className="text-white h-4 w-4" />
+              </div>
+              <span className="font-heading font-bold text-xl text-dark">
+                Bus<span className="text-primary">Cart</span>
+              </span>
+            </Link>
+
+            {/* Search and notifications for mobile */}
+            <div className="flex items-center space-x-2">
+              <Button variant="ghost" size="sm">
+                <Search className="h-5 w-5" />
+              </Button>
+              
+              {isAuthenticated && (
+                <>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="relative">
+                        <Bell className="h-5 w-5" />
+                        {notificationCount > 0 && (
+                          <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-xs">
+                            {notificationCount}
+                          </Badge>
+                        )}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-80">
+                      <div className="p-2">
+                        <h4 className="font-semibold text-sm mb-2">Notificaciones</h4>
+                        {notifications && notifications.length > 0 ? (
+                          notifications.slice(0, 5).map((notification: any) => (
+                            <div key={notification.id} className="p-2 hover:bg-gray-50 rounded-md cursor-pointer">
+                              <p className="text-sm">{notification.message}</p>
+                              <p className="text-xs text-gray-500">{notification.createdAt}</p>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-sm text-gray-500 text-center py-4">
+                            No hay notificaciones nuevas
+                          </p>
+                        )}
+                      </div>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link href="/messages">
+                      <MessageCircle className="h-5 w-5" />
+                    </Link>
+                  </Button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile Bottom Navigation */}
+      {isAuthenticated && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 md:hidden">
+          <div className="grid grid-cols-5 h-16">
+            {navigationItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
+                  isActive(item.href)
+                    ? "text-primary bg-primary/5"
+                    : "text-gray-600 hover:text-primary"
+                }`}
+              >
+                <item.icon className="h-5 w-5" />
+                <span className="text-xs font-medium">{item.label}</span>
+                {item.href === "/user/favorites" && favoritesCount > 0 && (
+                  <Badge className="absolute top-1 right-4 h-4 w-4 p-0 flex items-center justify-center text-xs">
+                    {favoritesCount}
+                  </Badge>
+                )}
+              </Link>
+            ))}
+            
+            {/* Profile in mobile bottom nav */}
+            <Link
+              href="/user/profile"
+              className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
+                isActive("/user/profile")
+                  ? "text-primary bg-primary/5"
+                  : "text-gray-600 hover:text-primary"
+              }`}
+            >
+              <Avatar className="h-5 w-5">
+                <AvatarImage src={user?.profileImageUrl} alt={`${user?.firstName} ${user?.lastName}`} />
+                <AvatarFallback className="text-xs">
+                  {getInitials(user?.firstName, user?.lastName)}
+                </AvatarFallback>
+              </Avatar>
+              <span className="text-xs font-medium">Perfil</span>
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Add padding to body when mobile bottom nav is present */}
+      {isAuthenticated && (
+        <style jsx global>{`
+          @media (max-width: 768px) {
+            body {
+              padding-bottom: 4rem;
+            }
+          }
+        `}</style>
+      )}
+    </>
   );
 }
