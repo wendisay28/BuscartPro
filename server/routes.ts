@@ -4,18 +4,7 @@ import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 
-// Configure WebSocket server
-const wss = new WebSocketServer({ 
-  port: 5000,
-  host: '0.0.0.0'
-});
-
-wss.on('connection', (ws) => {
-  console.log('Client connected');
-  ws.on('message', (message) => {
-    console.log('received: %s', message);
-  });
-});
+// WebSocket server will be configured with HTTP server
 import { 
   insertArtistSchema,
   insertEventSchema,
