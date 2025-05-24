@@ -32,8 +32,9 @@ export class WebSocketClient {
       const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
       const host = window.location.host;
       const wsUrl = `${protocol}//${host}/ws`;
+      const token = new URLSearchParams(window.location.search).get('token') || '';
       
-      this.ws = new WebSocket(wsUrl);
+      this.ws = new WebSocket(`${wsUrl}${token ? `?token=${token}` : ''}`);
 
       this.ws.onopen = () => {
         console.log('WebSocket connected');
