@@ -30,17 +30,43 @@ import RealTimeHiring from "@/pages/hiring/realtime";
 // Utility pages
 import NotFound from "@/pages/not-found";
 
+// Configuración de rutas
+const routes = {
+  public: [
+    { path: '/', component: Landing }
+  ],
+  private: [
+    { path: '/', component: Home },
+    { path: '/explorer', component: Explorer },
+    { path: '/explorer/artists', component: ExploreArtists },
+    { path: '/explorer/events', component: ExploreEvents },
+    { path: '/explorer/venues', component: ExploreVenues },
+    { path: '/user/profile', component: Profile },
+    { path: '/user/favorites', component: Favorites },
+    { path: '/community/blog', component: CommunityBlog },
+    { path: '/hiring/realtime', component: RealTimeHiring }
+  ]
+};
+
+/**
+ * Componente Router principal
+ */
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
 
   return (
     <Switch>
       {isLoading || !isAuthenticated ? (
-        <Route path="/" component={Landing} />
+        // Rutas públicas
+        routes.public.map(({ path, component: Component }) => (
+          <Route key={path} path={path} component={Component} />
+        ))
       ) : (
+        // Rutas privadas
         <>
-          {/* Dashboard */}
-          <Route path="/" component={Home} />
+          {routes.private.map(({ path, component: Component }) => (
+            <Route key={path} path={path} component={Component} />
+          ))}
           
           {/* Explorer routes */}
           <Route path="/explorer" component={Explorer} />
