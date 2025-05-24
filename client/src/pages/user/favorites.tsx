@@ -25,7 +25,7 @@ import {
   Eye,
   MessageCircle,
   Share2,
-  Compare,
+  Scale,
   Filter
 } from "lucide-react";
 
