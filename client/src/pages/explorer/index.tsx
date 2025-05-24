@@ -1,13 +1,13 @@
 import { useState, useRef } from "react";
 import { ExplorerHeader } from "./components/ExplorerHeader";
 import { ContentCard } from "./components/ContentCard";
-import { TabButton } from "./components/TabButton";
 import { FiltersSidebar } from "./components/FiltersSidebar";
 import { FiltersDialog } from "./components/FiltersDialog";
+import { TabList } from "./components/TabList";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { mockArtists, mockEvents, mockVenues, mockRecommendations } from "./data/mockData";
 
-type ContentType = 'artists' | 'events' | 'venues' | 'recommendations';
+export type ContentType = 'artists' | 'events' | 'venues' | 'recommendations';
 
 export default function Explorer() {
   const [activeTab, setActiveTab] = useState<ContentType>('artists');
@@ -23,9 +23,6 @@ export default function Explorer() {
 
   const isMobile = useIsMobile();
   const cardRef = useRef<HTMLDivElement>(null);
-  const dragStart = useRef({ x: 0, y: 0 });
-  const dragCurrent = useRef({ x: 0, y: 0 });
-  const isDragging = useRef(false);
 
   const getData = () => {
     switch (activeTab) {
@@ -40,58 +37,12 @@ export default function Explorer() {
   const currentData = getData();
   const currentItem = currentData[currentIndex];
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-      isDragging.current = true;
-      dragStart.current = { x: e.clientX, y: e.clientY };
-      dragCurrent.current = { x: 0, y: 0 };
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-      if (!isDragging.current) return;
-      const deltaX = e.clientX - dragStart.current.x;
-      const deltaY = e.clientY - dragStart.current.y;
-      dragCurrent.current = { x: deltaX, y: deltaY };
-  };
-
-  const handleMouseUp = () => {
-      if (!isDragging.current) return;
-      isDragging.current = false;
-
-      const threshold = 100;
-      if (Math.abs(dragCurrent.current.x) > threshold) {
-          nextCard();
-      }
-      dragCurrent.current = { x: 0, y: 0 };
-  };
-
   const nextCard = () => {
-      setCurrentIndex((prev) => (prev + 1) % currentData.length);
+    setCurrentIndex((prev) => (prev + 1) % currentData.length);
   };
 
-
-  const handleLike = () => {
-    nextCard();
-  };
-
-  const handleBookmark = () => {
-    nextCard();
-  };
-
-  const TabButtonComponent = ({ type, label }: { type: ContentType; label: string }) => (
-    <button
-      className={`text-xs px-3 py-1 h-8 transition-all ${
-        activeTab === type 
-          ? "bg-orange-500 text-white border-orange-500 hover:bg-orange-600" 
-          : "bg-white text-gray-700 border-gray-300 hover:bg-orange-50 hover:border-orange-300"
-      }`}
-      onClick={() => {
-        setActiveTab(type);
-        setCurrentIndex(0);
-      }}
-    >
-      {label}
-    </button>
-  );
+  const handleLike = () => nextCard();
+  const handleBookmark = () => nextCard();
 
   if (!currentItem) {
     return (
@@ -119,13 +70,6 @@ export default function Explorer() {
             item={currentItem}
             onLike={handleLike}
             onBookmark={handleBookmark}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-            dragCurrentX={dragCurrent.current.x}
-            dragCurrentY={dragCurrent.current.y}
-            isDragging={isDragging.current}
           />
         </div>
 
