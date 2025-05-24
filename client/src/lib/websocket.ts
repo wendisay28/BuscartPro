@@ -30,7 +30,8 @@ export class WebSocketClient {
 
     try {
       const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-      const wsUrl = `${protocol}//${window.location.host}/ws`;
+      const host = process.env.NODE_ENV === 'production' ? window.location.host : '0.0.0.0:5000';
+      const wsUrl = `${protocol}//${host}/ws`;
       
       this.ws = new WebSocket(wsUrl);
 
