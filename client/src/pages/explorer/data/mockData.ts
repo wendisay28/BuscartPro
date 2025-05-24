@@ -22,6 +22,51 @@ export const mockRecommendations = [
   }
 ];
 
+export const mockVenues = [
+  {
+    id: 1,
+    name: "Teatro La Luna",
+    description: "Espacio íntimo para performances y obras experimentales",
+    venueType: "teatro",
+    services: ["Iluminación", "Sonido", "Camerinos"],
+    address: "Calle del Arte 123",
+    city: "Madrid",
+    openingHours: { general: "Mar-Dom 15:00-23:00" },
+    contact: {
+      phone: "+34 912345678",
+      website: "https://teatrolaluna.es"
+    },
+    multimedia: {
+      images: ["https://images.unsplash.com/photo-1578662996442-48f60103fc96"]
+    },
+    coordinates: { lat: 40.4168, lng: -3.7038 },
+    dailyRate: 450,
+    rating: 4.8,
+    totalReviews: 124
+  },
+  {
+    id: 2,
+    name: "Galería Nova",
+    description: "Galería de arte contemporáneo con espacios versátiles",
+    venueType: "galeria",
+    services: ["Montaje", "Seguridad", "Climatización"],
+    address: "Avenida Creativa 45",
+    city: "Barcelona",
+    openingHours: { general: "Lun-Sab 10:00-20:00" },
+    contact: {
+      phone: "+34 933456789",
+      website: "https://galerianova.es"
+    },
+    multimedia: {
+      images: ["https://images.unsplash.com/photo-1577083552431-6e5fd75a9160"]
+    },
+    coordinates: { lat: 41.3851, lng: 2.1734 },
+    dailyRate: 350,
+    rating: 4.6,
+    totalReviews: 89
+  }
+];
+
 export const mockArtists = [
   {
     id: 1,
@@ -35,8 +80,7 @@ export const mockArtists = [
     likes: 234,
     favorites: 89,
     description: "Artista folk con 10 años de experiencia en eventos íntimos y bodas"
-  },
-  // ... resto de artistas
+  }
 ];
 
 export const mockEvents = [
@@ -52,8 +96,5 @@ export const mockEvents = [
     likes: 1250,
     attendees: 2500,
     description: "El festival de jazz más importante del mediterráneo con artistas internacionales"
-  },
-  // ... resto de eventos
+  }
 ];
-
-// ... exportar mockVenues y mockRecommendations de manera similar
