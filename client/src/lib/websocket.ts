@@ -30,11 +30,10 @@ export class WebSocketClient {
 
     try {
       const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-      const host = window.location.host;
+      const host = window.location.hostname || "0.0.0.0:5000";
       const wsUrl = `${protocol}//${host}/ws`;
-      const token = new URLSearchParams(window.location.search).get('token') || '';
       
-      this.ws = new WebSocket(`${wsUrl}${token ? `?token=${token}` : ''}`);
+      this.ws = new WebSocket(wsUrl);
 
       this.ws.onopen = () => {
         console.log('WebSocket connected');
