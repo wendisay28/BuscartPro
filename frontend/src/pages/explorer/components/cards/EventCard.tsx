@@ -1,6 +1,24 @@
 import { useState } from 'react';
 import { EventItem } from '../../types';
-import { Ticket, Music, Headphones, UserCheck, Calendar, Clock, MapPin, MessageCircle, Info, CalendarCheck, ChevronLeft, ChevronRight } from 'lucide-react';
+import { 
+  Ticket, 
+  Music, 
+  Headphones, 
+  UserCheck, 
+  Calendar, 
+  Clock, 
+  MapPin, 
+  MessageCircle, 
+  Info, 
+  CalendarCheck, 
+  ChevronLeft, 
+  ChevronRight,
+  Heart,
+  MessageSquare,
+  Share2,
+  Bookmark,
+  MoreVertical
+} from 'lucide-react';
 
 interface EventCardProps {
   data: EventItem;
@@ -20,21 +38,41 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
     setCurrentImageIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Solo manejar el clic si se hace clic en la tarjeta, no en los botones
+    if (!(e.target as HTMLElement).closest('.action-button')) {
+      console.log('Clic en la tarjeta de evento');
+      // Aquí puedes agregar la lógica de navegación o lo que necesites
+    }
+  };
+
   return (
-    <div className="flex flex-col w-[380px] h-[calc(75vh-1cm)] bg-[#0A1A35] rounded-[20px] overflow-hidden mx-auto shadow-xl">
+    <div className="relative w-[380px] h-[calc(75vh-1cm)] mx-auto">
+      <div 
+        className="flex flex-col w-full h-full bg-[#0A1A35] rounded-[20px] overflow-hidden shadow-xl"
+        onClick={handleCardClick}
+      >
       {/* Sección superior - Imagen (65% de la altura) */}
-      <div className="relative" style={{ height: '65%' }}>
-        {images.length > 0 ? (
-          <img 
-            src={images[currentImageIndex]} 
-            alt={`${data.name} - Imagen ${currentImageIndex + 1}`} 
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <div className="w-full h-full bg-gray-800 flex items-center justify-center">
-            <span className="text-gray-500">No hay imágenes</span>
-          </div>
-        )}
+      <div className="relative overflow-hidden" style={{ height: '65%' }}>
+        <div className="absolute inset-0 w-full h-full bg-[#0A1A35]">
+          {images.length > 0 ? (
+            <div className="w-full h-full relative">
+              <img
+                src={images[currentImageIndex]}
+                alt={`${data.name} - Imagen ${currentImageIndex + 1}`}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = 'https://via.placeholder.com/380x400/0A1A35/CCCCCC?text=Imagen+no+disponible';
+                }}
+              />
+            </div>
+          ) : (
+            <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+              <span className="text-gray-500">No hay imágenes</span>
+            </div>
+          )}
+        </div>
         
         {/* Controles de navegación de imágenes */}
         {images.length > 1 && (
@@ -42,12 +80,14 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
             <button
               onClick={handlePrevImage}
               className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-1.5 rounded-full hover:bg-black/70 transition-colors z-10"
+              aria-label="Imagen anterior"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={handleNextImage}
               className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-1.5 rounded-full hover:bg-black/70 transition-colors z-10"
+              aria-label="Siguiente imagen"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -144,6 +184,61 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Botones de acción flotantes */}
+      <div className="absolute top-[45%] right-0 transform translate-x-16 -translate-y-1/2 flex flex-col gap-3 z-10">
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log('Me gusta');
+          }}
+          className="action-button w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+        >
+          <Heart className="w-5 h-5" />
+        </button>
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log('Comentarios');
+          }}
+          className="action-button w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+        >
+          <MessageSquare className="w-5 h-5" />
+        </button>
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log('Guardar');
+          }}
+          className="action-button w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+        >
+          <Bookmark className="w-5 h-5" />
+        </button>
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log('Compartir');
+          }}
+          className="action-button w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+        >
+          <Share2 className="w-5 h-5" />
+        </button>
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log('Más opciones');
+          }}
+          className="action-button w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+        >
+          <MoreVertical className="w-5 h-5" />
+        </button>
+      </div>
       </div>
     </div>
   );

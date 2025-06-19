@@ -1,5 +1,7 @@
 // Los tipos se definen localmente para evitar conflictos
 
+// Los tipos se definen localmente para evitar conflictos
+
 export interface Artist {
   id: string;
   name: string;
@@ -167,29 +169,86 @@ export const mockEvents: any[] = [
   }
 ];
 
-export const mockVenues: any[] = [
+export const mockVenues = [
   {
     id: 'venue-1',
-    name: 'Galería El Cubo',
-    description: 'Un espacio donde el aroma del café se mezcla con exposiciones de arte, talleres creativos y charlas culturales. Perfecto para una tarde inspiradora.',
-    image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=60',
-    images: ['https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=60'],
-    address: 'Cra. 10 #20-30, Bogotá',
+    name: 'Café Literario',
+    description: 'Un acogedor café con ambiente bohemio, perfecto para trabajar, leer o disfrutar de un buen café. Con espacios al aire libre y una amplia selección de libros.',
+    image: 'https://images.unsplash.com/photo-1453614512568-c5104f568a37?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1453614512568-c5104f568a37?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80'
+    ],
+    address: 'Calle 123 #45-67, Bogotá',
     city: 'Bogotá',
-    distance: '3.2',
-    price: 50000,
+    distance: '1.2',
+    price: 0, // Entrada libre
     rating: 4.7,
-    reviews: 18,
+    reviews: 45,
     verified: true,
-    tags: ['Galería', 'Exposiciones', 'Arte'],
-
-    capacity: 150,
-    amenities: ['WiFi', 'Aire acondicionado', 'Baños', 'Estacionamiento'],
-    openingHours: 'Lunes a Viernes: 9AM - 8PM, Sábados: 10AM - 6PM',
+    tags: ['Café', 'Trabajo', 'Lectura', 'WiFi'],
+    capacity: 50,
+    amenities: ['WiFi', 'Enchufes', 'Terraza', 'Libros'],
+    openingHours: 'Lun-Vie: 8:00 AM - 10:00 PM, Sáb-Dom: 9:00 AM - 11:00 PM',
     contact: {
-      phone: '+57 1234567890',
-      email: 'info@galeriaelcubo.com',
-      website: 'https://galeriaelcubo.com'
+      phone: '+57 123 456 7890',
+      email: 'info@cafeliterario.com',
+      website: 'www.cafeliterario.com'
+    }
+  },
+  {
+    id: 'venue-2',
+    name: 'Galería de Arte Moderno',
+    description: 'Espacio cultural que exhibe obras de artistas contemporáneos emergentes y consagrados. Cuenta con tres pisos de exposición y una cafetería en la terraza.',
+    image: 'https://images.unsplash.com/photo-1531913764164-f85c52d6e654?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1531913764164-f85c52d6e654?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1578303512597-81e6fc158a8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80'
+    ],
+    address: 'Carrera 56 #12-34, Medellín',
+    city: 'Medellín',
+    distance: '3.5',
+    price: 25000,
+    rating: 4.9,
+    reviews: 68,
+    verified: true,
+    tags: ['Arte', 'Cultura', 'Exposiciones', 'Talleres'],
+    capacity: 200,
+    amenities: ['Tienda', 'Cafetería', 'Ascensor', 'Accesible'],
+    openingHours: 'Mar-Dom: 10:00 AM - 7:00 PM, Lunes cerrado',
+    contact: {
+      phone: '+57 4 123 4567',
+      email: 'info@galeriamoderna.com',
+      website: 'www.galeriamoderna.com'
+    }
+  },
+  {
+    id: 'venue-3',
+    name: 'Estudio de Grabación Sonora',
+    description: 'Estudio profesional de grabación equipado con tecnología de punta. Ideal para músicos, podcasters y productores. Ofrecemos paquetes por hora o por proyecto.',
+    image: 'https://images.unsplash.com/photo-1514525252781-4e8f829c796d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1514525252781-4e8f829c796d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1605146769289-440113c0a3ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80'
+    ],
+    address: 'Avenida 8N #23-45, Cali',
+    city: 'Cali',
+    distance: '5.2',
+    price: 80000,
+    rating: 4.8,
+    reviews: 32,
+    verified: true,
+    tags: ['Música', 'Grabación', 'Producción', 'Estudio'],
+    capacity: 10,
+    amenities: ['Equipo profesional', 'Sala de ensayo', 'Ingeniero de sonido', 'Estacionamiento'],
+    openingHours: 'Lun-Sáb: 9:00 AM - 9:00 PM, Dom: 10:00 AM - 6:00 PM',
+    contact: {
+      phone: '+57 2 987 6543',
+      email: 'reservas@estudiosonora.com',
+      website: 'www.estudiosonora.com'
     }
   }
 ];

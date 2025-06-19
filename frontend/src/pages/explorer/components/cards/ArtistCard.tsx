@@ -14,7 +14,12 @@ import {
   Zap,
   MessageCircle,
   Info,
-  CalendarCheck
+  CalendarCheck,
+  Heart,
+  MessageSquare,
+  Share2,
+  Bookmark,
+  MoreVertical
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -58,22 +63,36 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
   
   const images = artist.images || [];
   
-  const handlePrevImage = () => {
+  const handlePrevImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (images.length <= 1) return;
     setCurrentImageIndex(prev => 
       prev === 0 ? images.length - 1 : prev - 1
     );
   };
 
-  const handleNextImage = () => {
+  const handleNextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (images.length <= 1) return;
     setCurrentImageIndex(prev => 
       prev === images.length - 1 ? 0 : prev + 1
     );
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Solo manejar el clic si se hace clic en la tarjeta, no en los botones
+    if (!(e.target as HTMLElement).closest('.action-button')) {
+      console.log('Clic en la tarjeta de artista');
+      // Aquí puedes agregar la lógica de navegación o lo que necesites
+    }
+  };
+
   return (
-    <div className="flex flex-col w-[380px] h-[calc(75vh-1cm)] bg-[#0A1A35] rounded-[20px] overflow-hidden mx-auto shadow-xl">
+    <div className="relative w-[380px] h-[calc(75vh-1cm)] mx-auto">
+      <div 
+        className="flex flex-col w-full h-full bg-[#0A1A35] rounded-[20px] overflow-hidden shadow-xl"
+        onClick={handleCardClick}
+      >
       {/* Sección superior - Imagen (65% de la altura) */}
       <div className="relative overflow-hidden" style={{ height: '65%' }}>
         <div className="absolute inset-0 w-full h-full bg-[#0A1A35]">
@@ -224,6 +243,61 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
             </div>
           </div>
       </div>
+      </div>
+      </div>
+
+      {/* Botones de acción flotantes */}
+      <div className="absolute top-[45%] right-0 transform translate-x-16 -translate-y-1/2 flex flex-col gap-3 z-10">
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log('Me gusta');
+          }}
+          className="action-button w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+        >
+          <Heart className="w-5 h-5" />
+        </button>
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log('Comentarios');
+          }}
+          className="action-button w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+        >
+          <MessageSquare className="w-5 h-5" />
+        </button>
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log('Guardar');
+          }}
+          className="action-button w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+        >
+          <Bookmark className="w-5 h-5" />
+        </button>
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log('Compartir');
+          }}
+          className="action-button w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+        >
+          <Share2 className="w-5 h-5" />
+        </button>
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log('Más opciones');
+          }}
+          className="action-button w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+        >
+          <MoreVertical className="w-5 h-5" />
+        </button>
       </div>
     </div>
   );

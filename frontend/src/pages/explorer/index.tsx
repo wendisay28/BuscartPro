@@ -43,7 +43,7 @@ export default function Explorer() {
 
   // Render content based on the active tab
   return (
-    <div className="min-h-screen bg-gray-50 py-6 px-4">
+    <div className="min-h-screen bg-black py-6 px-4">
       <div className="max-w-md mx-auto">
         <NavigationTabs 
           activeTab={activeTab}
@@ -59,7 +59,7 @@ export default function Explorer() {
         
         {/* Navigation Buttons */}
         {currentItems.length > 1 && (
-          <div className="flex justify-center gap-4">
+          <div className="flex justify-center items-center gap-3 mt-6">
             <button 
               onClick={() => {
                 if (activeCardIndex > 0) {
@@ -67,17 +67,20 @@ export default function Explorer() {
                 }
               }} 
               disabled={activeCardIndex === 0}
-              className="w-12 h-12 flex items-center justify-center rounded-full bg-white border border-gray-200 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              aria-label="Anterior"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            <div className="flex items-center px-4 bg-white rounded-full shadow-sm">
-              <span className="text-sm font-medium text-gray-700">
-                {activeCardIndex + 1} <span className="text-gray-400">/ {currentItems.length}</span>
+            
+            <div className="flex items-center px-3 h-8 bg-white/10 rounded-full">
+              <span className="text-xs font-medium text-white">
+                {activeCardIndex + 1} <span className="text-white/60">/ {currentItems.length}</span>
               </span>
             </div>
+            
             <button 
               onClick={() => {
                 if (activeCardIndex < currentItems.length - 1) {
@@ -85,10 +88,11 @@ export default function Explorer() {
                 }
               }} 
               disabled={activeCardIndex === currentItems.length - 1}
-              className="w-12 h-12 flex items-center justify-center rounded-full bg-white border border-gray-200 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              aria-label="Siguiente"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
               </svg>
             </button>
           </div>
