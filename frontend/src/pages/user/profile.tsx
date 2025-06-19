@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { EventForm } from "@/components/event/event-form";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,10 +11,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+
 import { useIsMobile } from "@/hooks/use-mobile";
+import { CreateRecommendationForm } from "@/components/recommendation/CreateRecommendationForm";
+import { RecommendationCard } from "@/components/recommendation/RecommendationCard";
+
+// Definir los tipos de usuario permitidos
+type ProfileUserType = 'general' | 'artist' | 'company';
+
 import { 
-  User, 
   Heart, 
   Star, 
   MapPin, 
@@ -23,25 +31,113 @@ import {
   Users,
   TrendingUp,
   Award,
-  Clock,
   DollarSign,
-  Play,
-  Image as ImageIcon,
   Building,
-  Music,
-  Palette,
-  Video,
+  CheckCircle,
+  Play,
   Grid3X3,
+  Video,
   Eye,
-  ThumbsUp,
-  CheckCircle
+  Music,
+  Plus,
+  Calendar as CalendarIcon
 } from "lucide-react";
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user, updateUserType } = useAuth();
   const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState("overview");
   const [showEditDialog, setShowEditDialog] = useState(false);
+  const [showRecommendationDialog, setShowRecommendationDialog] = useState(false);
+  const [showEventDialog, setShowEventDialog] = useState(false);
+  const [showChangeTypeDialog, setShowChangeTypeDialog] = useState(false);
+  const [selectedUserType, setSelectedUserType] = useState<ProfileUserType>('general');
+  const currentUserType = (user?.userType || 'general') as ProfileUserType;
+
+  // Datos de ejemplo para recomendaciones
+  const [recommendations, setRecommendations] = useState([
+    {
+      id: '1',
+      title: 'Necesito músico para boda',
+      description: 'Buscamos un músico acústico para nuestra boda el próximo mes. Debe tener repertorio romántico y poder tocar durante la ceremonia y el cóctel.',
+      location: 'Medellín, El Poblado',
+      date: new Date('2025-07-15'),
+      category: 'Música',
+      tags: ['Bodas', 'Música en vivo'],
+      user: {
+        id: 'user1',
+        name: 'Ana Pérez',
+        avatar: undefined
+      },
+      likes: 8,
+      comments: 3
+    },
+    {
+      id: '2',
+      title: 'Buscamos artista para mural en restaurante',
+      description: 'Estamos buscando un artista para pintar un mural en la pared principal de nuestro restaurante. El estilo que buscamos es urbano/grafiti con toques de color.',
+      location: 'Bogotá, Chapinero',
+      date: new Date('2025-06-30'),
+      category: 'Artes visuales',
+      tags: ['Mural', 'Arte público'],
+      user: {
+        id: 'user2',
+        name: 'Carlos Gómez',
+        avatar: undefined
+      },
+      likes: 12,
+      comments: 5
+    }
+  ]);
+
+  const handleCreateRecommendation = (data: any) => {
+    const newRecommendation = {
+      id: `rec-${Date.now()}`,
+      ...data,
+      user: {
+        id: user?.id || 'current-user',
+        name: user?.displayName || 'Usuario Anónimo',
+        avatar: user?.photoURL || '/default-avatar.png',
+      },
+      likes: 0,
+      comments: [],
+      createdAt: new Date().toISOString(),
+    };
+    
+    setRecommendations([newRecommendation, ...recommendations]);
+    setShowRecommendationDialog(false);
+  };
+
+  const handleUserTypeChange = async (newType: ProfileUserType) => {
+    try {
+      await updateUserType(newType);
+      // Actualizar la pestaña activa según el nuevo tipo de usuario
+      if (newType === 'artist') {
+        setActiveTab('portfolio');
+      } else if (newType === 'company') {
+        setActiveTab('events');
+      } else {
+        setActiveTab('overview');
+      }
+      setShowChangeTypeDialog(false);
+      
+      // Aquí podrías agregar una notificación de éxito
+      console.log('Tipo de usuario actualizado con éxito');
+    } catch (error) {
+      console.error('Error al actualizar el tipo de usuario:', error);
+      // Aquí podrías agregar una notificación de error
+    }
+  };
+
+  const handleDeleteRecommendation = (id: string) => {
+    setRecommendations(recommendations.filter(rec => rec.id !== id));
+  };
+
+  const handleLikeRecommendation = (id: string) => {
+    setRecommendations(recommendations.map(rec => 
+      rec.id === id ? { ...rec, likes: rec.likes + 1 } : rec
+    ));
+  };
 
   // Datos del perfil según tipo de usuario
   const profileData = {
@@ -92,7 +188,6 @@ export default function Profile() {
     }
   };
 
-  const currentUserType = user?.userType || "general";
   const currentData = profileData[currentUserType as keyof typeof profileData];
 
   const renderGeneralProfile = () => (
@@ -401,19 +496,204 @@ export default function Profile() {
       {/* Contenido principal */}
       <div className="max-w-4xl mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-3 md:grid-cols-4 w-full mb-6">
-            <TabsTrigger value="overview">Resumen</TabsTrigger>
-            <TabsTrigger value="activity">Actividad</TabsTrigger>
-            <TabsTrigger value="settings">Config</TabsTrigger>
+          <TabsList className="flex overflow-x-auto pb-2 mb-6">
+            <TabsTrigger value="overview" className="whitespace-nowrap">Resumen</TabsTrigger>
+            <TabsTrigger value="blog" className="whitespace-nowrap">Mi Blog</TabsTrigger>
+            <TabsTrigger value="events" className="whitespace-nowrap">Mis Eventos</TabsTrigger>
             {currentUserType === 'artist' && (
-              <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
+              <TabsTrigger value="portfolio" className="whitespace-nowrap">Portfolio</TabsTrigger>
             )}
+            <TabsTrigger value="recommendations" className="whitespace-nowrap">Recomendaciones</TabsTrigger>
+            <TabsTrigger value="activity" className="whitespace-nowrap">Actividad</TabsTrigger>
+            <TabsTrigger value="settings" className="whitespace-nowrap">Configuración</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview">
             {currentUserType === 'general' && renderGeneralProfile()}
             {currentUserType === 'artist' && renderArtistProfile()}
             {currentUserType === 'company' && renderCompanyProfile()}
+          </TabsContent>
+
+          {/* Pestaña de Blog */}
+          <TabsContent value="blog">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>Mis Publicaciones</CardTitle>
+                <Button size="sm" className="bg-orange-500 hover:bg-orange-600">
+                  <Edit className="w-4 h-4 mr-2" />
+                  Nueva Publicación
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {[1, 2, 3].map((post) => (
+                    <Card key={post} className="overflow-hidden">
+                      <div className="p-4">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="font-semibold">Título de la publicación {post}</h3>
+                            <p className="text-sm text-gray-600 mt-1">
+                              Publicado el {new Date().toLocaleDateString()}
+                            </p>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button variant="outline" size="sm">
+                              <Edit className="w-4 h-4 mr-1" />
+                              Editar
+                            </Button>
+                            <Button variant="outline" size="sm" className="text-red-600">
+                              Eliminar
+                            </Button>
+                          </div>
+                        </div>
+                        <p className="mt-2 text-gray-700">
+                          Resumen de la publicación. Aquí iría un extracto del contenido...
+                        </p>
+                        <div className="flex items-center mt-3 text-sm text-gray-500">
+                          <span className="flex items-center mr-4">
+                            <Eye className="w-4 h-4 mr-1" /> 124
+                          </span>
+                          <span className="flex items-center">
+                            <MessageCircle className="w-4 h-4 mr-1" /> 5
+                          </span>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Pestaña de Eventos */}
+          <TabsContent value="events">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>Mis Eventos</CardTitle>
+                <Button 
+                  size="sm" 
+                  className="bg-orange-500 hover:bg-orange-600"
+                  onClick={() => setShowEventDialog(true)}
+                >
+                  <CalendarIcon className="w-4 h-4 mr-2" />
+                  Crear Evento
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {[1, 2].map((event) => (
+                    <Card key={event} className="overflow-hidden">
+                      <div className="md:flex">
+                        <div className="md:w-1/3 bg-gray-100 h-40 flex items-center justify-center">
+                          <Calendar className="w-12 h-12 text-gray-400" />
+                        </div>
+                        <div className="p-4 md:w-2/3">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h3 className="font-semibold">Nombre del Evento {event}</h3>
+                              <p className="text-sm text-gray-600 mt-1">
+                                {new Date().toLocaleDateString()} - {new Date(Date.now() + 86400000).toLocaleDateString()}
+                              </p>
+                            </div>
+                            <Badge variant="outline" className="bg-green-100 text-green-800">
+                              Activo
+                            </Badge>
+                          </div>
+                          <p className="mt-2 text-gray-700 line-clamp-2">
+                            Descripción del evento. Aquí iría un resumen de la información del evento...
+                          </p>
+                          <div className="flex justify-between items-center mt-3">
+                            <div className="flex items-center text-sm text-gray-500">
+                              <Users className="w-4 h-4 mr-1" /> 24 asistentes
+                            </div>
+                            <div className="flex gap-2">
+                              <Button variant="outline" size="sm">
+                                Editar
+                              </Button>
+                              <Button variant="outline" size="sm" className="text-red-600">
+                                Cancelar
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Pestaña de Recomendaciones */}
+          <TabsContent value="recommendations" className="space-y-6">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>Mis Recomendaciones</CardTitle>
+                <Button 
+                  size="sm" 
+                  className="bg-orange-500 hover:bg-orange-600"
+                  onClick={() => setShowRecommendationDialog(true)}
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Nueva Recomendación
+                </Button>
+              </CardHeader>
+              <CardContent>
+                {recommendations.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground mb-4">Aún no has publicado ninguna recomendación</p>
+                    <Button 
+                      onClick={() => setShowRecommendationDialog(true)}
+                      className="bg-orange-500 hover:bg-orange-600"
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      Crear mi primera recomendación
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {recommendations
+                      .filter(rec => rec.user.id === user?.id)
+                      .map((recommendation) => (
+                        <RecommendationCard
+                          key={recommendation.id}
+                          {...recommendation}
+                          isOwner={recommendation.user.id === user?.id}
+                          onDelete={handleDeleteRecommendation}
+                          onLike={handleLikeRecommendation}
+                        />
+                      ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Recomendaciones de la comunidad</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {recommendations.length === 0 ? (
+                  <p className="text-muted-foreground text-center py-8">
+                    No hay recomendaciones disponibles en este momento
+                  </p>
+                ) : (
+                  <div className="space-y-4">
+                    {recommendations
+                      .filter(rec => rec.user.id !== user?.id)
+                      .map((recommendation) => (
+                        <RecommendationCard
+                          key={recommendation.id}
+                          {...recommendation}
+                          isOwner={recommendation.user.id === user?.id}
+                          onDelete={handleDeleteRecommendation}
+                          onLike={handleLikeRecommendation}
+                        />
+                      ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="activity">
@@ -432,8 +712,34 @@ export default function Profile() {
               <CardHeader>
                 <CardTitle>Configuración de Cuenta</CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">Opciones de configuración y privacidad...</p>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-base font-medium">Tipo de Cuenta</h3>
+                      <p className="text-sm text-gray-500">
+                        Actualmente eres:{' '}
+                        <span className="font-medium capitalize">
+                          {currentUserType === 'general' 
+                            ? 'Usuario General' 
+                            : currentUserType === 'artist' 
+                              ? 'Artista' 
+                              : 'Empresa'
+                          }
+                        </span>
+                      </p>
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => {
+                        setSelectedUserType(currentUserType);
+                        setShowChangeTypeDialog(true);
+                      }}
+                    >
+                      Cambiar Tipo
+                    </Button>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -483,6 +789,133 @@ export default function Profile() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Diálogo para crear recomendación */}
+      <Dialog open={showRecommendationDialog} onOpenChange={setShowRecommendationDialog}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Crear nueva recomendación</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <CreateRecommendationForm onSubmit={handleCreateRecommendation} />
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Diálogo para cambiar tipo de usuario */}
+      <Dialog open={showChangeTypeDialog} onOpenChange={setShowChangeTypeDialog}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Cambiar tipo de cuenta</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6 py-4">
+            <p className="text-sm text-gray-600">
+              Selecciona el tipo de cuenta que mejor se ajuste a tus necesidades. 
+              Cada tipo tiene características específicas.
+            </p>
+            
+            <div className="space-y-4">
+              <div 
+                className={`border rounded-lg p-4 cursor-pointer transition-colors ${
+                  selectedUserType === 'general' 
+                    ? 'border-orange-500 bg-orange-50' 
+                    : 'border-gray-200 hover:border-orange-300'
+                }`}
+                onClick={() => setSelectedUserType('general')}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium">Usuario General</h4>
+                    <p className="text-sm text-gray-600">
+                      Para explorar, guardar favoritos y contratar artistas.
+                    </p>
+                  </div>
+                  {selectedUserType === 'general' && (
+                    <CheckCircle className="h-5 w-5 text-orange-500" />
+                  )}
+                </div>
+              </div>
+              
+              <div 
+                className={`border rounded-lg p-4 cursor-pointer transition-colors ${
+                  selectedUserType === 'artist' 
+                    ? 'border-orange-500 bg-orange-50' 
+                    : 'border-gray-200 hover:border-orange-300'
+                }`}
+                onClick={() => setSelectedUserType('artist')}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium">Artista</h4>
+                    <p className="text-sm text-gray-600">
+                      Para mostrar tu trabajo, recibir contrataciones y gestionar eventos.
+                    </p>
+                  </div>
+                  {selectedUserType === 'artist' && (
+                    <CheckCircle className="h-5 w-5 text-orange-500" />
+                  )}
+                </div>
+              </div>
+              
+              <div 
+                className={`border rounded-lg p-4 cursor-pointer transition-colors ${
+                  selectedUserType === 'company' 
+                    ? 'border-orange-500 bg-orange-50' 
+                    : 'border-gray-200 hover:border-orange-300'
+                }`}
+                onClick={() => setSelectedUserType('company')}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium">Empresa / Espacio Cultural</h4>
+                    <p className="text-sm text-gray-600">
+                      Para publicar eventos, gestionar espacios y contratar artistas.
+                    </p>
+                  </div>
+                  {selectedUserType === 'company' && (
+                    <CheckCircle className="h-5 w-5 text-orange-500" />
+                  )}
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex justify-end gap-3 pt-4">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowChangeTypeDialog(false)}
+              >
+                Cancelar
+              </Button>
+              <Button 
+                className="bg-orange-500 hover:bg-orange-600"
+                onClick={() => handleUserTypeChange(selectedUserType)}
+                disabled={selectedUserType === currentUserType}
+              >
+                {selectedUserType === currentUserType ? 'Tipo actual' : 'Cambiar a ' + 
+                  (selectedUserType === 'artist' ? 'Artista' : 
+                   selectedUserType === 'company' ? 'Empresa' : 'Usuario General')}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Diálogo para crear evento */}
+      <Dialog open={showEventDialog} onOpenChange={setShowEventDialog}>
+        <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Crear Nuevo Evento</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <EventForm 
+              onSuccess={() => {
+                setShowEventDialog(false);
+                // Aquí podrías agregar una recarga de los eventos si es necesario
+              }} 
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
-}
+};

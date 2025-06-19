@@ -28,7 +28,7 @@ export default function Landing() {
             </div>
             
             <Button asChild className="bg-primary hover:bg-primary/90 text-white">
-              <a href="/api/login">Iniciar Sesión</a>
+              <a href="/login">Iniciar Sesión</a>
             </Button>
           </div>
         </div>
@@ -47,7 +47,7 @@ export default function Landing() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-100">
-              <a href="/api/login">
+              <a href="/login">
                 <Music className="mr-2 h-5 w-5" />
                 Explorar Artistas
               </a>

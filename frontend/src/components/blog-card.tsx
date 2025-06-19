@@ -19,8 +19,32 @@ import { useAuth } from "@/hooks/useAuth";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 
+interface Author {
+  firstName?: string;
+  lastName?: string;
+  profileImageUrl?: string;
+  userType?: 'artist' | 'company' | 'member';
+  isVerified?: boolean;
+}
+
+interface BlogPost {
+  id: string;
+  title: string;
+  excerpt?: string;
+  content?: string;
+  featuredImage?: string;
+  category: string;
+  tags?: string[];
+  publishedAt?: string;
+  createdAt: string;
+  likeCount?: number;
+  commentCount?: number;
+  visibility?: 'public' | 'followers' | 'collaborators';
+  author?: Author;
+}
+
 interface BlogCardProps {
-  post: any;
+  post: BlogPost;
 }
 
 export default function BlogCard({ post }: BlogCardProps) {
@@ -46,7 +70,7 @@ export default function BlogCard({ post }: BlogCardProps) {
     },
     onSuccess: () => {
       setIsLiked(!isLiked);
-      setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
+      setLikeCount((prev: number) => isLiked ? prev - 1 : prev + 1);
       queryClient.invalidateQueries({ queryKey: ["/api/favorites"] });
     },
     onError: () => {
@@ -71,7 +95,7 @@ export default function BlogCard({ post }: BlogCardProps) {
     },
     onSuccess: () => {
       setIsFavorited(!isFavorited);
-      setSaveCount(prev => isFavorited ? prev - 1 : prev + 1);
+      setSaveCount((prev: number) => isFavorited ? prev - 1 : prev + 1);
       queryClient.invalidateQueries({ queryKey: ["/api/favorites"] });
     },
     onError: () => {
@@ -106,7 +130,6 @@ export default function BlogCard({ post }: BlogCardProps) {
   };
 
   const handleReadMore = () => {
-    // TODO: Navigate to full blog post view
     toast({
       title: "Función próximamente",
       description: "La vista completa del artículo estará disponible pronto",
@@ -162,10 +185,10 @@ export default function BlogCard({ post }: BlogCardProps) {
     }
   };
 
-  const getReadingTime = (content: string) => {
+  const getReadingTime = (content?: string) => {
     if (!content) return '2 min';
     const words = content.split(' ').length;
-    const readingTime = Math.ceil(words / 200); // Assuming 200 words per minute
+    const readingTime = Math.ceil(words / 200);
     return `${readingTime} min`;
   };
 

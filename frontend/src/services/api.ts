@@ -1,30 +1,73 @@
 
-import { queryClient } from "@/lib/queryClient";
+import axios from 'axios';
 
-interface ApiOptions {
-  method?: string;
-  body?: any;
-  headers?: Record<string, string>;
-}
+type AxiosRequestConfig = any; // Temporalmente para compatibilidad
+import { auth } from '@/lib/firebase';
+import { config } from '@/config/config';
 
-/**
- * Cliente API centralizado para manejar todas las peticiones HTTP
- */
-export const api = {
-  async fetch<T>(endpoint: string, options: ApiOptions = {}): Promise<T> {
-    const response = await fetch(`/api/${endpoint}`, {
-      method: options.method || 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-      },
-      body: options.body ? JSON.stringify(options.body) : undefined
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error API: ${response.statusText}`);
-    }
-
-    return response.json();
+// Crear instancia de axios
+export const api = axios.create({
+  baseURL: config.apiUrl,
+  withCredentials: true, // Importante para enviar cookies de autenticación
+  headers: {
+    'Content-Type': 'application/json'
   }
-};
+});
+
+// Interceptor para agregar el token a las peticiones
+api.interceptors.request.use(async (config: AxiosRequestConfig) => {
+  // Usar el usuario actual de Firebase para obtener el token
+  const currentUser = auth.currentUser;
+  if (!currentUser) {
+    return config;
+  }
+  
+  try {
+    const token = await currentUser.getIdToken();
+    if (token && config.headers) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  } catch (error) {
+    console.error('Error al obtener el token de autenticación:', error);
+  }
+  
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
+// Interceptor para manejar errores
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    
+    // Si el error es 401 y no es una solicitud de reintento
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      
+      try {
+        // Intentar refrescar el token
+        const currentUser = auth.currentUser;
+        if (currentUser) {
+          const token = await currentUser.getIdToken(true); // Forzar refresco del token
+          
+          // Actualizar el token en el encabezado
+          originalRequest.headers.Authorization = `Bearer ${token}`;
+          
+          // Reintentar la solicitud original con el nuevo token
+          return api(originalRequest);
+        }
+      } catch (refreshError) {
+        console.error('Error al refrescar el token:', refreshError);
+        // Si falla el refresco del token, redirigir al login
+        if (!window.location.pathname.includes('/login')) {
+          window.location.href = '/login';
+        }
+      }
+    }
+    
+    // Para otros errores, rechazar con el error original
+    return Promise.reject(error);
+  }
+);

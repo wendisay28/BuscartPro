@@ -19,8 +19,39 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import RealTimeHiringModal from "./real-time-hiring-modal";
 
+interface Artist {
+  id: string;
+  artistName: string;
+  firstName: string;
+  lastName: string;
+  fanCount?: number;
+  description?: string;
+  pricePerHour: number;
+  isAvailable?: boolean;
+  rating?: number;
+  totalReviews?: number;
+  artistType?: string;
+  categoryId: string;
+  category: {
+    name: string;
+  };
+  user: {
+    firstName: string;
+    lastName: string;
+    city: string;
+    profileImageUrl?: string;
+    isVerified?: boolean;
+  };
+  subcategories?: string[];
+  tags?: string[];
+  serviceTypes?: string[];
+  portfolio?: {
+    images?: string[];
+  };
+}
+
 interface ArtistCardProps {
-  artist: any;
+  artist: Artist;
 }
 
 export default function ArtistCard({ artist }: ArtistCardProps) {
@@ -47,7 +78,7 @@ export default function ArtistCard({ artist }: ArtistCardProps) {
     },
     onSuccess: () => {
       setIsLiked(!isLiked);
-      setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
+      setLikeCount((prev: number) => isLiked ? prev - 1 : prev + 1);
       queryClient.invalidateQueries({ queryKey: ["/api/favorites"] });
     },
     onError: () => {
@@ -72,7 +103,7 @@ export default function ArtistCard({ artist }: ArtistCardProps) {
     },
     onSuccess: () => {
       setIsFavorited(!isFavorited);
-      setSaveCount(prev => isFavorited ? prev - 1 : prev + 1);
+      setSaveCount((prev: number) => isFavorited ? prev - 1 : prev + 1);
       queryClient.invalidateQueries({ queryKey: ["/api/favorites"] });
     },
     onError: () => {
@@ -121,7 +152,7 @@ export default function ArtistCard({ artist }: ArtistCardProps) {
     return name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'A';
   };
 
-  const formatPrice = (price: string | number) => {
+  const formatPrice = (price: string | number | undefined) => {
     if (!price) return 'Consultar precio';
     const numPrice = typeof price === 'string' ? parseFloat(price) : price;
     return new Intl.NumberFormat('es-CO', {

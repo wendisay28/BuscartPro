@@ -6,28 +6,114 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   Star, 
   MapPin, 
-  DollarSign, 
   Users, 
-  Clock,
   X,
   Send,
-  Eye,
-  Phone,
-  Mail
+  Eye
 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import RealTimeHiringModal from "./real-time-hiring-modal";
 
+// Tipos para mayor claridad y validación
+interface Artist {
+  id: string;
+  artistName: string;
+  firstName: string;
+  lastName: string;
+  fanCount?: number;
+  description?: string;
+  pricePerHour: number;
+  isAvailable?: boolean;
+  rating?: number;
+  totalReviews?: number;
+  artistType?: string;
+  categoryId: string;
+  category: {
+    name: string;
+  };
+  user: {
+    firstName: string;
+    lastName: string;
+    city: string;
+    profileImageUrl?: string;
+    isVerified?: boolean;
+  };
+  subcategories?: string[];
+  tags?: string[];
+  serviceTypes?: string[];
+  portfolio?: {
+    images?: string[];
+  };
+}
+
+interface Favorite {
+  id: number;
+  targetId?: string;
+  artist?: Artist;
+  rating?: number;
+  name?: string;
+  category?: string;
+  type?: string;
+  city?: string;
+  price?: number;
+  fans?: number;
+  description?: string;
+  availability?: string;
+  verified?: boolean;
+  image?: string;
+  // Propiedades adicionales utilizadas en el renderizado
+  artistName?: string;
+  firstName?: string;
+  lastName?: string;
+  fanCount?: number;
+  pricePerHour?: number;
+  isAvailable?: boolean;
+  totalReviews?: number;
+  artistType?: string;
+  categoryId?: string;
+  subcategories?: string[];
+  tags?: string[];
+  serviceTypes?: string[];
+  portfolio?: {
+    images?: string[];
+  };
+  user?: {
+    firstName: string;
+    lastName: string;
+    city: string;
+    profileImageUrl?: string;
+    isVerified?: boolean;
+  };
+}
+
+
+
 export default function FavoritesComparison() {
   const [showHiringModal, setShowHiringModal] = useState(false);
-  const [selectedArtist, setSelectedArtist] = useState<any>(null);
+  const [selectedArtist, setSelectedArtist] = useState<Artist | undefined>(undefined);
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
-  const { data: favoriteArtists, isLoading } = useQuery({
+  const { data: favoriteArtists = [], isLoading } = useQuery<Favorite[]>({
     queryKey: ["/api/favorites", { targetType: 'artist' }],
+    queryFn: async () => {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000/api'}/favorites?targetType=artist`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch favorites');
+      }
+      
+      const data = await response.json();
+      return data.data || [];
+    },
   });
 
   const removeFavoriteMutation = useMutation({
@@ -50,7 +136,10 @@ export default function FavoritesComparison() {
     },
   });
 
-  const handleHire = (artist: any) => {
+  const handleHire = (artistOrFavorite: Artist | Favorite) => {
+    // Si es un Favorite, usamos el artista si está disponible, de lo contrario usamos el propio favorite
+    const artist = 'artist' in artistOrFavorite && artistOrFavorite.artist ? 
+                  artistOrFavorite.artist : artistOrFavorite as Artist;
     setSelectedArtist(artist);
     setShowHiringModal(true);
   };
@@ -59,11 +148,58 @@ export default function FavoritesComparison() {
     removeFavoriteMutation.mutate(artistId);
   };
 
+  // Función para obtener el precio de un artista
+  const getArtistPrice = (favorite: Favorite) => {
+    return favorite.artist?.pricePerHour || favorite.price || 0;
+  };
+
+  // Función para obtener la imagen del artista
+  const getArtistImage = (favorite: Favorite) => {
+    return favorite.image || favorite.artist?.user?.profileImageUrl || '';
+  };
+
+  // Función para obtener el nombre del artista
+  const getArtistName = (favorite: Favorite) => {
+    return favorite.artistName || 
+           favorite.name || 
+           (favorite.artist ? `${favorite.artist.firstName} ${favorite.artist.lastName}` : 'Artista');
+  };
+
+  // Función para obtener la ciudad del artista
+  const getArtistCity = (favorite: Favorite) => {
+    return favorite.artist?.user?.city || favorite.city || 'Ciudad no especificada';
+  };
+
+  // Función para obtener la categoría del artista
+  const getArtistCategory = (favorite: Favorite) => {
+    return favorite.artist?.category?.name || favorite.category || 'Música';
+  };
+
+  // Función para obtener la calificación del artista
+  const getArtistRating = (favorite: Favorite) => {
+    return favorite.artist?.rating || favorite.rating || 4.8;
+  };
+
+  // Función para obtener el número de reseñas
+  const getArtistReviewsCount = (favorite: Favorite) => {
+    return favorite.artist?.totalReviews || favorite.totalReviews || 0;
+  };
+
+  // Función para obtener los servicios del artista
+  const getArtistServices = (favorite: Favorite) => {
+    return favorite.artist?.serviceTypes || favorite.serviceTypes || [];
+  };
+
+  // Función para verificar si el artista está disponible
+  const isArtistAvailable = (favorite: Favorite) => {
+    return favorite.artist?.isAvailable !== false && favorite.availability !== 'No disponible';
+  };
+
   const getInitials = (name: string) => {
     return name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'A';
   };
 
-  const formatPrice = (price: string | number) => {
+  const formatPrice = (price: string | number | undefined) => {
     if (!price) return 'Consultar';
     const numPrice = typeof price === 'string' ? parseFloat(price) : price;
     return new Intl.NumberFormat('es-CO', {
@@ -96,7 +232,7 @@ export default function FavoritesComparison() {
     );
   }
 
-  if (!favoriteArtists || favoriteArtists.length === 0) {
+  if (!favoriteArtists.length) {
     return (
       <Card>
         <CardHeader>
@@ -158,11 +294,9 @@ export default function FavoritesComparison() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {favoriteArtists.map((favorite: any) => {
-                  // Note: In a real implementation, this would fetch the actual artist data
-                  // For now, we'll work with what we have in the favorite object
-                  const artist = favorite.artist || favorite; // Fallback structure
-                  const availability = getAvailabilityStatus(artist.isAvailable !== false);
+                {favoriteArtists.map((favorite) => {
+                  const availability = getAvailabilityStatus(isArtistAvailable(favorite));
+                  const services = getArtistServices(favorite);
                   
                   return (
                     <tr key={favorite.id} className="hover:bg-gray-50 transition-colors">
@@ -170,21 +304,21 @@ export default function FavoritesComparison() {
                         <div className="flex items-center space-x-3">
                           <Avatar className="h-12 w-12">
                             <AvatarImage 
-                              src={artist.user?.profileImageUrl || artist.profileImageUrl} 
-                              alt={artist.artistName || artist.name} 
+                              src={getArtistImage(favorite)} 
+                              alt={getArtistName(favorite)} 
                             />
                             <AvatarFallback>
-                              {getInitials(artist.artistName || artist.name || 'Artista')}
+                              {getInitials(getArtistName(favorite))}
                             </AvatarFallback>
                           </Avatar>
                           <div className="min-w-0 flex-1">
                             <div className="font-medium text-dark truncate">
-                              {artist.artistName || artist.name || 'Artista'}
+                              {getArtistName(favorite)}
                             </div>
                             <div className="text-sm text-gray-500 flex items-center mt-1">
                               <MapPin className="h-3 w-3 mr-1" />
                               <span className="truncate">
-                                {artist.user?.city || artist.city || 'Ciudad no especificada'}
+                                {getArtistCity(favorite)}
                               </span>
                             </div>
                           </div>
@@ -192,22 +326,22 @@ export default function FavoritesComparison() {
                       </td>
                       <td className="px-6 py-4">
                         <Badge variant="secondary" className="text-xs">
-                          {artist.category?.name || artist.categoryName || 'Música'}
+                          {getArtistCategory(favorite)}
                         </Badge>
                       </td>
                       <td className="px-6 py-4">
                         <div className="font-semibold text-dark">
-                          {formatPrice(artist.pricePerHour || artist.price)}
+                          {formatPrice(getArtistPrice(favorite))}
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center">
                           <Star className="h-4 w-4 text-yellow-400 fill-current mr-1" />
                           <span className="text-sm font-medium">
-                            {artist.rating || '4.8'}
+                            {getArtistRating(favorite).toFixed(1)}
                           </span>
                           <span className="text-xs text-gray-500 ml-1">
-                            ({artist.totalReviews || artist.reviewsCount || 0})
+                            ({getArtistReviewsCount(favorite)})
                           </span>
                         </div>
                       </td>
@@ -218,10 +352,8 @@ export default function FavoritesComparison() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm text-gray-600">
-                          {artist.serviceTypes?.slice(0, 2).join(', ') || 
-                           artist.services?.slice(0, 2).join(', ') ||
-                           'Shows, Eventos'}
-                          {(artist.serviceTypes?.length > 2 || artist.services?.length > 2) && (
+                          {services.slice(0, 2).join(', ') || 'Shows, Eventos'}
+                          {services.length > 2 && (
                             <span className="text-gray-400"> +más</span>
                           )}
                         </div>
@@ -230,18 +362,17 @@ export default function FavoritesComparison() {
                         <div className="flex items-center space-x-2">
                           <Button
                             size="sm"
-                            onClick={() => handleHire(artist)}
+                            onClick={() => handleHire(favorite.artist || favorite)}
                             className="bg-primary hover:bg-primary/90 text-white"
-                            disabled={artist.isAvailable === false}
+                            disabled={!isArtistAvailable(favorite)}
                           >
                             <Send className="h-3 w-3 mr-1" />
-                            {artist.isAvailable === false ? 'No disponible' : 'Contratar'}
+                            {isArtistAvailable(favorite) ? 'Contratar' : 'No disponible'}
                           </Button>
                           <Button
                             size="sm"
                             variant="outline"
                             onClick={() => {
-                              // TODO: Navigate to artist profile
                               toast({
                                 title: "Función próximamente",
                                 description: "La vista del perfil estará disponible pronto",
@@ -253,7 +384,7 @@ export default function FavoritesComparison() {
                           <Button
                             size="sm"
                             variant="ghost"
-                            onClick={() => handleRemove(favorite.targetId || artist.id)}
+                            onClick={() => handleRemove(Number(favorite.targetId || favorite.id))}
                             className="text-gray-400 hover:text-red-500"
                           >
                             <X className="h-3 w-3" />
@@ -267,7 +398,7 @@ export default function FavoritesComparison() {
             </table>
           </div>
 
-          {/* Summary Stats */}
+          {/* Resumen */}
           <div className="bg-gray-50 px-6 py-4 border-t">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
               <div>
@@ -278,22 +409,31 @@ export default function FavoritesComparison() {
               </div>
               <div>
                 <div className="text-lg font-semibold text-dark">
-                  {favoriteArtists.filter((f: any) => (f.artist?.rating || f.rating || 4.8) >= 4.5).length}
+                  {
+                    favoriteArtists.filter((f) =>
+                    (f.artist?.rating || 4.8) >= 4.5
+                  ).length}
                 </div>
                 <div className="text-xs text-gray-600">Con 4.5+ estrellas</div>
               </div>
               <div>
                 <div className="text-lg font-semibold text-dark">
-                  {favoriteArtists.filter((f: any) => f.artist?.isAvailable !== false).length}
+                  {
+                    favoriteArtists.filter((f) =>
+                      f.artist?.isAvailable !== false
+                    ).length
+                  }
                 </div>
                 <div className="text-xs text-gray-600">Disponibles ahora</div>
               </div>
               <div>
                 <div className="text-lg font-semibold text-dark">
-                  ${Math.round(favoriteArtists.reduce((acc: number, f: any) => {
-                    const price = parseFloat(f.artist?.pricePerHour || f.price || '0');
-                    return acc + price;
-                  }, 0) / favoriteArtists.length).toLocaleString()}
+                  ${Math.round(
+                    favoriteArtists.reduce((acc, f) => {
+                      const price = f.artist?.pricePerHour || 0;
+                      return acc + price;
+                    }, 0) / favoriteArtists.length
+                  ).toLocaleString()}
                 </div>
                 <div className="text-xs text-gray-600">Precio promedio/hora</div>
               </div>

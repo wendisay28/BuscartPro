@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import NavigationHeader from "@/components/navigation-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,9 +10,7 @@ import {
   MessageCircle, 
   Calendar, 
   Users, 
-  TrendingUp, 
   Star,
-  Camera,
   Music,
   BookOpen,
   ThumbsUp,
@@ -21,8 +18,8 @@ import {
   MapPin,
   Award,
   Image,
-  Video,
-  PenTool
+  PenTool,
+  Store
 } from "lucide-react";
 import { Link } from "wouter";
 
@@ -30,21 +27,15 @@ export default function Home() {
   const { user } = useAuth();
   const [postContent, setPostContent] = useState("");
 
-  const { data: featuredArtists } = useQuery({
-    queryKey: ["/api/artists?featured=true"],
-  });
-
-  const { data: upcomingEvents } = useQuery({
-    queryKey: ["/api/events?upcoming=true"],
-  });
-
-  const { data: recentBlogPosts } = useQuery({
-    queryKey: ["/api/blog?recent=true"],
-  });
-
-  const { data: recentActivity } = useQuery({
-    queryKey: ["/api/activity/recent"],
-  });
+  // Ejemplo de publicaciones de blog (comentado ya que no se usa actualmente)
+  // const mockBlogPosts = [
+  //   {
+  //     id: 1,
+  //     title: 'Publicación de ejemplo',
+  //     excerpt: 'Esta es una publicación de ejemplo para mostrar en el dashboard.',
+  //     date: '2023-11-20'
+  //   }
+  // ];
 
   const getPostTypeButtons = () => {
     const baseButtons = [
@@ -76,28 +67,30 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-warm-gray">
+    <div className="min-h-screen bg-black text-white">
       <NavigationHeader />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           
-          {/* Left Sidebar - Mini Profile & Quick Access */}
-          <div className="lg:col-span-1 space-y-6">
+          {/* Left Sidebar */}
+          <div className="hidden lg:block lg:col-span-1 space-y-6">
             {/* Mini Profile */}
-            <Card>
+            <Card className="bg-gray-900 border-gray-800">
               <CardContent className="p-6 text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full mx-auto mb-4 flex items-center justify-center">
                   <span className="text-white text-xl font-bold">
                     {user?.firstName?.[0]}{user?.lastName?.[0]}
                   </span>
                 </div>
-                <h3 className="font-heading font-semibold text-lg text-dark">
+                <h3 className="font-heading font-semibold text-lg text-white">
                   {user?.firstName} {user?.lastName}
                 </h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  {user?.userType === 'artist' ? 'Artista' : 
-                   user?.userType === 'company' ? 'Empresa' : 'Usuario General'}
+                <p className="text-sm text-gray-400 mb-4">
+                  {user?.userType === 'artist' && 'Artista'}
+                  {user?.userType === 'company' && 'Empresa'}
+                  {user?.userType === 'general' && 'Usuario General'}
+                  {!user?.userType && 'Invitado'}
                 </p>
                 <Button variant="outline" size="sm" className="w-full" asChild>
                   <Link href="/user/profile">
@@ -109,9 +102,9 @@ export default function Home() {
             </Card>
 
             {/* Quick Access */}
-            <Card>
+            <Card className="bg-gray-900 border-gray-800">
               <CardHeader>
-                <CardTitle className="text-lg">Accesos Rápidos</CardTitle>
+                <CardTitle className="text-lg text-white">Accesos Rápidos</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button variant="ghost" className="w-full justify-start" asChild>
@@ -124,6 +117,18 @@ export default function Home() {
                   <Link href="/community/groups">
                     <Users className="h-4 w-4 mr-3" />
                     Grupos
+                  </Link>
+                </Button>
+                <Button variant="ghost" className="w-full justify-start" asChild>
+                  <Link href="/community/blog">
+                    <BookOpen className="h-4 w-4 mr-3" />
+                    Blog
+                  </Link>
+                </Button>
+                <Button variant="ghost" className="w-full justify-start" asChild>
+                  <Link href="/marketplace">
+                    <Store className="h-4 w-4 mr-3" />
+                    Tienda
                   </Link>
                 </Button>
                 <Button variant="ghost" className="w-full justify-start" asChild>
@@ -146,7 +151,7 @@ export default function Home() {
           <div className="lg:col-span-2 space-y-6">
             
             {/* Post Creation Section */}
-            <Card>
+            <Card className="bg-gray-900 border-gray-800">
               <CardContent className="p-6">
                 <div className="flex items-start space-x-4">
                   <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
@@ -190,7 +195,7 @@ export default function Home() {
               
               {/* Example content from favorites */}
               {[1, 2, 3].map((_, index) => (
-                <Card key={index} className="card-hover">
+                <Card key={index} className="overflow-hidden bg-gray-900 border-gray-800">
                   <CardContent className="p-6">
                     <div className="flex items-start space-x-4 mb-4">
                       <div className="w-10 h-10 bg-gradient-to-br from-secondary to-accent rounded-full"></div>
@@ -271,17 +276,17 @@ export default function Home() {
           <div className="lg:col-span-1 space-y-6">
             
             {/* Suggested Artists */}
-            <Card>
+            <Card className="bg-gray-900 border-gray-800">
               <CardHeader>
-                <CardTitle className="text-lg">Artistas Sugeridos</CardTitle>
+                <CardTitle className="text-lg text-white">Artistas Sugeridos</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {[1, 2, 3].map((_, index) => (
                   <div key={index} className="flex items-center space-x-3">
                     <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-full flex-shrink-0"></div>
                     <div className="flex-1">
-                      <h4 className="font-medium text-dark text-sm">Ana Rodríguez</h4>
-                      <p className="text-xs text-gray-600">Bailarina Contemporánea</p>
+                      <h4 className="font-medium text-white text-sm">Ana Rodríguez</h4>
+                      <p className="text-xs text-gray-400">Bailarina Contemporánea</p>
                       <div className="flex items-center text-xs text-gray-500 mt-1">
                         <MapPin className="h-3 w-3 mr-1" />
                         <span>Medellín</span>
@@ -294,9 +299,9 @@ export default function Home() {
             </Card>
 
             {/* Upcoming Events */}
-            <Card>
+            <Card className="bg-gray-900 border-gray-800">
               <CardHeader>
-                <CardTitle className="text-lg">Eventos Sugeridos</CardTitle>
+                <CardTitle className="text-lg text-white">Eventos Sugeridos</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {[1, 2, 3].map((_, index) => (
@@ -306,8 +311,8 @@ export default function Home() {
                         <Calendar className="h-6 w-6 text-white" />
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-medium text-dark text-sm">Festival de Jazz</h4>
-                        <p className="text-xs text-gray-600">15 de Abril</p>
+                        <h4 className="font-medium text-white text-sm">Festival de Jazz</h4>
+                        <p className="text-xs text-gray-400">15 de Abril</p>
                         <div className="flex items-center text-xs text-gray-500 mt-1">
                           <MapPin className="h-3 w-3 mr-1" />
                           <span>Teatro Nacional</span>

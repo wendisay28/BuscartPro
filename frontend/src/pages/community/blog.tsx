@@ -7,17 +7,51 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Search, SlidersHorizontal, Plus, TrendingUp, Heart, Eye } from "lucide-react";
+import { BookOpen, Search, Plus, TrendingUp, Heart, Eye } from "lucide-react";
+
+// Definición de tipos
+interface Author {
+  firstName?: string;
+  lastName?: string;
+  profileImageUrl?: string;
+  userType?: 'artist' | 'company' | 'member';
+  isVerified?: boolean;
+}
+
+interface BlogPost {
+  id: string;
+  title: string;
+  excerpt?: string;
+  content?: string;
+  featuredImage?: string;
+  category: string;
+  tags?: string[];
+  publishedAt?: string;
+  createdAt: string;
+  likeCount?: number;
+  commentCount?: number;
+  visibility?: 'public' | 'followers' | 'collaborators';
+  author?: Author;
+}
+
+type FilterKeys = 'search' | 'category' | 'author' | 'sortBy';
+
+type Filters = {
+  search: string;
+  category: string;
+  author: string;
+  sortBy: 'recent' | 'popular' | 'trending' | 'liked';
+};
 
 export default function CommunityBlog() {
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<Filters>({
     search: '',
     category: '',
     author: '',
     sortBy: 'recent'
   });
 
-  const { data: blogPosts, isLoading } = useQuery({
+  const { data: blogPosts, isLoading } = useQuery<BlogPost[]>({
     queryKey: ['/api/blog', filters],
   });
 
@@ -26,7 +60,10 @@ export default function CommunityBlog() {
     'Industria Musical', 'Arte Visual', 'Teatro', 'Eventos'
   ];
 
-  const handleFilterChange = (key: string, value: any) => {
+  const handleFilterChange = (key: FilterKeys, value: string | Filters['sortBy']) => {
+    if (key === 'sortBy' && typeof value === 'string') {
+      if (!['recent', 'popular', 'trending', 'liked'].includes(value)) return;
+    }
     setFilters(prev => ({ ...prev, [key]: value }));
   };
 
@@ -95,7 +132,7 @@ export default function CommunityBlog() {
               </div>
 
               <div className="flex flex-wrap gap-3 lg:flex-nowrap">
-                <Select value={filters.category} onValueChange={(value) => handleFilterChange('category', value)}>
+                <Select value={filters.category} onValueChange={(value: string) => handleFilterChange('category', value)}>
                   <SelectTrigger className="w-48">
                     <SelectValue placeholder="Categoría" />
                   </SelectTrigger>
@@ -109,15 +146,15 @@ export default function CommunityBlog() {
                   </SelectContent>
                 </Select>
 
-                <Select value={filters.sortBy} onValueChange={(value) => handleFilterChange('sortBy', value)}>
+                <Select value={filters.sortBy} onValueChange={(value: 'recent' | 'popular' | 'trending' | 'liked') => handleFilterChange('sortBy', value)}>
                   <SelectTrigger className="w-40">
                     <SelectValue placeholder="Ordenar por" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="recent">Más recientes</SelectItem>
-                    <SelectItem value="popular">Más populares</SelectItem>
-                    <SelectItem value="trending">Tendencias</SelectItem>
-                    <SelectItem value="liked">Más gustados</SelectItem>
+                    <SelectItem value="recent" key="recent">Más recientes</SelectItem>
+                    <SelectItem value="popular" key="popular">Más populares</SelectItem>
+                    <SelectItem value="trending" key="trending">Tendencias</SelectItem>
+                    <SelectItem value="liked" key="liked">Más gustados</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -170,7 +207,7 @@ export default function CommunityBlog() {
               </div>
             ) : blogPosts && blogPosts.length > 0 ? (
               <div className="space-y-6">
-                {blogPosts.map((post: any) => (
+                {blogPosts.map((post) => (
                   <BlogCard key={post.id} post={post} />
                 ))}
                 

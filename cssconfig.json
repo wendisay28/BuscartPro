@@ -1,0 +1,12 @@
+{
+  "atrules": {
+    "tailwind": {
+      "name": "tailwind",
+      "descriptions": "Tailwind CSS directives"
+    },
+    "apply": {
+      "name": "apply",
+      "descriptions": "Tailwind CSS apply directive"
+    }
+  }
+}

@@ -1,7 +1,6 @@
 
 import { useEffect, useRef } from 'react';
 import { WebSocketClient } from '@/lib/websocket';
-import { useToast } from './use-toast';
 import { useAuth } from './useAuth';
 
 /**
@@ -9,7 +8,6 @@ import { useAuth } from './useAuth';
  */
 export function useWebSocket() {
   const { user } = useAuth();
-  const { toast } = useToast();
   const wsRef = useRef<WebSocketClient | null>(null);
 
   useEffect(() => {

@@ -27,10 +27,47 @@ import { es } from "date-fns/locale";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
+interface Artist {
+  id: string;
+  firstName: string;
+  lastName: string;
+  profileImageUrl?: string;
+  rating?: number;
+  categoryId: string;
+  category: { name: string };
+  pricePerHour: number;
+  user: {
+    firstName: string;
+    lastName: string;
+    city: string;
+  };
+}
+
+interface FormData {
+  description: string;
+  city: string;
+  eventDate: Date | undefined;
+  eventTime: string;
+  minBudget: string;
+  maxBudget: string;
+  additionalDetails: string;
+}
+
+interface HiringRequestDTO {
+  description: string;
+  city: string;
+  eventDate: string;
+  eventTime: string;
+  minBudget?: number;
+  maxBudget?: number;
+  additionalDetails: string;
+  categoryId?: string;
+}
+
 interface RealTimeHiringModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  artist?: any;
+  artist?: Artist;
 }
 
 export default function RealTimeHiringModal({ 
@@ -38,27 +75,38 @@ export default function RealTimeHiringModal({
   onOpenChange, 
   artist 
 }: RealTimeHiringModalProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     description: '',
     city: '',
-    eventDate: null as Date | null,
+    eventDate: undefined,
     eventTime: '',
     minBudget: '',
     maxBudget: '',
     additionalDetails: '',
   });
-  const [selectedDate, setSelectedDate] = useState<Date>();
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
   const createHiringRequestMutation = useMutation({
-    mutationFn: async (data: any) => {
-      const response = await apiRequest('POST', '/api/hiring-requests', data);
-      return response.json();
+    mutationFn: async (formData: FormData): Promise<HiringRequestDTO> => {
+      const requestData: HiringRequestDTO = {
+        description: formData.description,
+        city: formData.city,
+        eventTime: formData.eventTime,
+        additionalDetails: formData.additionalDetails,
+        eventDate: formData.eventDate ? formData.eventDate.toISOString() : '',
+        minBudget: formData.minBudget ? parseFloat(formData.minBudget) : undefined,
+        maxBudget: formData.maxBudget ? parseFloat(formData.maxBudget) : undefined,
+        categoryId: artist?.categoryId
+      };
+      const response = await apiRequest('POST', '/api/hiring-requests', requestData);
+      const result = await response.json();
+      return result as HiringRequestDTO;
     },
-    onSuccess: () => {
+    onSuccess: (data: HiringRequestDTO) => {
       queryClient.invalidateQueries({ queryKey: ["/api/hiring-requests"] });
       toast({
         title: "¡Solicitud enviada!",
@@ -80,7 +128,7 @@ export default function RealTimeHiringModal({
     setFormData({
       description: '',
       city: '',
-      eventDate: null,
+      eventDate: undefined,
       eventTime: '',
       minBudget: '',
       maxBudget: '',
@@ -89,9 +137,16 @@ export default function RealTimeHiringModal({
     setSelectedDate(undefined);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  const handleSubmit = async () => {
+    if (!formData.eventDate) {
+      toast({
+        title: "Error",
+        description: "Por favor selecciona una fecha para el evento.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!formData.description.trim()) {
       toast({
         title: "Campos requeridos",
@@ -119,18 +174,7 @@ export default function RealTimeHiringModal({
       return;
     }
 
-    const requestData = {
-      description: formData.description,
-      city: formData.city,
-      eventDate: selectedDate.toISOString(),
-      eventTime: formData.eventTime,
-      minBudget: formData.minBudget ? parseFloat(formData.minBudget) : undefined,
-      maxBudget: formData.maxBudget ? parseFloat(formData.maxBudget) : undefined,
-      additionalDetails: formData.additionalDetails,
-      categoryId: artist?.categoryId,
-    };
-
-    createHiringRequestMutation.mutate(requestData);
+    createHiringRequestMutation.mutate(formData);
   };
 
   const cities = [
@@ -173,7 +217,7 @@ export default function RealTimeHiringModal({
                 <User className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h4 className="font-semibold text-dark">{artist.artistName}</h4>
+                <h4 className="font-semibold text-dark">{`${artist.firstName} ${artist.lastName}`}</h4>
                 <p className="text-sm text-gray-600">{artist.category?.name}</p>
                 <div className="flex items-center gap-2 mt-1">
                   <Badge variant="outline" className="text-xs">
@@ -243,10 +287,10 @@ export default function RealTimeHiringModal({
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
-                    selected={selectedDate}
-                    onSelect={(date) => {
+                    selected={selectedDate || undefined}
+                    onSelect={(date: Date | undefined) => {
                       setSelectedDate(date);
-                      setFormData(prev => ({ ...prev, eventDate: date }));
+                      setFormData({ ...formData, eventDate: date });
                     }}
                     disabled={(date) => date < new Date()}
                     initialFocus

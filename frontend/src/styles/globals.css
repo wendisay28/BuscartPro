@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 22.8 9.8% 90%; /* Naranja claro */
+    --primary-foreground: 22.8 9.8% 20%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: #f97316; /* Naranja */
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 22.8 9.8% 40%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 24.6 95% 53.1%; /* Naranja */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: #f97316; /* Naranja */
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 24.6 95% 53.1%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Estilos personalizados adicionales */
+body {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-secondary rounded-full border-2 border-solid border-background;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground;
+}
+
+/* Clases para la navegación móvil */
+.bottom-nav {
+  @apply fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-md border-t z-50;
+}
+
+/* Clases para la navegación desktop */
+.sidebar-nav {
+  @apply fixed left-0 top-0 h-screen w-20 bg-background/80 backdrop-blur-md border-r z-40;
+}
+
+.main-content {
+  @apply ml-20;
+}
+
+.right-sidebar {
+  @apply fixed right-0 top-0 h-screen w-80 bg-background/80 backdrop-blur-md border-l z-40 overflow-y-auto;
+}
+
+/* Estilos para tarjetas */
+.card {
+  @apply rounded-lg overflow-hidden bg-card relative border;
+}
+
+.card-title {
+  @apply font-bold text-sm md:text-base mb-1 line-clamp-2 text-card-foreground;
+}
+
+.card-description {
+  @apply text-xs text-muted-foreground line-clamp-2;
+}
+
+.card-tag {
+  @apply inline-block px-2 py-0.5 text-xs rounded-full bg-secondary text-secondary-foreground mr-1 mb-1;
+}
+
+/* Barra de búsqueda */
+.search-bar {
+  @apply bg-secondary/50 backdrop-blur-md rounded-full px-4 py-2 text-sm text-foreground placeholder-muted-foreground w-full max-w-md border;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}

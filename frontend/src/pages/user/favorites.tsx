@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,30 +12,21 @@ import {
   Heart, 
   Star, 
   MapPin, 
-  DollarSign,
   Calendar,
   Users,
   Building,
-  Music,
-  Camera,
-  Palette,
-  Mic,
-  X,
-  ArrowRight,
-  Eye,
   MessageCircle,
-  Share2,
-  Scale,
-  Filter
+  Filter,
+  Scale
 } from "lucide-react";
 
 export default function Favorites() {
-  const { user } = useAuth();
+  useAuth(); // Usuario autenticado (se mantiene para futuras validaciones)
   const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState("artists");
   const [selectedForComparison, setSelectedForComparison] = useState<number[]>([]);
   const [showComparison, setShowComparison] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
+  const [, setShowFilters] = useState(false); // Para mostrar/ocultar filtros
 
   // Datos de favoritos realistas
   const favoriteData = {
@@ -93,7 +84,6 @@ export default function Favorites() {
     ]
   };
 
-  const currentData = favoriteData[activeTab as keyof typeof favoriteData];
 
   const handleCompareToggle = (id: number) => {
     setSelectedForComparison(prev => 
@@ -139,7 +129,7 @@ export default function Favorites() {
           <Heart className="w-4 h-4 text-red-500 fill-current" />
         </Button>
       </div>
-      
+
       <CardContent className="p-4">
         <div className="flex items-start justify-between mb-3">
           <div>
@@ -205,7 +195,7 @@ export default function Favorites() {
           <Heart className="w-4 h-4 text-red-500 fill-current" />
         </Button>
       </div>
-      
+
       <CardContent className="p-4">
         <h3 className="font-semibold text-gray-900 mb-2">{event.title}</h3>
         <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
@@ -251,7 +241,7 @@ export default function Favorites() {
           <Heart className="w-4 h-4 text-red-500 fill-current" />
         </Button>
       </div>
-      
+
       <CardContent className="p-4">
         <h3 className="font-semibold text-gray-900 mb-2">{venue.name}</h3>
         <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
@@ -298,7 +288,7 @@ export default function Favorites() {
                   onClick={() => setShowComparison(true)}
                   className="bg-orange-500 hover:bg-orange-600"
                 >
-                  <Compare className="w-4 h-4 mr-2" />
+                  <Scale className="w-4 h-4 mr-2" />
                   Comparar ({selectedForComparison.length})
                 </Button>
               )}
@@ -348,7 +338,7 @@ export default function Favorites() {
                 </div>
               </div>
             )}
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {favoriteData.artists.map(renderArtistCard)}
             </div>
@@ -374,7 +364,7 @@ export default function Favorites() {
           <DialogHeader>
             <DialogTitle>Comparar Artistas</DialogTitle>
           </DialogHeader>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {getComparisonData().map((artist) => (
               <Card key={artist.id} className="border-2 border-orange-200">
@@ -428,7 +418,7 @@ export default function Favorites() {
                       </Badge>
                     </div>
                   </div>
-                  
+
                   <Button size="sm" className="w-full bg-orange-500 hover:bg-orange-600">
                     <MessageCircle className="w-3 h-3 mr-1" />
                     Contactar

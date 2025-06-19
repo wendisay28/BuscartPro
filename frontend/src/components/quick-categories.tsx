@@ -12,6 +12,12 @@ import {
 } from "lucide-react";
 import { Link } from "wouter";
 
+// Definición de tipos
+type Category = {
+  id: string;
+  name: string;
+};
+
 const categoryIcons: Record<string, any> = {
   "Música": Music,
   "Teatro": Drama,
@@ -35,7 +41,8 @@ const gradients = [
 ];
 
 export default function QuickCategories() {
-  const { data: categories, isLoading } = useQuery({
+  // Query con tipo definido
+  const { data: categories, isLoading } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
   });
 
@@ -69,9 +76,9 @@ export default function QuickCategories() {
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
           {categories && categories.length > 0 ? (
-            categories.map((category: any, index: number) => {
+            categories.map((category) => {
               const IconComponent = categoryIcons[category.name] || Music;
-              const gradient = gradients[index % gradients.length];
+              const gradient = gradients[categories.indexOf(category) % gradients.length];
               
               return (
                 <Link
@@ -95,21 +102,21 @@ export default function QuickCategories() {
           ) : (
             // Fallback static categories if API fails
             [
-              { name: "Música", icon: Music },
-              { name: "Teatro", icon: Drama },
-              { name: "Artes Visuales", icon: PaintbrushVertical },
-              { name: "Fotografía", icon: Camera },
-              { name: "Danza", icon: Users },
-              { name: "Literatura", icon: BookOpen },
-              { name: "Audiovisual", icon: Video },
-              { name: "Más", icon: Sparkles },
+              { id: "1", name: "Música" },
+              { id: "2", name: "Teatro" },
+              { id: "3", name: "Artes Visuales" },
+              { id: "4", name: "Fotografía" },
+              { id: "5", name: "Danza" },
+              { id: "6", name: "Literatura" },
+              { id: "7", name: "Audiovisual" },
+              { id: "8", name: "Más" },
             ].map((category, index) => {
-              const IconComponent = category.icon;
+              const IconComponent = categoryIcons[category.name] || Music;
               const gradient = gradients[index % gradients.length];
               
               return (
                 <Link
-                  key={category.name}
+                  key={category.id}
                   href={`/explorer?search=${category.name}&type=artists`}
                   className="group"
                 >

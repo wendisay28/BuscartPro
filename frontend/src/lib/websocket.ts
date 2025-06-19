@@ -204,14 +204,14 @@ export function useWebSocket() {
       });
     });
 
-    const unsubscribeNewMessage = clientRef.current.subscribe('new_message', (data) => {
+    const unsubscribeNewMessage = clientRef.current.subscribe('new_message', () => {
       toast({
         title: "Nuevo mensaje",
         description: "Tienes un nuevo mensaje",
       });
     });
 
-    const unsubscribeAuthSuccess = clientRef.current.subscribe('auth_success', (data) => {
+    const unsubscribeAuthSuccess = clientRef.current.subscribe('auth_success', () => {
       console.log('WebSocket authenticated successfully');
     });
 

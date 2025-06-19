@@ -13,11 +13,27 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CalendarDays, MapPin, DollarSign, Star, Filter, X } from "lucide-react";
 import { format } from "date-fns";
 
+interface Category {
+  id: number;
+  name: string;
+}
+
+interface Filters {
+  categoryId?: number;
+  city?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  rating?: number;
+  date?: Date;
+  sortBy?: string;
+  [key: string]: any;
+}
+
 interface FilterSidebarProps {
   contentType: 'artists' | 'events' | 'venues' | 'recommendations' | 'blog';
   onContentTypeChange: (type: 'artists' | 'events' | 'venues' | 'recommendations' | 'blog') => void;
-  filters: any;
-  onFiltersChange: (filters: any) => void;
+  filters: Filters;
+  onFiltersChange: (filters: Filters) => void;
 }
 
 export default function FilterSidebar({ 
@@ -29,7 +45,7 @@ export default function FilterSidebar({
   const [priceRange, setPriceRange] = useState([0, 1000000]);
   const [selectedDate, setSelectedDate] = useState<Date>();
 
-  const { data: categories } = useQuery({
+  const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
   });
 
@@ -45,7 +61,7 @@ export default function FilterSidebar({
     "Manizales"
   ];
 
-  const handleFilterChange = (key: string, value: any) => {
+  const handleFilterChange = (key: keyof Filters, value: any) => {
     const newFilters = { ...filters, [key]: value };
     onFiltersChange(newFilters);
   };
@@ -129,7 +145,7 @@ export default function FilterSidebar({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="">Todas las categorías</SelectItem>
-                {categories?.map((category: any) => (
+                {categories.map((category) => (
                   <SelectItem key={category.id} value={category.id.toString()}>
                     {category.name}
                   </SelectItem>

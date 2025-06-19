@@ -16,9 +16,19 @@ import {
   Palette
 } from "lucide-react";
 
+interface User {
+  id: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  profileImageUrl?: string;
+  userType?: 'artist' | 'client' | 'admin' | 'general';
+  isVerified?: boolean;
+}
+
 export default function GlobalNavigation() {
   const [location] = useLocation();
-  const { user } = useAuth();
+  const { user } = useAuth() as { user: User | null };
   const isMobile = useIsMobile();
 
   const navigationItems = [
