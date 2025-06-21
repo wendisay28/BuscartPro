@@ -8,7 +8,7 @@ interface NavigationTabsProps {
 }
 
 const NavigationTabs: React.FC<NavigationTabsProps> = ({ activeTab, onTabChange }) => {
-  const tabs = [
+  const tabs: { id: ExplorerTab; label: string; icon: React.ReactNode }[] = [
     { id: 'artists', label: 'Artista', icon: <User size={16} /> },
     { id: 'events', label: 'Eventos', icon: <Calendar size={16} /> },
     { id: 'venues', label: 'Sitios', icon: <MapPin size={16} /> },

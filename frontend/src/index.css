@@ -5,8 +5,13 @@
 @tailwind utilities;
 
 @layer base {
-  html {
+  html, body, #root {
+    background-color: #000000;
+    color: #ffffff;
     font-family: 'Poppins', system-ui, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
   }
 }
 

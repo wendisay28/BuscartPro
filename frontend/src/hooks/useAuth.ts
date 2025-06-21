@@ -26,14 +26,47 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      if (firebaseUser) {
-        setUser({
-          id: firebaseUser.uid,  // Asegurar que id esté definido
+    const loadUserData = async (firebaseUser: any) => {
+      try {
+        // Primero actualizamos el estado con los datos básicos de Firebase
+        // para que la autenticación se marque como exitosa rápidamente
+        const userData: any = {
+          id: firebaseUser.uid,
           uid: firebaseUser.uid,
           email: firebaseUser.email,
           displayName: firebaseUser.displayName,
-        });
+          photoURL: firebaseUser.photoURL,
+          userType: 'general' // Valor por defecto
+        };
+        
+        setUser(userData);
+        
+        // Luego cargamos los datos adicionales de Firestore
+        try {
+          const { doc, getDoc, getFirestore } = await import('firebase/firestore');
+          const db = getFirestore();
+          const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+          
+          if (userDoc.exists()) {
+            setUser({
+              ...userData,
+              ...userDoc.data(),
+              userType: userDoc.data()?.userType || 'general'
+            });
+          }
+        } catch (error) {
+          console.error('Error al cargar datos adicionales del usuario:', error);
+          // No hacemos nada aquí, ya que ya tenemos los datos básicos
+        }
+      } catch (error) {
+        console.error('Error en la autenticación:', error);
+        setUser(null);
+      }
+    };
+
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        loadUserData(firebaseUser);
       } else {
         setUser(null);
       }
@@ -54,16 +87,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const updateUserType = async (userType: UserType) => {
-    if (!user) return;
+    if (!user) return false;
     
-    // Aquí iría la llamada a la API para actualizar el tipo de usuario
-    console.log('Actualizando tipo de usuario a:', userType);
-    
-    // Actualizar el usuario localmente
-    setUser({
-      ...user,
-      userType
-    });
+    try {
+      // Actualizar en Firestore
+      const { doc, setDoc, getFirestore } = await import('firebase/firestore');
+      const db = getFirestore();
+      const userRef = doc(db, 'users', user.id);
+      
+      await setDoc(userRef, { userType }, { merge: true });
+      
+      // Actualizar el usuario localmente
+      setUser({
+        ...user,
+        userType
+      });
+      
+      return true;
+    } catch (error) {
+      console.error('Error al actualizar el tipo de usuario:', error);
+      throw error;
+    }
   };
 
   const value = {
@@ -72,7 +116,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     isAuthenticated: !!user,
     logout,
     updateUserType,
-  };
+  } as const;
 
   return React.createElement(
     AuthContext.Provider,

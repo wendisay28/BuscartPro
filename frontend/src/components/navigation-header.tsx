@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
+import Button from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import Badge from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { 
@@ -106,7 +106,7 @@ export default function NavigationHeader({ hideSearch = false }: NavigationHeade
   return (
     <>
       {/* Desktop Navigation */}
-      <nav className="bg-white dark:bg-black/80 dark:backdrop-blur-md border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50 hidden md:block shadow-sm">
+      <nav className="bg-black border-b border-gray-800 sticky top-0 z-50 hidden md:block">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Left Side: Logo and Search */}
