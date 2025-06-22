@@ -45,6 +45,16 @@ export interface Product {
   tags?: string[]; // Etiquetas para filtrado
 }
 
+export interface FeaturedItem {
+  id: string;
+  title: string;
+  description?: string;
+  url: string;
+  type: 'youtube' | 'spotify' | 'vimeo' | 'soundcloud' | 'other';
+  thumbnailUrl?: string;
+  createdAt: string;
+}
+
 export interface Photo {
   id: string;
   title?: string;

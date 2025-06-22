@@ -1,6 +1,12 @@
-import { Palette, Music, Drama, PaintbrushVertical, Camera, BookOpen, Video, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Music, Drama, PaintbrushVertical, Camera, BookOpen, Video, Sparkles, Users, ShieldCheck, Zap, Palette } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import Button from "@/components/ui/button";
+import Navbar from "@/components/landing/Navbar";
+import HeroSection from "@/components/landing/HeroSection";
+import ArtistsCarousel from "@/components/landing/ArtistsCarousel";
+import HowItWorksSection from "@/components/landing/HowItWorksSection";
+import UserProfilesSection from "@/components/landing/UserProfilesSection";
+import MapSection from "@/components/landing/MapSection";
 
 export default function Landing() {
   const categories = [
@@ -15,49 +21,32 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-warm-gray">
       {/* Navigation */}
-      <nav className="bg-white shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-                <Palette className="text-white h-6 w-6" />
-              </div>
-              <span className="font-heading font-bold text-2xl text-dark">
-                Bus<span className="text-primary">Cart</span>
-              </span>
-            </div>
-            
-            <Button asChild className="bg-primary hover:bg-primary/90 text-white">
-              <a href="/login">Iniciar Sesión</a>
-            </Button>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary via-secondary to-accent py-16 cultural-pattern">
-        <div className="absolute inset-0 gradient-overlay"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="font-heading font-bold text-4xl md:text-6xl text-white mb-6 animate-fade-in">
-            Descubre el Arte que
-            <span className="font-accent text-accent block mt-2">Te Inspira</span>
-          </h1>
-          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Conecta con artistas locales, encuentra eventos únicos y descubre espacios culturales en tu ciudad
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-100">
-              <a href="/login">
-                <Music className="mr-2 h-5 w-5" />
-                Explorar Artistas
-              </a>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
-              <a href="/api/login">
-                <Sparkles className="mr-2 h-5 w-5" />
-                Ver Eventos
-              </a>
-            </Button>
+      <HeroSection />
+
+      {/* Map Section */}
+      <MapSection />
+
+      {/* How It Works + Artists Carousel Section */}
+      <section className="py-16 lg:py-24 bg-gradient-to-b from-gray-900 to-black">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row items-start gap-8 lg:gap-12 mb-16">
+            {/* Left Column - How It Works */}
+            <div className="w-full lg:w-1/2">
+              <HowItWorksSection />
+            </div>
+            
+            {/* Right Column - Artists Carousel */}
+            <div className="w-full lg:w-1/2">
+              <ArtistsCarousel />
+            </div>
+          </div>
+          
+          {/* User Profiles Section */}
+          <div className="mt-16">
+            <UserProfilesSection />
           </div>
         </div>
       </section>
@@ -168,9 +157,79 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-dark text-white py-12">
+      {/* Features Section */}
+      <section className="py-16 bg-warm-gray">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="font-heading font-bold text-3xl text-dark mb-4">
+              ¿Por qué elegir BusCart?
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              La plataforma más completa para conectar el talento artístico con quienes buscan experiencias culturales auténticas
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card className="text-center card-hover">
+              <CardContent className="p-8">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Users className="text-primary h-8 w-8" />
+                </div>
+                <h3 className="font-heading font-semibold text-xl mb-3">Amplia Comunidad</h3>
+                <p className="text-gray-600">Conecta con miles de artistas y organizadores de toda la región</p>
+              </CardContent>
+            </Card>
+            <Card className="text-center card-hover">
+              <CardContent className="p-8">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <ShieldCheck className="text-primary h-8 w-8" />
+                </div>
+                <h3 className="font-heading font-semibold text-xl mb-3">Seguridad Garantizada</h3>
+                <p className="text-gray-600">Perfiles verificados y sistema de valoraciones confiable</p>
+              </CardContent>
+            </Card>
+            <Card className="text-center card-hover">
+              <CardContent className="p-8">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Zap className="text-primary h-8 w-8" />
+                </div>
+                <h3 className="font-heading font-semibold text-xl mb-3">Proceso Rápido</h3>
+                <p className="text-gray-600">Encuentra y contrata al artista perfecto en minutos</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* User Profiles Section */}
+      <UserProfilesSection />
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-primary to-secondary text-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-heading font-bold text-3xl md:text-4xl mb-6">
+            ¿Listo para comenzar?
+          </h2>
+          <p className="text-xl mb-8 max-w-2xl mx-auto">
+            Únete a miles de artistas y organizadores que ya están conectando a través de BusCart
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-100">
+              <a href="/api/login">
+                Soy Artista
+              </a>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+              <a href="/api/login">
+                Busco Artistas
+              </a>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center space-x-2 mb-4">

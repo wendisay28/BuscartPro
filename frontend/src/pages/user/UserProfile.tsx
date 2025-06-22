@@ -6,11 +6,13 @@ import NavigationHeader from "@/components/navigation-header";
 import { UserProfileHeader } from "./components/UserProfileHeader";
 import { ProfileTabs } from "./components/ProfileTabs";
 import PortfolioView from "./components/portfolio";
-import { BlogView } from "./components/sections/BlogView";
-import { EventsView } from "./components/sections/EventsView";
-import { RecommendationsView } from "./components/sections/RecommendationsView";
-import { OffersView } from "./components/sections/OffersView";
-import { SettingsView } from "./components/sections/SettingsView";
+import { 
+  BlogView, 
+  EventsView, 
+  OffersView, 
+  RecommendationsView, 
+  SettingsView 
+} from "./components/sections";
 import { EditProfileDialog } from "./dialogs/EditProfileDialog";
 import { UserTypeDialog } from "./dialogs/UserTypeDialog";
 import { CreateEventDialog } from "./dialogs/CreateEventDialog";
@@ -46,8 +48,8 @@ export default function UserProfile() {
               className="mt-6"
             >
               <ProfileTabs 
-                currentUserType={currentUserType} 
                 onPortfolioClick={() => setActiveTab("portfolio")}
+                activeTab={activeTab}
               />
               
               <div className="mt-6">
@@ -67,7 +69,7 @@ export default function UserProfile() {
                   <RecommendationsView onCreate={() => setShowRecommendationDialog(true)} />
                 </TabsContent>
 
-                <TabsContent value="data">
+                <TabsContent value="offers">
                   <OffersView />
                 </TabsContent>
 

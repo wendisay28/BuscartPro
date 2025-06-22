@@ -16,19 +16,27 @@ export const api = axios.create({
 
 // Interceptor para agregar el token a las peticiones
 api.interceptors.request.use(async (config: AxiosRequestConfig) => {
-  // Usar el usuario actual de Firebase para obtener el token
-  const currentUser = auth.currentUser;
-  if (!currentUser) {
-    return config;
-  }
-  
   try {
-    const token = await currentUser.getIdToken();
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
+    // Esperar a que Firebase esté listo
+    await auth.authStateReady();
+    
+    // Obtener el usuario actual
+    const currentUser = auth.currentUser;
+    
+    if (currentUser) {
+      // Obtener el token de ID
+      const token = await currentUser.getIdToken(true);
+      
+      if (token && config.headers) {
+        config.headers.Authorization = `Bearer ${token}`;
+      } else {
+        console.warn('No se pudo obtener el token de autenticación');
+      }
+    } else {
+      console.warn('No hay usuario autenticado');
     }
   } catch (error) {
-    console.error('Error al obtener el token de autenticación:', error);
+    console.error('Error en el interceptor de autenticación:', error);
   }
   
   return config;

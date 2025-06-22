@@ -131,3 +131,31 @@ body {
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out forwards;
 }
+
+/* Animación de rebote lento para botones */
+@keyframes bounce-slow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 3s ease-in-out infinite;
+}
+
+/* Efecto de brillo para el carrusel */
+.neon-glow {
+  box-shadow: 0 0 10px rgba(236, 72, 153, 0.5), 
+              0 0 20px rgba(236, 72, 153, 0.3),
+              0 0 30px rgba(236, 72, 153, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.neon-glow:hover {
+  box-shadow: 0 0 15px rgba(236, 72, 153, 0.7), 
+              0 0 30px rgba(236, 72, 153, 0.5),
+              0 0 45px rgba(236, 72, 153, 0.3);
+}

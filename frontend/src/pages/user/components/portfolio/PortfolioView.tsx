@@ -3,7 +3,8 @@ import {
   services, 
   products, 
   photos, 
-  portfolioTabs
+  portfolioTabs,
+  FeaturedItem
 } from '../../data/portfolio.mock';
 
 // Los tipos ya están importados en los componentes hijos
@@ -35,9 +36,33 @@ export const PortfolioView = () => {
     // Lógica para subir foto/vídeo
   };
 
-  const handleAddFeatured = () => {
-    console.log('Agregar destacado');
-    // Lógica para agregar destacado
+  const [featuredItems, setFeaturedItems] = useState<FeaturedItem[]>([]);
+
+  const handleAddFeatured = async (item: Omit<FeaturedItem, 'id' | 'createdAt'>) => {
+    // En una implementación real, aquí harías una llamada a tu API
+    const newItem: FeaturedItem = {
+      ...item,
+      id: `item-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+    };
+    
+    // Simulamos una llamada a la API
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        setFeaturedItems(prev => [...prev, newItem]);
+        resolve();
+      }, 500);
+    });
+  };
+
+  const handleRemoveFeatured = async (id: string) => {
+    // En una implementación real, aquí harías una llamada a tu API
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        setFeaturedItems(prev => prev.filter(item => item.id !== id));
+        resolve();
+      }, 500);
+    });
   };
 
   const renderActiveTab = () => {
@@ -56,7 +81,13 @@ export const PortfolioView = () => {
           />
         );
       case 'featured':
-        return <FeaturedSection items={[]} onAddContent={handleAddFeatured} />;
+        return (
+          <FeaturedSection 
+            items={featuredItems}
+            onAddContent={handleAddFeatured}
+            onRemoveContent={handleRemoveFeatured}
+          />
+        );
       default:
         return null;
     }
