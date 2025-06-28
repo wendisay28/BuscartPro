@@ -1,14 +1,82 @@
-import { Music, Drama, PaintbrushVertical, Camera, BookOpen, Video, Sparkles, Users, ShieldCheck, Zap, Palette } from "lucide-react";
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Music, Drama, PaintbrushVertical, Camera, BookOpen, Video, Palette } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import Button from "@/components/ui/button";
-import Navbar from "@/components/landing/Navbar";
-import HeroSection from "@/components/landing/HeroSection";
-import ArtistsCarousel from "@/components/landing/ArtistsCarousel";
-import HowItWorksSection from "@/components/landing/HowItWorksSection";
-import UserProfilesSection from "@/components/landing/UserProfilesSection";
-import MapSection from "@/components/landing/MapSection";
+import Navbar from "@/components/landing/components/Navbar";
+import HeroSection from "@/components/landing/components/HeroSection";
+import ArtistsCarousel from "@/components/landing/components/ArtistsCarousel";
+import HowItWorksSection from "@/components/landing/components/HowItWorksSection";
+import FeaturesSection from "@/components/landing/components/FeaturesSection";
+import MapSection from "@/components/landing/components/MapSection";
+import ArtistCategories from "@/components/landing/components/ArtistCategories";
+
+import EventsSection from "@/components/landing/components/EventsSection";
+
+// Registrar plugins de GSAP
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Landing() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const sections = useRef<HTMLDivElement[]>([]);
+  const sectionContents = useRef<HTMLDivElement[]>([]);
+
+  const addToSections = (el: HTMLDivElement | null) => {
+    if (el) sections.current.push(el);
+  };
+
+  const addToSectionContents = (el: HTMLDivElement | null) => {
+    if (el) sectionContents.current.push(el);
+  };
+
+  useEffect(() => {
+    // Verificar que estamos en el navegador
+    if (typeof window === 'undefined') return;
+    
+    // Configurar ScrollTrigger para cada sección
+    sections.current.forEach((section, index) => {
+      const content = sectionContents.current[index];
+      if (!content || !section) return;
+
+      // Configurar la altura de la sección para que coincida con el viewport
+      gsap.set(section, { height: '100vh' });
+      
+      // Crear la animación para el contenido
+      gsap.to(content, {
+        y: () => -(content.scrollHeight - window.innerHeight),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 1,
+          // Limpiar los ScrollTriggers cuando el componente se desmonte
+          onRefresh: (self: any) => self.progress === 0 && self.animation?.progress(0),
+          pin: true,
+          pinSpacing: false,
+          markers: true, // Desactivar en producción
+          onUpdate: (self) => {
+            // Añadir clase cuando la sección está activa
+            const progress = self.progress;
+            if (progress > 0.1 && progress < 0.9) {
+              section.classList.add('active-section');
+            } else {
+              section.classList.remove('active-section');
+            }
+          }
+        }
+      });
+    });
+
+    // Limpiar los ScrollTriggers cuando el componente se desmonte
+    return () => {
+      if (typeof window !== 'undefined' && ScrollTrigger) {
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      }
+    };
+  }, []);
+
   const categories = [
     { name: "Música", icon: Music, gradient: "from-primary to-secondary" },
     { name: "Teatro", icon: Drama, gradient: "from-secondary to-accent" },
@@ -19,210 +87,129 @@ export default function Landing() {
   ];
 
   return (
-    <div className="min-h-screen bg-warm-gray">
+    <div className="min-h-screen bg-warm-gray overflow-x-hidden" ref={containerRef}>
       {/* Navigation */}
       <Navbar />
 
       {/* Hero Section */}
-      <HeroSection />
+      <section 
+        ref={addToSections} 
+        className="relative h-screen w-full bg-gradient-to-b from-purple-900 to-gray-900 flex items-center justify-center overflow-hidden"
+      >
+        <div ref={addToSectionContents} className="w-full">
+          <HeroSection />
+        </div>
+      </section>
 
-      {/* Map Section */}
-      <MapSection />
+      {/* Features Section */}
+      <section 
+        ref={addToSections} 
+        className="relative w-full bg-black"
+      >
+        <div ref={addToSectionContents} className="w-full py-20">
+          <FeaturesSection />
+        </div>
+      </section>
 
-      {/* How It Works + Artists Carousel Section */}
-      <section className="py-16 lg:py-24 bg-gradient-to-b from-gray-900 to-black">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row items-start gap-8 lg:gap-12 mb-16">
-            {/* Left Column - How It Works */}
-            <div className="w-full lg:w-1/2">
+      {/* How It Works + Artists Carousel */}
+      <section 
+        ref={addToSections} 
+        className="relative w-full bg-[#390052]"
+      >
+        <div ref={addToSectionContents} className="w-full py-20">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
               <HowItWorksSection />
-            </div>
-            
-            {/* Right Column - Artists Carousel */}
-            <div className="w-full lg:w-1/2">
               <ArtistsCarousel />
             </div>
           </div>
-          
-          {/* User Profiles Section */}
-          <div className="mt-16">
-            <UserProfilesSection />
-          </div>
         </div>
       </section>
 
-      {/* Categories Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading font-semibold text-3xl text-dark mb-12 text-center">
-            Explora por Categoría
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {categories.map((category, index) => {
-              const IconComponent = category.icon;
-              return (
-                <Card key={index} className="group cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2">
-                  <CardContent className="p-6 text-center">
-                    <div className={`w-16 h-16 bg-gradient-to-br ${category.gradient} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
-                      <IconComponent className="text-white h-8 w-8" />
-                    </div>
-                    <h3 className="font-medium text-gray-700">{category.name}</h3>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-16 bg-warm-gray">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="font-heading font-bold text-3xl text-dark mb-4">
-              ¿Por qué elegir BusCart?
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              La plataforma más completa para conectar el talento artístico con quienes buscan experiencias culturales auténticas
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="text-center card-hover">
-              <CardContent className="p-8">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Music className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="font-heading font-semibold text-xl text-dark mb-4">
-                  Artistas Verificados
-                </h3>
-                <p className="text-gray-600">
-                  Todos nuestros artistas pasan por un proceso de verificación para garantizar calidad y profesionalismo
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center card-hover">
-              <CardContent className="p-8">
-                <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Sparkles className="h-8 w-8 text-secondary" />
-                </div>
-                <h3 className="font-heading font-semibold text-xl text-dark mb-4">
-                  Contratación en Tiempo Real
-                </h3>
-                <p className="text-gray-600">
-                  Sistema innovador de contratación inmediata con ofertas y contraofertas para necesidades urgentes
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center card-hover">
-              <CardContent className="p-8">
-                <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <PaintbrushVertical className="h-8 w-8 text-accent" />
-                </div>
-                <h3 className="font-heading font-semibold text-xl text-dark mb-4">
-                  Comunidad Cultural
-                </h3>
-                <p className="text-gray-600">
-                  Blog colaborativo, recomendaciones comunitarias y networking entre artistas y organizadores
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-dark to-gray-800">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading font-bold text-3xl text-white mb-6">
-            ¿Listo para formar parte de la comunidad cultural más vibrante?
-          </h2>
-          <p className="text-xl text-gray-300 mb-8">
-            Únete a miles de artistas y organizadores que ya están conectando a través de BusCart
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-white">
-              <a href="/api/login">
-                Soy Artista
-              </a>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-dark">
-              <a href="/api/login">
-                Busco Artistas
-              </a>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-16 bg-warm-gray">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="font-heading font-bold text-3xl text-dark mb-4">
-              ¿Por qué elegir BusCart?
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              La plataforma más completa para conectar el talento artístico con quienes buscan experiencias culturales auténticas
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="text-center card-hover">
-              <CardContent className="p-8">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Users className="text-primary h-8 w-8" />
-                </div>
-                <h3 className="font-heading font-semibold text-xl mb-3">Amplia Comunidad</h3>
-                <p className="text-gray-600">Conecta con miles de artistas y organizadores de toda la región</p>
-              </CardContent>
-            </Card>
-            <Card className="text-center card-hover">
-              <CardContent className="p-8">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <ShieldCheck className="text-primary h-8 w-8" />
-                </div>
-                <h3 className="font-heading font-semibold text-xl mb-3">Seguridad Garantizada</h3>
-                <p className="text-gray-600">Perfiles verificados y sistema de valoraciones confiable</p>
-              </CardContent>
-            </Card>
-            <Card className="text-center card-hover">
-              <CardContent className="p-8">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Zap className="text-primary h-8 w-8" />
-                </div>
-                <h3 className="font-heading font-semibold text-xl mb-3">Proceso Rápido</h3>
-                <p className="text-gray-600">Encuentra y contrata al artista perfecto en minutos</p>
-              </CardContent>
-            </Card>
-          </div>
+      {/* Map Section */}
+      <section 
+        ref={addToSections} 
+        className="relative w-full bg-gray-900"
+      >
+        <div ref={addToSectionContents} className="w-full py-20">
+          <MapSection />
         </div>
       </section>
 
       {/* User Profiles Section */}
-      <UserProfilesSection />
+      <section 
+        ref={addToSections} 
+        className="relative w-full bg-black"
+      >
+        <div ref={addToSectionContents} className="w-full py-20">
+          <ArtistCategories />
+        </div>
+      </section>
+
+      {/* Events Section */}
+      <section 
+        ref={addToSections} 
+        className="relative w-full bg-gray-950"
+      >
+        <div ref={addToSectionContents} className="w-full py-20">
+          <EventsSection />
+        </div>
+      </section>
+
+      {/* Categories Section */}
+      <section 
+        ref={addToSections} 
+        className="relative w-full bg-white"
+      >
+        <div ref={addToSectionContents} className="w-full py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="font-heading font-semibold text-3xl text-dark mb-12 text-center">
+              Explora por Categoría
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+              {categories.map((category, index) => {
+                const IconComponent = category.icon;
+                return (
+                  <Card key={index} className="group cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                    <CardContent className="p-6 text-center">
+                      <div className={`w-16 h-16 bg-gradient-to-br ${category.gradient} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
+                        <IconComponent className="text-white h-8 w-8" />
+                      </div>
+                      <h3 className="font-medium text-gray-700">{category.name}</h3>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-primary to-secondary text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-heading font-bold text-3xl md:text-4xl mb-6">
-            ¿Listo para comenzar?
-          </h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Únete a miles de artistas y organizadores que ya están conectando a través de BusCart
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-100">
-              <a href="/api/login">
-                Soy Artista
-              </a>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-              <a href="/api/login">
-                Busco Artistas
-              </a>
-            </Button>
+      <section 
+        ref={addToSections} 
+        className="relative w-full bg-gradient-to-r from-primary to-secondary text-white"
+      >
+        <div ref={addToSectionContents} className="w-full py-20">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="font-heading font-bold text-3xl md:text-4xl mb-6">
+              ¿Listo para formar parte de la comunidad cultural más vibrante?
+            </h2>
+            <p className="text-xl text-gray-300 mb-8">
+              Únete a miles de artistas y organizadores que ya están conectando a través de BusCart
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-white">
+                <a href="/api/login">
+                  Soy Artista
+                </a>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-dark">
+                <a href="/api/login">
+                  Busco Artistas
+                </a>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
@@ -267,10 +254,27 @@ export default function Landing() {
           </div>
           
           <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-            <p>© 2024 BusCart. Todos los derechos reservados. <span className="font-accent text-accent">Conectando arte y cultura</span></p>
+            <p> 2024 BusCart. Todos los derechos reservados. <span className="font-accent text-accent">Conectando arte y cultura</span></p>
           </div>
         </div>
       </footer>
+
+      <style jsx global>{`
+        /* Estilos globales para el scroll suave */
+        html {
+          scroll-behavior: smooth;
+        }
+        
+        /* Estilos para las secciones activas */
+        section {
+          will-change: transform;
+        }
+        
+        .active-section {
+          outline: 2px solid rgba(236, 72, 153, 0.5);
+          outline-offset: -2px;
+        }
+      `}</style>
     </div>
   );
 }

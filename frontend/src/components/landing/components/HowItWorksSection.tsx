@@ -2,10 +2,10 @@ import { Search, Filter, Zap, Check } from "lucide-react";
 
 export default function HowItWorksSection() {
   return (
-    <div className="w-full">
+    <div className="w-full text-white">
       <div className="mb-10">
         <h2 className="text-4xl font-bold text-white mb-4">
-          Encuentra el talento perfecto para tu evento
+          Encuentra el talento perfecto para tu evento y ocación
         </h2>
         <p className="text-lg text-gray-300 mb-8">
           Conectamos organizadores con los mejores artistas y profesionales del entretenimiento

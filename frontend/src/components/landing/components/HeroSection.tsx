@@ -1,6 +1,45 @@
+'use client';
+
 import Button from "@/components/ui/button";
+import { useEffect } from "react";
 
 export default function HeroSection() {
+  // Inject keyframes/animations en el DOM (solo si Tailwind no está configurado aún)
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `
+      @keyframes fade-in-up {
+        0% { opacity: 0; transform: translateY(40px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes zoom-in-up {
+        0% { opacity: 0; transform: scale(0.95) translateY(40px); }
+        100% { opacity: 1; transform: scale(1) translateY(0); }
+      }
+      @keyframes glow {
+        0%, 100% { opacity: 0.6; }
+        50% { opacity: 1; }
+      }
+      .animate-fade-in-up {
+        animation: fade-in-up 0.8s ease-out forwards;
+      }
+      .animate-zoom-in-up {
+        animation: zoom-in-up 1s ease-out forwards;
+      }
+      .animate-glow {
+        animation: glow 3s ease-in-out infinite;
+      }
+    `;
+    
+    // Agregar los estilos al head del documento
+    document.head.appendChild(style);
+    
+    // Función de limpieza que se ejecutará cuando el componente se desmonte
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   return (
     <section
       className="relative min-h-[100vh] bg-black text-white overflow-hidden flex items-center py-16"
@@ -17,7 +56,7 @@ export default function HeroSection() {
       <div className="container mx-auto px-6 lg:px-12 relative z-10 flex flex-col lg:flex-row items-center">
         {/* Left column (text) */}
         <div className="w-full lg:w-1/2 mb-12 lg:mb-0 lg:pr-12">
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-2xl mx-auto animate-fade-in-up">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight mb-8">
               Busca, <span className="bg-gradient-to-r from-pink-400 to-purple-500 bg-clip-text text-transparent">compara</span>, contrata y vive el{" "}
               <span className="bg-gradient-to-r from-purple-500 to-pink-400 bg-clip-text text-transparent">arte</span> en tu ciudad
@@ -44,14 +83,14 @@ export default function HeroSection() {
 
         {/* Right column (image) */}
         <div className="w-full lg:w-1/2 flex items-center justify-center">
-          <div className="relative w-full max-w-3xl h-[600px] lg:h-[700px]">
+          <div className="relative w-full max-w-3xl h-[600px] lg:h-[700px] animate-zoom-in-up">
             <img 
               src="/images/landing/tango.png" 
               alt="Arte y cultura" 
               className="w-full h-full object-contain"
             />
             {/* Efecto de brillo en la imagen */}
-            <div className="absolute inset-0 bg-gradient-to-l from-black/60 via-transparent to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-l from-black/60 via-transparent to-transparent animate-glow"></div>
           </div>
         </div>
       </div>
