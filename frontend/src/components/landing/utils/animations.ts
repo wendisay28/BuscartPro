@@ -71,7 +71,7 @@ export const createParticleFloat = (element: HTMLElement, options = {}) => {
     if (typeof window !== 'undefined' && window.gsap) {
       const tl = window.gsap.timeline({ repeat: -1 });
       
-      config.borderRadius.forEach((radius, index) => {
+      config.borderRadius.forEach((radius) => {
         tl.to(element, {
           duration: config.duration / config.borderRadius.length,
           borderRadius: radius,

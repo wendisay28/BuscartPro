@@ -13,13 +13,11 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { 
   CalendarDays, 
-  Clock, 
   DollarSign, 
   Send, 
   User, 
   MapPin,
   AlertCircle,
-  CheckCircle,
   X
 } from "lucide-react";
 import { format } from "date-fns";
@@ -86,7 +84,7 @@ export default function RealTimeHiringModal({
   });
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   
-  const { user } = useAuth();
+  useAuth(); // Usamos el hook para mantener el contexto de autenticación
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -106,7 +104,7 @@ export default function RealTimeHiringModal({
       const result = await response.json();
       return result as HiringRequestDTO;
     },
-    onSuccess: (data: HiringRequestDTO) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/hiring-requests"] });
       toast({
         title: "¡Solicitud enviada!",
@@ -115,7 +113,7 @@ export default function RealTimeHiringModal({
       onOpenChange(false);
       resetForm();
     },
-    onError: (error: any) => {
+    onError: () => {
       toast({
         title: "Error",
         description: "No se pudo enviar la solicitud. Inténtalo de nuevo.",

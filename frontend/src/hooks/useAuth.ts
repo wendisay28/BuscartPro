@@ -86,8 +86,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  const updateUserType = async (userType: UserType) => {
-    if (!user) return false;
+  const updateUserType = async (userType: UserType): Promise<void> => {
+    if (!user) return;
     
     try {
       // Actualizar en Firestore
@@ -103,7 +103,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         userType
       });
       
-      return true;
+      // No retornamos nada (void)
+      return;
     } catch (error) {
       console.error('Error al actualizar el tipo de usuario:', error);
       throw error;

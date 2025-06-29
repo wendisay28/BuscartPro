@@ -12,8 +12,7 @@ import {
   MapPin,
   Calendar,
   Reply,
-  Clock,
-  User
+  Clock
 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -31,7 +30,7 @@ export default function RecommendationCard({ recommendation }: RecommendationCar
   const [likeCount, setLikeCount] = useState(12);
   const [saveCount, setSaveCount] = useState(5);
   
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
 

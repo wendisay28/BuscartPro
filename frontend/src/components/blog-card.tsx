@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import Button from "@/components/ui/button";
+import Badge from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   Heart, 
@@ -10,8 +10,7 @@ import {
   MessageCircle, 
   BookOpen,
   Clock,
-  User,
-  ExternalLink
+  User
 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -53,7 +52,7 @@ export default function BlogCard({ post }: BlogCardProps) {
   const [likeCount, setLikeCount] = useState(post.likeCount || 45);
   const [saveCount, setSaveCount] = useState(12);
   
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
 

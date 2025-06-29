@@ -9,7 +9,6 @@ import {
   Zap, 
   Search, 
   User, 
-  Settings,
   Bell,
   MessageCircle,
   Calendar,

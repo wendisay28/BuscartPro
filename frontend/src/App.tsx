@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 
 // Auth pages
-import Landing from "./pages/auth/landing";
+import Landing from "./pages/landing";
 import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
 import Home from "./pages/dashboard/home";

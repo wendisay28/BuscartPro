@@ -1,6 +1,6 @@
 'use client';
 
-import Button from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { MapPin, CheckCircle, Mic2, DollarSign } from "lucide-react";
 
@@ -149,9 +149,13 @@ const InteractiveMapSection = () => {
               {/* Contenedor de la imagen del mapa */}
               <div className="absolute inset-0 w-full h-full">
                 <img 
-                  src="/images/Map/map1.jpg" 
+                  src="images/Map/map1.jpg" 
                   alt="Mapa de la ciudad"
                   className="w-full h-full object-cover opacity-90"
+                  onError={(e) => {
+                    console.error('Error loading image:', e.currentTarget.src);
+                    e.currentTarget.style.display = 'none';
+                  }}
                 />
                 {/* Capa de superposición para oscurecer la imagen */}
                 <div className="absolute inset-0 bg-black/20" />

@@ -1,6 +1,6 @@
 'use client';
 
-import Button from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 
 export default function HeroSection() {
@@ -85,9 +85,13 @@ export default function HeroSection() {
         <div className="w-full lg:w-1/2 flex items-center justify-center">
           <div className="relative w-full max-w-3xl h-[600px] lg:h-[700px] animate-zoom-in-up">
             <img 
-              src="/images/landing/tango.png" 
+              src="images/landing/tango.png" 
               alt="Arte y cultura" 
               className="w-full h-full object-contain"
+              onError={(e) => {
+                console.error('Error loading image:', e.currentTarget.src);
+                e.currentTarget.style.display = 'none';
+              }}
             />
             {/* Efecto de brillo en la imagen */}
             <div className="absolute inset-0 bg-gradient-to-l from-black/60 via-transparent to-transparent animate-glow"></div>

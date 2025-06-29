@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Home, Search, Calendar, MapPin, Users, Heart, Plus, LogOut } from 'lucide-react';
+import { Home, Calendar, MapPin, Users, Heart, Plus, LogOut } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 type SidebarItem = {

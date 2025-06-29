@@ -7,8 +7,14 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "./hooks/useTheme";
+import { initAnimations } from '@/lib/animations';
 import App from "./App";
 import "./index.css";
+
+// Inicializar animaciones
+if (typeof window !== 'undefined') {
+  initAnimations();
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {

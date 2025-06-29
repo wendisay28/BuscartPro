@@ -31,7 +31,7 @@ export default function EventCard({ event }: EventCardProps) {
   const [likeCount, setLikeCount] = useState(89);
   const [saveCount, setSaveCount] = useState(23);
   
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
 

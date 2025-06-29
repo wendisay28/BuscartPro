@@ -30,7 +30,7 @@ export default function VenueCard({ venue }: VenueCardProps) {
   const [likeCount, setLikeCount] = useState(156);
   const [saveCount, setSaveCount] = useState(48);
   
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
 

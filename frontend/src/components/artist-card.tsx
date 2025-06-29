@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import Button from "@/components/ui/button";
+import Badge from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   Heart, 
@@ -61,7 +61,7 @@ export default function ArtistCard({ artist }: ArtistCardProps) {
   const [likeCount, setLikeCount] = useState(artist.fanCount || 127);
   const [saveCount, setSaveCount] = useState(34);
   
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
 

@@ -71,22 +71,26 @@ export default function LandingCarousel() {
           transition={{ duration: 1 }}
           className="absolute inset-0 flex items-center justify-center"
         >
-          {/* Fondo púrpura con patrón sutil */}
+          {/* Fondo con gradiente sutil */}
           <div 
-            className="absolute inset-0 bg-[#7c1da5]"
+            className="absolute inset-0"
             style={{
-              backgroundImage: 'radial-gradient(circle at 10% 20%, rgba(255,255,255,0.05) 0%, rgba(124, 29, 165, 0.1) 90%)',
+              background: 'linear-gradient(135deg, rgba(28, 0, 46, 0.9) 0%, rgba(76, 0, 94, 0.8) 100%)',
               backgroundSize: '30px 30px'
             }}
           />
           
-          {/* Imagen con transparencia reducida */}
-<div 
-  className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-30"
-  style={{ 
-    backgroundImage: `url(${destinations[index].image})`,
-  }}
-/>
+          {/* Imagen principal */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ 
+              backgroundImage: `url(${destinations[index].image})`,
+              opacity: 0.8
+            }}
+          />
+          
+          {/* Overlay para mejorar contraste del texto */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent"></div>
           
           {/* Contenido del texto */}
           <div className="absolute left-16 bottom-40 z-10 flex flex-col justify-center w-1/2 max-w-2xl text-left">
