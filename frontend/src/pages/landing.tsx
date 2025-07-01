@@ -48,10 +48,13 @@ export default function Home() {
       
       {/* Artists Carousel with How It Works */}
       <ArtistsCarousel />
-
+      
+      {/* Universe Section with Impact Numbers */}
+      <Universe />
+      
       {/* Interactive Map Section */}
       <InteractiveMapSection />
-
+      
       {/* Gallery Section */}
       <section className="py-16 bg-black">
         <div className="container mx-auto px-6">
@@ -60,12 +63,9 @@ export default function Home() {
       </section>
 
       {/* Counter Offers */}
-      <section className="py-20 bg-gray-900">
+      <section className="py-20 bg-black">
         <CounterOffers />
       </section>
-
-      {/* Universe Section with Impact Numbers */}
-      <Universe />
 
       {/* Artist Categories */}
       <section ref={artistsRef} className="pb-0 bg-black">

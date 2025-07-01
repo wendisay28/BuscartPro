@@ -270,19 +270,19 @@ export default function CounterOffers() {
   ];
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen py-20 overflow-hidden bg-gray-900">
+    <section ref={sectionRef} className="relative py-20 bg-black z-0">
       {/* Efecto de humo */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 -z-10">
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-pink-600/10 to-transparent animate-pulse"></div>
         <div className="absolute bottom-0 right-0 w-full h-32 bg-gradient-to-t from-purple-600/10 to-transparent animate-pulse" style={{animationDelay: '1s'}}></div>
       </div>
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="counter-title text-center mb-12 md:mb-20">
-          <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-600 mb-6">
+        <div className="counter-title text-center mb-12 md:mb-16">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-600 mb-4">
             Contraofertas Activas
           </h2>
-          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
             Conoce a los clientes detrás de cada oportunidad
           </p>
         </div>
@@ -294,13 +294,13 @@ export default function CounterOffers() {
             return (
               <div 
                 key={index} 
-                className="flip-card h-64 md:h-72 relative cursor-pointer" 
+                className="flip-card h-64 md:h-72 relative cursor-pointer mb-8 md:mb-0" 
                 style={{ perspective: '1000px' }}
                 onClick={handleCardClick}
               >
                 {/* Parte delantera - Detalles de la oferta */}
                 <div 
-                  className="card-front absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl border border-purple-500/30"
+                  className="card-front absolute inset-0 bg-gradient-to-br from-gray-900 to-black p-6 rounded-2xl border border-purple-500/30"
                   style={{ backfaceVisibility: 'hidden', transformStyle: 'preserve-3d' }}
                 >
                   <div className="flex items-center justify-between mb-4">
