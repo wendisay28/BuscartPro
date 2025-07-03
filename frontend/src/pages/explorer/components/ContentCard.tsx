@@ -51,7 +51,7 @@ export const ContentCard = ({
 
   return (
     <div 
-      className={`content-card w-full max-w-md mx-auto ${className}`}
+      className={`content-card w-full ${className}`}
       onKeyDown={(e) => {
         if (!onSwipe) return;
         if (e.key === 'ArrowLeft') onSwipe('left');
