@@ -137,7 +137,7 @@ export default function Favorites() {
             <p className="text-sm text-gray-600">{artist.type}</p>
           </div>
           <div className="text-right">
-            <div className="flex items-center gap-1 text-orange-500">
+            <div className="flex items-center gap-1 text-[#bb00aa]">
               <Star className="w-4 h-4 fill-current" />
               <span className="text-sm font-medium">{artist.rating}</span>
             </div>
@@ -158,7 +158,7 @@ export default function Favorites() {
         <p className="text-sm text-gray-700 mb-4 line-clamp-2">{artist.description}</p>
 
         <div className="flex items-center justify-between">
-          <div className="text-lg font-bold text-orange-600">
+          <div className="text-lg font-bold text-[#bb00aa]">
             €{artist.price}/hora
           </div>
           <div className="flex gap-2">
@@ -169,7 +169,7 @@ export default function Favorites() {
                 disabled={!selectedForComparison.includes(artist.id) && selectedForComparison.length >= 3}
               />
             )}
-            <Button size="sm" className="bg-orange-500 hover:bg-orange-600">
+            <Button size="sm" className="bg-[#bb00aa] hover:bg-[#9b0089]">
               <MessageCircle className="w-3 h-3 mr-1" />
               Contactar
             </Button>
@@ -214,7 +214,7 @@ export default function Favorites() {
         </div>
         <p className="text-sm text-gray-700 mb-4 line-clamp-2">{event.description}</p>
         <div className="flex items-center justify-between">
-          <div className="text-lg font-bold text-orange-600">
+          <div className="text-lg font-bold text-[#bb00aa]">
             €{event.price}
           </div>
           <Button size="sm" className="bg-orange-500 hover:bg-orange-600">
@@ -273,9 +273,9 @@ export default function Favorites() {
   );
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-orange-50 to-gray-100 ${isMobile ? 'pb-20' : ''}`}>
+    <div className={`min-h-screen bg-gradient-to-br from-[#fdf4ff] to-gray-100 ${isMobile ? 'pb-20' : ''}`}>
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-orange-100">
+      <div className="bg-white shadow-sm border-b border-[#f3e8ff]">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
@@ -286,7 +286,7 @@ export default function Favorites() {
               {selectedForComparison.length >= 2 && (
                 <Button
                   onClick={() => setShowComparison(true)}
-                  className="bg-orange-500 hover:bg-orange-600"
+                  className="bg-[#bb00aa] hover:bg-[#9b0089]"
                 >
                   <Scale className="w-4 h-4 mr-2" />
                   Comparar ({selectedForComparison.length})
@@ -318,13 +318,13 @@ export default function Favorites() {
 
           <TabsContent value="artists">
             {selectedForComparison.length > 0 && (
-              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6">
+              <div className="bg-[#fdf4ff] border border-[#f3e8ff] rounded-lg p-4 mb-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-orange-800">
+                    <p className="text-sm font-medium text-[#701a75]">
                       {selectedForComparison.length} artistas seleccionados para comparar
                     </p>
-                    <p className="text-xs text-orange-600">
+                    <p className="text-xs text-[#9b0089]">
                       Máximo 3 artistas. Haz clic en "Comparar" para ver las diferencias.
                     </p>
                   </div>
@@ -367,7 +367,7 @@ export default function Favorites() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {getComparisonData().map((artist) => (
-              <Card key={artist.id} className="border-2 border-orange-200">
+              <Card key={artist.id} className="border-2 border-[#f3e8ff]">
                 <CardHeader className="pb-3">
                   <div className="relative">
                     <img
@@ -395,13 +395,13 @@ export default function Favorites() {
                     <div>
                       <span className="text-gray-600">Rating:</span>
                       <div className="flex items-center gap-1">
-                        <Star className="w-3 h-3 text-orange-500 fill-current" />
+                        <Star className="w-3 h-3 text-[#bb00aa] fill-current" />
                         <span className="font-medium">{artist.rating}</span>
                       </div>
                     </div>
                     <div>
                       <span className="text-gray-600">Precio/hora:</span>
-                      <p className="font-medium text-orange-600">€{artist.price}</p>
+                      <p className="font-medium text-[#9b0089]">€{artist.price}</p>
                     </div>
                     <div>
                       <span className="text-gray-600">Fans:</span>
@@ -419,7 +419,7 @@ export default function Favorites() {
                     </div>
                   </div>
 
-                  <Button size="sm" className="w-full bg-orange-500 hover:bg-orange-600">
+                  <Button size="sm" className="w-full bg-[#bb00aa] hover:bg-[#9b0089]">
                     <MessageCircle className="w-3 h-3 mr-1" />
                     Contactar
                   </Button>

@@ -24,8 +24,8 @@ const NavigationTabs: React.FC<NavigationTabsProps> = ({ activeTab, onTabChange 
             onClick={() => onTabChange(tab.id)}
             className={`flex items-center justify-center px-3 py-2 text-sm font-medium rounded-full transition-colors duration-200 ${
               activeTab === tab.id
-                ? 'bg-[#FF7A00] text-white'
-                : 'text-white hover:bg-[#FF7A00] hover:bg-opacity-20'
+                ? 'bg-[#bb00aa] text-white shadow-[0_0_10px_rgba(187,0,170,0.5)]'
+                : 'text-white hover:bg-[#bb00aa] hover:bg-opacity-20'
             }`}
           >
             <span className="mr-1.5">{tab.icon}</span>

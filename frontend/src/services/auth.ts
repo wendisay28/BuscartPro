@@ -27,6 +27,7 @@ export interface SignUpData {
   password: string;
   firstName: string;
   lastName: string;
+  userType?: UserType;
 }
 
 export interface SignInData {
@@ -42,13 +43,16 @@ const mapFirebaseUserToUser = (firebaseUser: FirebaseUser): User => ({
 });
 
 export const authService = {
-  async signUp({ email, password, firstName, lastName }: SignUpData): Promise<User> {
+  async signUp({ email, password, firstName, lastName, userType = 'general' }: SignUpData): Promise<User> {
     try {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
       
-      // Actualizar el perfil del usuario con el nombre completo
+      // Actualizar el perfil del usuario con el nombre completo y tipo de usuario
       await updateProfile(user, {
-        displayName: `${firstName} ${lastName}`
+        displayName: `${firstName} ${lastName}`.trim(),
+        photoURL: userType === 'artist' ? '/default-avatar-artist.svg' : 
+                 (userType === 'company' ? '/default-avatar-company.svg' : 
+                 '/default-avatar.svg')
       });
 
       // Aquí podrías hacer una llamada a tu backend para guardar más información del usuario

@@ -17,11 +17,11 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+    @apply bg-[#bb00aa] text-white px-4 py-2 rounded-md hover:bg-[#a00090] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#d966ff] transition-colors duration-200;
   }
   
   .input-field {
-    @apply appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm;
+    @apply appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#bb00aa] focus:border-[#bb00aa] focus:z-10 sm:text-sm transition-colors duration-200;
   }
 }
 
@@ -38,15 +38,15 @@
   --card-foreground: 20 14.3% 4.1%; /* #2C3E50 */
   --border: 20 5.9% 90%; /* #E9ECEF */
   --input: 20 5.9% 90%; /* #E9ECEF */
-  --primary: 13 100% 59%; /* #FF6B35 */
+  --primary: 305 100% 37%; /* #bb00aa */
   --primary-foreground: 0 0% 100%; /* #FFFFFF */
-  --secondary: 174 63% 56%; /* #4ECDC4 */
+  --secondary: 270 100% 25%; /* #400080 - Tono más oscuro para contraste */
   --secondary-foreground: 0 0% 100%; /* #FFFFFF */
-  --accent: 50 100% 71%; /* #FFE66D */
-  --accent-foreground: 20 14.3% 4.1%; /* #2C3E50 */
+  --accent: 290 100% 75%; /* #d966ff - Tono más claro para acentos */
+  --accent-foreground: 0 0% 100%; /* #FFFFFF */
   --destructive: 0 84.2% 60.2%; /* #EF4444 */
-  --destructive-foreground: 60 9.1% 97.8%; /* #FEFEFE */
-  --ring: 13 100% 59%; /* #FF6B35 */
+  --destructive-foreground: 0 0% 100%; /* #FFFFFF */
+  --ring: 305 100% 37%; /* #bb00aa */
   --radius: 0.5rem;
   
   /* Cultural colors */
@@ -54,10 +54,10 @@
   --dark: 210 11% 15%; /* #2C3E50 */
   
   /* Chart colors */
-  --chart-1: 13 100% 59%; /* #FF6B35 */
-  --chart-2: 174 63% 56%; /* #4ECDC4 */
-  --chart-3: 50 100% 71%; /* #FFE66D */
-  --chart-4: 263 85% 60%; /* #8B5CF6 */
+  --chart-1: 305 100% 37%; /* #bb00aa */
+  --chart-2: 270 100% 25%; /* #400080 */
+  --chart-3: 290 100% 75%; /* #d966ff */
+  --chart-4: 320 100% 85%; /* #ffb3f0 */
   --chart-5: 346 84% 61%; /* #F43F5E */
 }
 

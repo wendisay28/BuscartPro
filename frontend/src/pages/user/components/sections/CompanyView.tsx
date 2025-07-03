@@ -23,7 +23,7 @@ export function CompanyView() {
         {stats.map((stat, index) => (
           <Card key={index}>
             <CardContent className="p-4 text-center">
-              <stat.icon className="w-6 h-6 mx-auto mb-2 text-orange-500" />
+              <stat.icon className="w-6 h-6 mx-auto mb-2 text-[#bb00aa]" />
               <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
               <div className="text-sm text-gray-600">{stat.label}</div>
             </CardContent>
@@ -35,14 +35,14 @@ export function CompanyView() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Building className="w-5 h-5 text-orange-500" />
+            <Building className="w-5 h-5 text-[#bb00aa]" />
             Nuestros Servicios
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-3">
             {services.map((service, index) => (
-              <div key={index} className="p-3 bg-orange-50 rounded-lg border border-orange-200">
+              <div key={index} className="p-3 bg-[#fdf4ff] rounded-lg border border-[#f3e8ff]">
                 <p className="text-sm font-medium text-gray-900">{service}</p>
               </div>
             ))}
@@ -54,7 +54,7 @@ export function CompanyView() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-orange-500" />
+            <Calendar className="w-5 h-5 text-[#bb00aa]" />
             Próximos Eventos
           </CardTitle>
         </CardHeader>

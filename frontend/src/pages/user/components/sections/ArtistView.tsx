@@ -26,7 +26,7 @@ export function ArtistView() {
       {/* Banner video */}
       <Card>
         <CardContent className="p-0">
-          <div className="relative h-48 md:h-64 bg-gradient-to-r from-orange-400 to-orange-600 rounded-t-lg">
+          <div className="relative h-48 md:h-64 bg-gradient-to-r from-[#bb00aa] to-[#9b0089] rounded-t-lg">
             <div className="absolute inset-0 flex items-center justify-center text-white text-center">
               <div>
                 <Play className="w-16 h-16 mx-auto mb-2 opacity-80" />
@@ -46,7 +46,7 @@ export function ArtistView() {
         {stats.map((stat, index) => (
           <Card key={index}>
             <CardContent className="p-4 text-center">
-              <stat.icon className="w-6 h-6 mx-auto mb-2 text-orange-500" />
+              <stat.icon className="w-6 h-6 mx-auto mb-2 text-[#bb00aa]" />
               <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
               <div className="text-sm text-gray-600">{stat.label}</div>
             </CardContent>
@@ -79,13 +79,13 @@ export function ArtistView() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Star className="w-5 h-5 text-orange-500" />
+            <Star className="w-5 h-5 text-[#bb00aa]" />
             Mis Especialidades
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-2">
           {skills.map((skill, i) => (
-            <Badge key={i} className="bg-orange-100 text-orange-700">
+            <Badge key={i} className="bg-[#f3e8ff] text-[#701a75]">
               {skill}
             </Badge>
           ))}
@@ -96,7 +96,7 @@ export function ArtistView() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Grid3X3 className="w-5 h-5 text-orange-500" />
+            <Grid3X3 className="w-5 h-5 text-[#bb00aa]" />
             Mi Portfolio
           </CardTitle>
         </CardHeader>
@@ -118,7 +118,7 @@ export function ArtistView() {
                 </div>
               </div>
             ))}
-            <div className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:border-orange-400 transition-colors">
+            <div className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:border-[#bb00aa] transition-colors">
               <div className="text-center text-gray-500">
                 <Camera className="w-8 h-8 mx-auto mb-2" />
                 <p className="text-sm">Agregar</p>

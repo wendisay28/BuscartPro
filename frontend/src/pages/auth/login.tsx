@@ -92,7 +92,10 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-black flex items-start lg:items-center justify-center p-2 sm:p-4">
-      <div className="w-full max-w-5xl bg-gray-900 rounded-xl lg:rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(187,0,170,0.3)] flex flex-col lg:flex-row relative z-10 border border-gray-800 mt-4 lg:mt-0" style={{ maxHeight: '95vh' }}>
+      <div
+        className="w-full max-w-5xl bg-gray-900 rounded-xl lg:rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(187,0,170,0.3)] flex flex-col lg:flex-row relative z-10 border border-gray-800 mt-4 lg:mt-0 max-h-[80vh]"
+        style={{ maxHeight: '80vh' }}
+      >
         
         {/* Columna izquierda - Formulario */}
         <div className="w-full lg:w-[45%] flex flex-col p-4 sm:p-6 lg:p-8 xl:p-10 overflow-y-auto">
@@ -127,16 +130,19 @@ export default function Login() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="w-full max-w-sm bg-black/30 backdrop-blur-lg rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(187,0,170,0.2)] border border-white/10 relative overflow-hidden"
+              className="w-full max-w-sm bg-black rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(187,0,170,0.2)] border border-[#bb00aa]/30 relative overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-transparent via-[#bb00aa]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="absolute inset-0 rounded-2xl border border-white/5 pointer-events-none"></div>
               
-              <div className="text-center">
+              <div className="text-center relative z-10">
                 <h2 className="text-3xl font-bold text-white mb-2">Inicia sesión</h2>
                 <p className="text-sm text-gray-400 mb-6">
                   O{' '}
-                  <Link to="/register" className="font-medium text-[#bb00aa] hover:text-[#d966ff] transition-colors">
+                  <Link 
+                    to="/register" 
+                    className="font-medium text-[#bb00aa] hover:text-[#d966ff] transition-colors relative z-20"
+                  >
                     crea una cuenta
                   </Link>
                 </p>
@@ -247,7 +253,7 @@ export default function Login() {
                       provider: 'google', 
                       label: 'Google',
                       icon: (
-                        <svg className="w-5 h-5" viewBox="0 0 24 24">
+                        <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
                           <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
                           <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
                           <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05" />
@@ -259,7 +265,7 @@ export default function Login() {
                       provider: 'facebook', 
                       label: 'Facebook',
                       icon: (
-                        <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                           <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
                         </svg>
                       )
@@ -268,7 +274,7 @@ export default function Login() {
                       provider: 'apple', 
                       label: 'Apple',
                       icon: (
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                           <path d="M16.365 1.43c0 1.14-.493 2.27-1.177 3.08-.744.9-1.99 1.57-3.188 1.52-.14-1.36.396-2.66 1.168-3.48.7-.85 1.91-1.43 3.12-1.43.02 1.1.08 2.3.08 3.31zM5.5 23.5c1.5 0 2.08-.29 3.07-.99.85-.6 1.49-1.9 1.49-1.9s-1.11.29-2.17.29c-4.5 0-7.39-3.6-7.39-10.02 0-6.15 3.79-10.58 8.55-10.58 1.5 0 3.03.43 4.28 1.17l-1.66 2.88c-.62-.35-1.25-.6-1.98-.6-2.83 0-5.15 2.5-5.15 5.9 0 3.3 1.86 5.7 4.46 5.7 1.2 0 2.05-.5 2.78-1.2.3-.3.5-.5.9-.8.8-.6 1.5-.8 2.4-.8h.1c.5 0 1.5.1 2.3 1.4.1.2.1.6.1.9 0 1.1-.5 2.3-1.5 3.6-1.2 1.5-2.5 2.6-4.6 2.6-1.3 0-1.7-.3-2.7-.3-1.1 0-1.4.3-2.6.3z" />
                         </svg>
                       )
@@ -299,7 +305,6 @@ export default function Login() {
             className="w-full h-full object-cover"
             onError={(e) => {
               console.error('Error al cargar la imagen decorativa:', e);
-              // Intentar con la ruta codificada
               e.currentTarget.src = encodeURI('/images/diseñoapp.svg');
             }}
           />

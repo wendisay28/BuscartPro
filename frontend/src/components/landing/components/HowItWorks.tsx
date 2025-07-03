@@ -91,39 +91,39 @@ export default function HowItWorks() {
         <div className="morphing-blob absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-r from-pink-600/20 to-transparent" style={{animationDelay: '2s'}}></div>
       </div>
       
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
-        <div className="section-title text-center mb-20">
-          <h2 className="font-orbitron text-5xl md:text-7xl font-bold gradient-text mb-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="section-title text-center mb-12 md:mb-20">
+          <h2 className="font-orbitron text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold gradient-text mb-4 md:mb-8">
             Cómo Funciona
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto px-4">
             Todo lo que necesitas para encontrar y contratar artistas
           </p>
         </div>
         
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
           {features.map((feature, index) => {
             const IconComponent = feature.icon;
             return (
-              <div key={index} className="feature-card group">
-                <div className="relative bg-gradient-to-br from-gray-800 to-black p-8 rounded-2xl border border-purple-600/30 hover:border-purple-600 transition-all duration-500 transform-style-3d hover:scale-105">
+              <div key={index} className="feature-card group h-full">
+                <div className="relative bg-gradient-to-br from-gray-800 to-black p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl border border-purple-600/30 hover:border-purple-600 transition-all duration-500 transform-style-3d hover:scale-[1.03] h-full flex flex-col">
                   {/* Icon with gradient background */}
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center mb-6 mx-auto transform transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
-                    <IconComponent className="w-8 h-8 text-white" />
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 sm:mb-4 md:mb-6 mx-auto transform transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
+                    <IconComponent className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-white" />
                   </div>
                   
-                  <div className="text-center">
-                    <h3 className="text-xl font-orbitron font-bold gradient-text mb-4">
+                  <div className="text-center flex-grow">
+                    <h3 className="text-base sm:text-lg md:text-xl font-orbitron font-bold gradient-text mb-2 sm:mb-3 md:mb-4">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-400 leading-relaxed">
+                    <p className="text-xs sm:text-sm md:text-base text-gray-400 leading-relaxed">
                       {feature.description}
                     </p>
                   </div>
 
                   {/* Animated border effect */}
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 opacity-0 group-hover:opacity-20 transition-opacity duration-500 -z-10"></div>
+                  <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 opacity-0 group-hover:opacity-20 transition-opacity duration-500 -z-10"></div>
                 </div>
               </div>
             );

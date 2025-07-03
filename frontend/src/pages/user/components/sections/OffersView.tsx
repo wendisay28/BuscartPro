@@ -178,7 +178,7 @@ export function OffersView() {
         <TabsContent value="pending">
           <div className="space-y-4">
             {pendingOffers.map((offer) => (
-              <Card key={offer.id} className="bg-[#0f172a] border border-gray-700 hover:border-orange-500/30 transition-colors">
+              <Card key={offer.id} className="bg-[#0f172a] border border-gray-700 hover:border-[#bb00aa]/30 transition-colors">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start space-x-4 flex-1">
@@ -223,7 +223,7 @@ export function OffersView() {
         <TabsContent value="active">
           <div className="space-y-4">
             {activeOffers.map((offer) => (
-              <Card key={offer.id} className="bg-[#0f172a] border border-gray-700 hover:border-orange-500/30 transition-colors">
+              <Card key={offer.id} className="bg-[#0f172a] border border-gray-700 hover:border-[#bb00aa]/30 transition-colors">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start space-x-4 flex-1">
@@ -279,7 +279,7 @@ export function OffersView() {
         <TabsContent value="completed">
           <div className="space-y-4">
             {completedOffers.map((offer) => (
-              <Card key={offer.id} className="bg-[#0f172a] border border-gray-700 hover:border-orange-500/30 transition-colors">
+              <Card key={offer.id} className="bg-[#0f172a] border border-gray-700 hover:border-[#bb00aa]/30 transition-colors">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start space-x-4 flex-1">

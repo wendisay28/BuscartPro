@@ -25,7 +25,7 @@ export function GeneralView() {
         {stats.map((stat, index) => (
           <Card key={index}>
             <CardContent className="p-4 text-center">
-              <stat.icon className="w-6 h-6 mx-auto mb-2 text-orange-500" />
+              <stat.icon className="w-6 h-6 mx-auto mb-2 text-[#bb00aa]" />
               <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
               <div className="text-sm text-gray-600">{stat.label}</div>
             </CardContent>
@@ -37,14 +37,14 @@ export function GeneralView() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Heart className="w-5 h-5 text-orange-500" />
+            <Heart className="w-5 h-5 text-[#bb00aa]" />
             Mis Intereses
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-2">
             {interests.map((interest, index) => (
-              <Badge key={index} variant="secondary" className="bg-orange-100 text-orange-700">
+              <Badge key={index} variant="secondary" className="bg-[#f3e8ff] text-[#701a75]">
                 {interest}
               </Badge>
             ))}
@@ -56,7 +56,7 @@ export function GeneralView() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-orange-500" />
+            <TrendingUp className="w-5 h-5 text-[#bb00aa]" />
             Actividad Reciente
           </CardTitle>
         </CardHeader>
@@ -64,7 +64,7 @@ export function GeneralView() {
           <div className="space-y-3">
             {recentActivity.map((activity, index) => (
               <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-[#bb00aa] rounded-full"></div>
                 <div className="flex-1">
                   <p className="text-sm text-gray-900">{activity.text}</p>
                   <p className="text-xs text-gray-600">{activity.time}</p>

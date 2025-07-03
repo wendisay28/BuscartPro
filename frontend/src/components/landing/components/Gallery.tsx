@@ -1,68 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Gallery() {
-  const galleryRef = useRef<HTMLElement>(null);
-  const priceRefs = useRef<HTMLDivElement[]>([]);
-
-  const addToPriceRefs = (el: HTMLDivElement | null) => {
-    if (el && !priceRefs.current.includes(el)) {
-      priceRefs.current.push(el);
-    }
-  };
-
-  useEffect(() => {
-    // Price Counter Animation
-    const animatePrices = () => {
-      const prices = priceRefs.current;
-      
-      const priceObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const target = entry.target as HTMLElement;
-            const price = parseInt(target.getAttribute('data-price') || '0');
-            let current = 0;
-            const increment = price / 80;
-            
-            const timer = setInterval(() => {
-              current += increment;
-              if (current >= price) {
-                current = price;
-                clearInterval(timer);
-              }
-              target.textContent = '$' + Math.floor(current).toLocaleString();
-            }, 25);
-          }
-        });
-      }, { threshold: 0.5 });
-      
-      prices.forEach((price: HTMLDivElement) => {
-        if (price) priceObserver.observe(price);
-      });
-    };
-
-    animatePrices();
-
-    // GSAP VR Card Animations
-    if (typeof window !== 'undefined' && window.gsap && window.ScrollTrigger) {
-      const vrCards = window.gsap.utils.toArray('.vr-card') as HTMLElement[];
-      vrCards.forEach((card: HTMLElement, i: number) => {
-        window.gsap.from(card, {
-          scrollTrigger: {
-            trigger: card,
-            start: 'top 85%',
-          },
-          duration: 0.6,
-          y: 60,
-          rotationY: 15,
-          opacity: 0,
-          delay: i * 0.1,
-          ease: 'power2.out'
-        });
-      });
-    }
-  }, []);
-
-  const products = [
+  const [products] = useState([
     {
       name: "Pintura al Óleo - Amanecer Andino",
       category: "Pintura",
@@ -129,24 +68,86 @@ export default function Gallery() {
       stock: 8,
       description: "Set completo de 24 colores profesionales de alta pigmentación."
     }
-  ];
-  
-  return (
-    <section ref={galleryRef} id="gallery" className="relative min-h-screen py-20">
-      <div className="absolute inset-0 bg-gradient-radial from-transparent via-gray-800/50 to-black"></div>
+  ]);
+
+  const priceRefs = useRef<HTMLDivElement[]>([]);
+
+  const addToPriceRefs = (el: HTMLDivElement | null) => {
+    if (el && !priceRefs.current.includes(el)) {
+      priceRefs.current.push(el);
+    }
+  };
+
+  useEffect(() => {
+    // Price Counter Animation
+    const animatePrices = () => {
+      const prices = priceRefs.current;
       
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
-        <div className="text-center mb-20">
-          <h2 className="font-orbitron text-5xl md:text-7xl font-bold gradient-text mb-8">
+      const priceObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const target = entry.target as HTMLElement;
+            const price = parseInt(target.getAttribute('data-price') || '0');
+            let current = 0;
+            const increment = price / 80;
+            
+            const timer = setInterval(() => {
+              current += increment;
+              if (current >= price) {
+                current = price;
+                clearInterval(timer);
+              }
+              target.textContent = '$' + Math.floor(current).toLocaleString();
+            }, 25);
+          }
+        });
+      }, { threshold: 0.5 });
+      
+      prices.forEach((price: HTMLDivElement) => {
+        if (price) priceObserver.observe(price);
+      });
+    };
+
+    animatePrices();
+
+    // GSAP VR Card Animations
+    if (typeof window !== 'undefined' && window.gsap && window.ScrollTrigger) {
+      const vrCards = window.gsap.utils.toArray('.vr-card') as HTMLElement[];
+      vrCards.forEach((card: HTMLElement, i: number) => {
+        window.gsap.from(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 85%',
+          },
+          duration: 0.6,
+          y: 60,
+          rotationY: 15,
+          opacity: 0,
+          delay: i * 0.1,
+          ease: 'power2.out'
+        });
+      });
+    }
+  }, []);
+
+  return (
+    <section 
+      id="gallery" 
+      className="relative w-full py-20 bg-gradient-to-b from-gray-900 to-black"
+    >
+      <div className="absolute inset-0 bg-gradient-radial from-transparent via-gray-800/50 to-black/80"></div>
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="font-orbitron text-4xl md:text-6xl lg:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-600 mb-6">
             Tienda de Artistas
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
             Descubre y adquiere obras únicas, materiales de arte y más, directamente de los artistas
           </p>
         </div>
         
-        {/* Product Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product, index) => (
             <div key={index} className="product-card group bg-gray-900/50 rounded-xl border border-gray-700 hover:border-pink-500/50 transition-all duration-300 overflow-hidden hover:shadow-lg hover:shadow-pink-500/10">
               <div className="relative">
