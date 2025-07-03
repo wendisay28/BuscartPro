@@ -49,12 +49,12 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
   return (
     <div className="relative w-[380px] h-[calc(75vh-1cm)] mx-auto">
       <div 
-        className="flex flex-col w-full h-full bg-[#0A1A35] rounded-[20px] overflow-hidden shadow-xl"
+        className="flex flex-col w-full h-full bg-gray-900 rounded-[20px] overflow-hidden shadow-xl"
         onClick={handleCardClick}
       >
       {/* Sección superior - Imagen (65% de la altura) */}
       <div className="relative overflow-hidden" style={{ height: '65%' }}>
-        <div className="absolute inset-0 w-full h-full bg-[#0A1A35]">
+        <div className="absolute inset-0 w-full h-full bg-gray-900">
           {images.length > 0 ? (
             <div className="w-full h-full relative">
               <img
@@ -110,30 +110,30 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
       </div>
       
       {/* Sección inferior - Contenido (35% de la altura) */}
-      <div className="flex flex-col bg-[#0A1A35] overflow-hidden" style={{ height: '35%' }}>
+      <div className="flex flex-col bg-gray-900 overflow-hidden" style={{ height: '35%' }}>
         <div className="p-4 h-full flex flex-col">
           {/* Contenedor para las filas 1 y 2 con margen reducido */}
           <div className="-mt-1">
             {/* Fila 1 - Encabezado con nombre y precio */}
             <div className="flex justify-between items-start">
               <h3 className="text-white font-bold text-[15px] truncate">{data.name}</h3>
-              <div className="flex items-center text-[#FF7A00] text-[13px] font-bold">
-                <Ticket className="w-3 h-3 mr-1 flex-shrink-0 text-[#FF7A00]" />
+              <div className="flex items-center text-[#bb00aa] text-[13px] font-bold">
+                <Ticket className="w-3 h-3 mr-1 flex-shrink-0 text-[#bb00aa]" />
                 <span>{data.type === 'free' ? 'Entrada libre' : `$${data.price?.toLocaleString()}`}</span>
               </div>
             </div>
             
             {/* Fila 2 - Etiquetas */}
           <div className="flex flex-wrap gap-1.5 mt-1.5">
-            <span className="px-1.5 py-0.5 bg-[#FF7A0026] text-[#FF7A00] text-[9px] rounded-full flex items-center gap-1 whitespace-nowrap">
+            <span className="px-1.5 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[9px] rounded-full flex items-center gap-1 whitespace-nowrap">
               <Music className="w-3 h-3 flex-shrink-0" />
               Música
             </span>
-            <span className="px-1.5 py-0.5 bg-[#FF7A0026] text-[#FF7A00] text-[9px] rounded-full flex items-center gap-1 whitespace-nowrap">
+            <span className="px-1.5 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[9px] rounded-full flex items-center gap-1 whitespace-nowrap">
               <Headphones className="w-3 h-3 flex-shrink-0" />
               Pop/Rock
             </span>
-            <span className="px-1.5 py-0.5 bg-[#FF7A0026] text-[#FF7A00] text-[9px] rounded-full flex items-center gap-1 whitespace-nowrap">
+            <span className="px-1.5 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[9px] rounded-full flex items-center gap-1 whitespace-nowrap">
               <UserCheck className="w-3 h-3 flex-shrink-0" />
               Presencial
             </span>
@@ -174,10 +174,10 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
               
               {/* Botones */}
               <div className="flex gap-2">
-                <button className="w-8 h-8 rounded-full border border-[#FF7A00] text-white flex items-center justify-center hover:bg-[#FF7A00]/20 transition-colors">
+                <button className="w-8 h-8 rounded-full border border-[#bb00aa] text-white flex items-center justify-center hover:bg-[#FF7A00]/20 transition-colors">
                   <Info className="w-4 h-4" />
                 </button>
-                <button className="w-8 h-8 rounded-full bg-[#FF7A00] text-white flex items-center justify-center hover:bg-[#FF7A00]/90 transition-colors">
+                <button className="w-8 h-8 rounded-full bg-[#bb00aa] text-white flex items-center justify-center hover:bg-[#FF7A00]/90 transition-colors">
                   <CalendarCheck className="w-4 h-4" />
                 </button>
               </div>

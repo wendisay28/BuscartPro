@@ -6,6 +6,7 @@ import { Artist, EventItem, VenueItem, GalleryItem } from './types';
 import { ContentCard } from './components/ContentCard';
 import NavigationTabs from './components/NavigationTabs';
 import { ExplorerTab } from './hooks/useExplorer';
+import { Handshake } from 'lucide-react';
 
 type ExplorerItem = Artist | EventItem | VenueItem | GalleryItem;
 
@@ -73,25 +74,44 @@ export default function Explorer() {
         />
         
         <div className="relative mt-8">
-          {/* Left Navigation Button */}
-          <div className="hidden md:flex absolute left-0 -ml-12 top-1/2 -translate-y-1/2 z-10">
-            <button 
-              onClick={() => activeCardIndex > 0 && setActiveCardIndex(activeCardIndex - 1)}
-              disabled={activeCardIndex === 0}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-black/90 backdrop-blur-sm text-white hover:bg-[#bb00aa] transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed shadow-md hover:scale-105"
-              aria-label="Anterior"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-          </div>
-          
           {/* Card with swipe gestures (mobile) */}
-          <div className="mt-8 mb-16 md:mb-6 relative" {...swipeHandlers}>
+          <div className="relative" {...swipeHandlers}>
             {/* Current card */}
             <div className="transition-transform duration-300 transform hover:scale-[1.02] hover:shadow-xl">
               <ContentCard data={currentItem} />
+              
+              {/* Navigation Buttons - Bottom - Hidden on mobile, visible on md and up */}
+              <div className="hidden md:flex justify-center items-center mt-2 space-x-4">
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Acción de conectar
+                    // Lógica de conexión aquí
+                  }}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-pink-500 to-pink-600 text-white hover:from-pink-600 hover:to-pink-700 transition-all duration-200 shadow-lg hover:scale-105 transform hover:rotate-2"
+                  aria-label="Conectar"
+                >
+                  <Handshake className="h-5 w-5" />
+                </button>
+                
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Acción de descartar
+                    if (activeCardIndex < currentItems.length - 1) {
+                      setActiveCardIndex(activeCardIndex + 1);
+                    } else if (activeCardIndex > 0) {
+                      setActiveCardIndex(0);
+                    }
+                  }}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-purple-600 text-white hover:from-purple-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:scale-105 transform hover:-rotate-2"
+                  aria-label="Descartar"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
             </div>
             
             {/* Swipe indicators */}
@@ -120,20 +140,6 @@ export default function Explorer() {
                 </svg>
               </div>
             </div>
-          </div>
-          
-          {/* Right Navigation Button */}
-          <div className="hidden md:flex absolute right-0 -mr-12 top-1/2 -translate-y-1/2 z-10">
-            <button 
-              onClick={() => activeCardIndex < currentItems.length - 1 && setActiveCardIndex(activeCardIndex + 1)}
-              disabled={activeCardIndex === currentItems.length - 1}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-black/90 backdrop-blur-sm text-white hover:bg-[#bb00aa] transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed shadow-md hover:scale-105"
-              aria-label="Siguiente"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
           </div>
         </div>
       </div>

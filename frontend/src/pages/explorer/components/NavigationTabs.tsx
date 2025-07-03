@@ -18,7 +18,7 @@ const NavigationTabs: React.FC<NavigationTabsProps> = ({ activeTab, onTabChange 
   return (
     <div className="w-full max-w-md mx-auto mb-6 px-4">
       {/* Pestañas de navegación */}
-      <div className="bg-[#0A1A35] bg-opacity-90 border border-white border-opacity-15 rounded-full px-2 py-1.5 flex justify-between">
+      <div className="bg-gray-900 bg-opacity-90 border border-gray-700 rounded-full px-2 py-1.5 flex justify-between">
         {tabs.map((tab) => (
           <button
             key={tab.id}
