@@ -7,7 +7,7 @@ import { Artist, EventItem, VenueItem, GalleryItem, CardType } from '../types';
 // Componente para manejar la tarjeta de galería
 const GalleryCard = ({ galleryItem }: { galleryItem: GalleryItem }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="relative w-full h-full">
       <img 
         src={galleryItem.image} 
         alt={galleryItem.name} 

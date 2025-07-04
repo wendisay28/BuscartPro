@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import NavigationHeader from '@/components/navigation-header';
 import { useSwipeable } from 'react-swipeable';
 import { mockArtists, mockEvents, mockVenues, mockGallery } from './data/mockData';
 import { Artist, EventItem, VenueItem, GalleryItem } from './types';
@@ -65,17 +64,19 @@ export default function Explorer() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
-      <NavigationHeader />
-      <div className="max-w-md mx-auto pt-8">
-        <NavigationTabs 
-          activeTab={activeTab}
-          onTabChange={handleTabChange}
-        />
-        
-        <div className="relative mt-8">
+    <div className="min-h-screen bg-black overflow-hidden">
+      <div className="max-w-md mx-auto pt-2 pb-4 md:pt-4">
+        <div className="relative mt-32 md:mt-4">
+          <div className="px-4 absolute -top-16 left-0 right-0 md:relative md:top-0">
+            <NavigationTabs 
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+            />
+          </div>
+          
+          <div className="mt-4 md:mt-0">
           {/* Card with swipe gestures (mobile) */}
-          <div className="relative" {...swipeHandlers}>
+          <div className="relative mt-4" {...swipeHandlers}>
             {/* Current card */}
             <div className="transition-transform duration-300 transform hover:scale-[1.02] hover:shadow-xl">
               <ContentCard data={currentItem} />
@@ -127,21 +128,10 @@ export default function Explorer() {
                 ))}
               </div>
             )}
-            
-            {/* Swipe hint for first-time users (only on mobile) */}
-            <div className="mt-6 text-center md:hidden">
-              <p className="text-sm text-white/60">Desliza para ver más</p>
-              <div className="flex justify-center mt-2 space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </div>
+
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

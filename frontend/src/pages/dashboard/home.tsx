@@ -1,5 +1,4 @@
 import { useState } from "react";
-import NavigationHeader from "@/components/navigation-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -68,9 +67,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <NavigationHeader />
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           
           {/* Left Sidebar */}

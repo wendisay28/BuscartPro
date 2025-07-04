@@ -25,17 +25,15 @@ const queryClient = new QueryClient({
   },
 });
 
-// Configuración futura para React Router v7
-const routerConfig = {
-  future: {
-    v7_relativeSplatPath: true,
-  },
-};
-
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter {...routerConfig}>
+      <BrowserRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
           <AuthProvider>
             <TooltipProvider>

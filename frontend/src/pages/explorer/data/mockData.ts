@@ -30,12 +30,13 @@ export const mockArtists: Artist[] = [
     name: 'Carla Ortiz',
     profession: 'Ilustradora Digital',
     description: 'Artista visual especializada en ilustración digital y muralismo urbano. Con más de 7 años de experiencia creando piezas únicas para marcas y clientes internacionales.',
-    image: 'https://images.unsplash.com/photo-1573497621117-9ebf843f974f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+    image: '/images/explorador/artistas/artista1.jpeg',
     images: [
-      'https://images.unsplash.com/photo-1573497621117-9ebf843f974f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1573496358766-f068d43b7a0e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1573497620058-e95ceb8f9e9f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80'
+      '/images/explorador/artistas/artista1.jpeg',
+      '/images/explorador/artistas/artista2.jpg',
+      '/images/explorador/artistas/artista3.jpg',
+      '/images/explorador/artistas/artista4.jpg',
+      '/images/explorador/artistas/artista5.jpg'
     ],
     city: 'Medellín',
     distance: '2.5',
@@ -56,12 +57,13 @@ export const mockArtists: Artist[] = [
     name: 'Juan Pérez',
     profession: 'Fotógrafo Profesional',
     description: 'Especialista en fotografía de retrato y moda con más de 5 años de experiencia. Capturando momentos únicos y contando historias a través de mi lente.',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=60',
+    image: '/images/explorador/eventos/artist1.jpg',
     images: [
-      'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=60'
+      '/images/explorador/eventos/artist1.jpg',
+      '/images/explorador/eventos/artist2.jpg',
+      '/images/explorador/eventos/artist3.jpg',
+      '/images/explorador/eventos/artist4.jpg',
+      '/images/explorador/eventos/artist5.jpg'
     ],
     city: 'Bogotá',
     distance: '1.8',
@@ -82,12 +84,14 @@ export const mockArtists: Artist[] = [
     name: 'María García',
     profession: 'Diseñadora de Interiores',
     description: 'Transformo espacios en experiencias únicas. Especializada en diseño residencial y comercial con un toque moderno y funcional.',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=800&q=60',
+    image: '/images/explorador/eventos/artist1.jpg',
     images: [
-      'https://images.unsplash.com/photo-1616486338817-2a8d4f1b8e8f?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1616486338817-2a8d4f1b8e8f?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1616486338817-2a8d4f1b8e8f?auto=format&fit=crop&w=800&q=60'
+      '/images/explorador/eventos/artist1.jpg',
+      '/images/explorador/eventos/artist2.jpg',
+      '/images/explorador/eventos/artist3.jpg',
+      '/images/explorador/eventos/artist4.jpg',
+      '/images/explorador/eventos/artist5.jpg',
+      '/images/explorador/eventos/artist6.jpg'
     ],
     city: 'Cali',
     distance: '3.2',
@@ -110,11 +114,13 @@ export const mockEvents: any[] = [
     id: 'event-1',
     name: 'Festival de Arte Urbano',
     description: 'Música en vivo, arte callejero, presentaciones en tarima y experiencias interactivas. ¡No te lo pierdas! Un evento para toda la familia con lo mejor del arte callejero local e internacional.',
-    image: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=800&q=60',
+    image: '/images/explorador/sitios/sitio1.jpg',
     images: [
-      'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=60'
+      '/images/explorador/sitios/sitio1.jpg',
+      '/images/explorador/sitios/sitio2.jpg',
+      '/images/explorador/sitios/sitio3.jpg',
+      '/images/explorador/sitios/sitio4.jpg',
+      '/images/explorador/sitios/sitio5.jpg'
     ],
     date: '2024-08-15',
     time: '3 PM - 10 PM',
@@ -148,11 +154,13 @@ export const mockEvents: any[] = [
     id: 'event-3',
     name: 'Concierto de Jazz al Aire Libre',
     description: 'Disfruta de una noche mágica con lo mejor del jazz en un ambiente único. Trae tu manta y disfruta de la música bajo las estrellas.',
-    image: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=800&q=60',
+    image: '/images/explorador/artistas/artista3.jpg',
     images: [
-      'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1514525252781-3bddd70915ad?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1514525252781-3bddd70915ad?auto=format&fit=crop&w=800&q=60'
+      '/images/explorador/artistas/artista3.jpg',
+      '/images/explorador/artistas/artista1.jpeg',
+      '/images/explorador/artistas/artista2.jpg',
+      '/images/explorador/artistas/artista4.jpg',
+      '/images/explorador/artistas/artista5.jpg'
     ],
     date: '2024-07-22',
     time: '6 PM - 11 PM',
@@ -174,11 +182,13 @@ export const mockVenues = [
     id: 'venue-1',
     name: 'Café Literario',
     description: 'Un acogedor café con ambiente bohemio, perfecto para trabajar, leer o disfrutar de un buen café. Con espacios al aire libre y una amplia selección de libros.',
-    image: 'https://images.unsplash.com/photo-1453614512568-c5104f568a37?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+    image: '/images/explorador/artistas/artista2.jpg',
     images: [
-      'https://images.unsplash.com/photo-1453614512568-c5104f568a37?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80'
+      '/images/explorador/artistas/artista2.jpg',
+      '/images/explorador/artistas/artista1.jpeg',
+      '/images/explorador/artistas/artista3.jpg',
+      '/images/explorador/artistas/artista4.jpg',
+      '/images/explorador/artistas/artista5.jpg'
     ],
     address: 'Calle 123 #45-67, Bogotá',
     city: 'Bogotá',
@@ -201,11 +211,13 @@ export const mockVenues = [
     id: 'venue-2',
     name: 'Galería de Arte Moderno',
     description: 'Espacio cultural que exhibe obras de artistas contemporáneos emergentes y consagrados. Cuenta con tres pisos de exposición y una cafetería en la terraza.',
-    image: 'https://images.unsplash.com/photo-1531913764164-f85c52d6e654?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+    image: '/images/explorador/artistas/artista5.jpg',
     images: [
-      'https://images.unsplash.com/photo-1531913764164-f85c52d6e654?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1578303512597-81e6fc158a8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80'
+      '/images/explorador/artistas/artista5.jpg',
+      '/images/explorador/artistas/artista1.jpeg',
+      '/images/explorador/artistas/artista2.jpg',
+      '/images/explorador/artistas/artista3.jpg',
+      '/images/explorador/artistas/artista4.jpg'
     ],
     address: 'Carrera 56 #12-34, Medellín',
     city: 'Medellín',
@@ -228,11 +240,13 @@ export const mockVenues = [
     id: 'venue-3',
     name: 'Estudio de Grabación Sonora',
     description: 'Estudio profesional de grabación equipado con tecnología de punta. Ideal para músicos, podcasters y productores. Ofrecemos paquetes por hora o por proyecto.',
-    image: 'https://images.unsplash.com/photo-1514525252781-4e8f829c796d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+    image: '/images/explorador/artistas/artista3.jpg',
     images: [
-      'https://images.unsplash.com/photo-1514525252781-4e8f829c796d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1605146769289-440113c0a3ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80'
+      '/images/explorador/artistas/artista3.jpg',
+      '/images/explorador/artistas/artista1.jpeg',
+      '/images/explorador/artistas/artista2.jpg',
+      '/images/explorador/artistas/artista4.jpg',
+      '/images/explorador/artistas/artista5.jpg'
     ],
     address: 'Avenida 8N #23-45, Cali',
     city: 'Cali',
