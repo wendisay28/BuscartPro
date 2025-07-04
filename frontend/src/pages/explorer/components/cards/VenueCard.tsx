@@ -16,8 +16,42 @@ import {
   MessageSquare,
   Share2,
   Bookmark,
-  MoreVertical
+  MoreVertical,
+  Music,
+  Film,
+  Camera,
+  Code,
+  Zap
 } from 'lucide-react';
+
+// Función para obtener el ícono según el tag
+const getTagIcon = (tag: string) => {
+  const tagLower = tag.toLowerCase();
+  
+  if (tagLower.includes('café') || tagLower.includes('cafe') || tagLower.includes('restaurante')) {
+    return <Coffee className="w-3 h-3" />;
+  } else if (tagLower.includes('wifi') || tagLower.includes('internet')) {
+    return <Wifi className="w-3 h-3" />;
+  } else if (tagLower.includes('arte') || tagLower.includes('galería') || tagLower.includes('galeria')) {
+    return <Palette className="w-3 h-3" />;
+  } else if (tagLower.includes('ubicación') || tagLower.includes('ubicacion') || tagLower.includes('lugar')) {
+    return <MapPin className="w-3 h-3" />;
+  } else if (tagLower.includes('música') || tagLower.includes('musica') || tagLower.includes('concierto')) {
+    return <Music className="w-3 h-3" />;
+  } else if (tagLower.includes('cine') || tagLower.includes('película') || tagLower.includes('pelicula')) {
+    return <Film className="w-3 h-3" />;
+  } else if (tagLower.includes('foto') || tagLower.includes('fotografía') || tagLower.includes('fotografia')) {
+    return <Camera className="w-3 h-3" />;
+  } else if (tagLower.includes('tecnología') || tagLower.includes('tecnologia') || tagLower.includes('digital')) {
+    return <Code className="w-3 h-3" />;
+  } else if (tagLower.includes('fecha') || tagLower.includes('día') || tagLower.includes('dia')) {
+    return <Calendar className="w-3 h-3" />;
+  } else if (tagLower.includes('hora') || tagLower.includes('horario') || tagLower.includes('tiempo')) {
+    return <Clock className="w-3 h-3" />;
+  } else {
+    return <Zap className="w-3 h-3" />;
+  }
+};
 
 interface VenueCardProps {
   data: VenueItem;
@@ -58,13 +92,13 @@ export const VenueCard: React.FC<VenueCardProps> = ({ data }) => {
   };
 
   return (
-    <div className="relative w-full h-[calc(100vh-180px)] mx-auto md:h-[calc(75vh-1cm)]">
+            <div className="relative w-full h-[calc(100vh-180px)] mx-auto md:h-[80vh]">
       {/* Contenedor de la tarjeta */}
       <div 
-        className="flex flex-col w-full h-full bg-gray-900 rounded-[20px] overflow-hidden shadow-xl"
+        className="flex flex-col w-full h-full bg-gray-900 rounded-[20px] overflow-hidden shadow-xl mb-0"
         onClick={handleCardClick}
       >
-        {/* Sección superior - Imagen (70% de la altura) */}
+        {/* Sección superior - Imagen (65% de la altura) */}
         <div className="relative overflow-hidden h-[70%] md:h-[70%]">
           <div className="absolute inset-0 w-full h-full bg-gray-900 image-container cursor-pointer">
             {images.length > 0 ? (
@@ -123,64 +157,72 @@ export const VenueCard: React.FC<VenueCardProps> = ({ data }) => {
         </div>
         
         {/* Sección de contenido */}
-        <div className="flex-1 p-4 pb-6 md:pb-4 flex flex-col h-[40%] md:h-[50%] overflow-y-auto">
-          <div className="h-full flex flex-col">
+        <div className="flex-1 p-4 pb-2 flex flex-col h-[30%] md:h-[30%] overflow-y-auto">
+          <div className="h-full flex flex-col justify-between">
             {/* Encabezado */}
-            <div className="flex justify-between items-start mb-2">
-              <div className="flex-1 min-w-0">
-                <h2 className="text-[16px] font-bold text-white">{data.name}</h2>
+            <div className="flex justify-between items-start mb-1">
+              <div>
+                <div className="hidden md:flex items-baseline gap-3">
+                  <h2 className="text-2xl font-bold text-white">{data.name}</h2>
+                </div>
+                <div className="md:hidden">
+                  <h2 className="text-2xl font-bold text-white">{data.name}</h2>
+                </div>
               </div>
-              <div className="text-[#bb00aa] text-[14px] font-bold whitespace-nowrap">
+              <div className="text-[#bb00aa] text-xl font-bold whitespace-nowrap">
                 ${data.price?.toLocaleString()}/h
               </div>
             </div>
             
             {/* Etiquetas */}
-            <div className="flex flex-wrap gap-1.5 mb-1">
-              <span className="px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[9px] md:text-[8px] rounded-full flex items-center gap-1">
-                <Coffee className="w-2.5 h-2.5" />
-                Café cultural
-              </span>
-              <span className="px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[9px] md:text-[8px] rounded-full flex items-center gap-1">
-                <Palette className="w-2.5 h-2.5" />
-                Arte local
-              </span>
-              <span className="px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[9px] md:text-[8px] rounded-full flex items-center gap-1">
-                <Wifi className="w-2.5 h-2.5" />
-                WiFi
-              </span>
-            </div>
+            {data.tags?.length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5 mb-1">
+                {data.tags.slice(0, 3).map((tag, index) => (
+                  <div 
+                    key={index}
+                    className="flex-shrink-0 px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-xs rounded-full flex items-center gap-1"
+                  >
+                    {getTagIcon(tag)}
+                    <span>{tag}</span>
+                  </div>
+                ))}
+              </div>
+            )}
             
             {/* Horario */}
-            <div className="flex gap-3 text-[#CCCCCC] text-[11px] md:text-[10px] mb-1">
-              <div className="flex items-center whitespace-nowrap">
-                <Calendar className="w-3 h-3 mr-1 text-white flex-shrink-0" />
+            <div className="flex gap-4 text-xs text-gray-400">
+              <div className="flex items-center gap-1">
+                <Calendar className="w-3 h-3 text-gray-400" />
                 <span>Lun-Sáb</span>
               </div>
-              <div className="flex items-center whitespace-nowrap">
-                <Clock className="w-3 h-3 mr-1 text-white flex-shrink-0" />
+              <div className="flex items-center gap-1">
+                <Clock className="w-3 h-3 text-gray-400" />
                 <span>9 AM - 6 PM</span>
               </div>
             </div>
             
             {/* Descripción */}
             <div className="flex-1">
-              <p className="text-[#CCCCCC] text-[11px] md:text-[10px] leading-tight line-clamp-3">
-                {data.description || 'Un espacio donde el aroma del café se mezcla con exposiciones de arte, talleres creativos y charlas culturales. Perfecto para una tarde inspiradora.'}
+              <p className="text-base text-gray-300 leading-snug mt-2">
+                {data.description && data.description.length > 90
+                  ? `${data.description.substring(0, 90)}...`
+                  : data.description || 'Un espacio donde el aroma del café se mezcla con exposiciones de arte, talleres creativos y charlas culturales. Perfecto para una tarde inspiradora.'}
               </p>
             </div>
             
             {/* Pie de tarjeta */}
-            <div className="mt-1.5 pt-1.5 border-t border-[#1A2C4A]">
+            <div className="relative mt-1">
+              <div className="absolute -top-2 left-0 w-full h-2 bg-gradient-to-b from-transparent to-[#0F172A]/80"></div>
+              <div className="h-px w-full bg-[#1A2C4A] mb-1"></div>
               <div className="flex justify-between items-center">
                 {/* Información adicional */}
-                <div className="flex items-center gap-2 text-[#CCCCCC] text-[11px] md:text-[10px]">
+                <div className="flex items-center gap-4 text-[#CCCCCC] text-sm">
                   <div className="flex items-center whitespace-nowrap">
-                    <MessageCircle className="w-3 h-3 mr-0.5 text-white flex-shrink-0" />
+                    <MessageCircle className="w-4 h-4 mr-1.5 text-white flex-shrink-0" />
                     <span>{data.reviews || '24'} reseñas</span>
                   </div>
                   <div className="flex items-center whitespace-nowrap">
-                    <MapPin className="w-3 h-3 mr-0.5 text-white flex-shrink-0" />
+                    <MapPin className="w-4 h-4 mr-1.5 text-white flex-shrink-0" />
                     <span>{data.city || 'Bogotá'} • 2.7km</span>
                   </div>
                 </div>
@@ -225,7 +267,7 @@ export const VenueCard: React.FC<VenueCardProps> = ({ data }) => {
           >
             <Heart className="w-5 h-5 fill-current" />
           </button>
-          <span className="text-white text-[10px] font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">1.2K</span>
+                    <span className="text-white text-lg font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">1.2K</span>
         </div>
         
         <div className="flex flex-col items-center">
@@ -239,7 +281,7 @@ export const VenueCard: React.FC<VenueCardProps> = ({ data }) => {
           >
             <MessageSquare className="w-5 h-5 fill-current" />
           </button>
-          <span className="text-white text-[10px] font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">24</span>
+                    <span className="text-white text-lg font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">24</span>
         </div>
         
         <div className="flex flex-col items-center">

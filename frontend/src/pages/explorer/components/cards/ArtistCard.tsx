@@ -27,6 +27,13 @@ interface ArtistCardProps {
   artist: Artist;
 }
 
+// Función para limitar la profesión a dos palabras
+const formatProfession = (profession: string): string => {
+  const words = profession.split(' ').filter(word => word.trim() !== '');
+  // Tomar solo las primeras dos palabras y unirlas con espacio
+  return words.slice(0, 2).join(' ');
+};
+
 // Función para obtener el ícono según el tag
 const getTagIcon = (tag: string) => {
   const tagLower = tag.toLowerCase();
@@ -98,7 +105,7 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
   };
 
   return (
-    <div className="relative w-full h-[calc(100vh-180px)] mx-auto md:h-[calc(75vh-1cm)]">
+            <div className="relative w-full h-[calc(100vh-180px)] mx-auto md:h-[80vh]">
       {/* Tarjeta principal */}
       <div 
         className="flex flex-col w-full h-full bg-gray-900 rounded-[20px] overflow-hidden shadow-xl"
@@ -158,70 +165,86 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
         </div>
         
         {/* Sección de contenido */}
-        <div className="flex-1 p-4 pb-6 md:pb-4 flex flex-col h-[40%] md:h-[50%] overflow-y-auto">
-          <div className="h-full flex flex-col">
-            {/* Encabezado */}
-            <div className="flex justify-between items-start mb-2">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-[16px] font-bold text-white">{artist.name}</h2>
-                  <span className="bg-gray-700/50 text-[12px] text-white px-2 py-0.5 rounded-full">
-                    {artist.profession}
-                  </span>
+        <div className="flex-1 p-4 pb-2 flex flex-col h-[30%] md:h-[30%] overflow-y-auto">
+          <div className="h-full flex flex-col justify-between">
+            {/* Nombre, profesión y precio */}
+            <div className="flex justify-between items-start mb-1">
+              <div>
+                {/* --- Vista de Escritorio: Nombre Profesión --- */}
+                <div className="hidden md:flex items-baseline gap-3">
+                  <h2 className="text-2xl font-bold text-white drop-shadow-lg">{artist.name}</h2>
+                  <p className="text-sm text-white bg-black/20 backdrop-blur-md rounded-full px-3 py-0.5">
+                    {formatProfession(artist.profession)}
+                  </p>
+                </div>
+
+                {/* --- Vista Móvil: Nombre y debajo Profesión --- */}
+                <div className="md:hidden">
+                  <h2 className="text-2xl font-bold text-white drop-shadow-lg">{artist.name}</h2>
+                  <p className="text-md text-gray-300 -mt-1 bg-black/20 backdrop-blur-sm px-2 rounded-md inline-block">
+                    {formatProfession(artist.profession)}
+                  </p>
                 </div>
               </div>
+              
               {artist.price && (
-                <div className="flex-shrink-0 text-[#bb00aa] font-bold text-[14px] ml-2 whitespace-nowrap">
-                  ${artist.price.toLocaleString()}/h
+                <div className="text-right flex-shrink-0 ml-2">
+                  <p className="text-xl font-bold text-[#bb00aa] drop-shadow-lg">
+                    ${artist.price.toLocaleString()}<span className="text-xs text-gray-400 font-normal"> /hr</span>
+                  </p>
                 </div>
               )}
             </div>
             
             {/* Etiquetas */}
             {artist.tags?.length > 0 && (
-              <div className="flex items-center gap-1.5 mb-1">
+              <div className="flex flex-wrap items-center gap-1.5 mb-1">
                 {artist.tags.slice(0, 3).map((tag, index) => (
                   <div 
                     key={index}
-                    className="flex-shrink-0 px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[9px] md:text-[8px] rounded-full flex items-center gap-1 whitespace-nowrap"
+                    className="flex-shrink-0 px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-xs rounded-full flex items-center gap-1"
                   >
                     {getTagIcon(tag)}
-                    <span className="truncate" style={{ maxWidth: '60px' }}>{tag}</span>
+                    <span>{tag}</span>
                   </div>
                 ))}
               </div>
             )}
             
             {/* Horario */}
-            <div className="flex gap-3 text-[#CCCCCC] text-[11px] md:text-[10px] mb-1">
-              <div className="flex items-center whitespace-nowrap">
-                <Calendar className="w-3 h-3 mr-1 text-white flex-shrink-0" />
+            <div className="flex gap-4 text-xs text-gray-400">
+              <div className="flex items-center gap-1">
+                <Calendar className="w-3 h-3 text-gray-400" />
                 <span>Lun-Sáb</span>
               </div>
-              <div className="flex items-center whitespace-nowrap">
-                <Clock className="w-3 h-3 mr-1 text-white flex-shrink-0" />
-                <span>6 AM - 4 PM</span>
+              <div className="flex items-center gap-1">
+                <Clock className="w-3 h-3 text-gray-400" />
+                <span>10am-8pm</span>
               </div>
             </div>
             
             {/* Descripción */}
             <div className="flex-1">
-              <p className="text-[#CCCCCC] text-[11px] md:text-[10px] leading-tight line-clamp-3">
-                {artist.description || 'Artista apasionado por crear experiencias únicas a través de su trabajo.'}
+                            <p className="text-base text-gray-300 leading-snug mt-2">
+                {artist.description && artist.description.length > 90
+                  ? `${artist.description.substring(0, 90)}...`
+                  : artist.description || 'Artista apasionado por crear experiencias únicas a través de su trabajo.'}
               </p>
             </div>
             
             {/* Pie de tarjeta */}
-            <div className="mt-1.5 pt-1.5 border-t border-[#1A2C4A]">
+            <div className="relative mt-1">
+              <div className="absolute -top-2 left-0 w-full h-2 bg-gradient-to-b from-transparent to-[#0F172A]/80"></div>
+              <div className="h-px w-full bg-[#1A2C4A] mb-1"></div>
               <div className="flex justify-between items-center">
                 {/* Información adicional */}
-                <div className="flex items-center gap-2 text-[#CCCCCC] text-[11px] md:text-[10px]">
+                <div className="flex items-center gap-4 text-[#CCCCCC] text-sm">
                   <div className="flex items-center whitespace-nowrap">
-                    <MessageCircle className="w-3 h-3 mr-0.5 text-white flex-shrink-0" />
+                    <MessageCircle className="w-4 h-4 mr-1.5 text-white flex-shrink-0" />
                     <span>30 reseñas</span>
                   </div>
                   <div className="flex items-center whitespace-nowrap">
-                    <MapPin className="w-3 h-3 mr-0.5 text-white flex-shrink-0" />
+                    <MapPin className="w-4 h-4 mr-1.5 text-white flex-shrink-0" />
                     <span>Bogotá • 4.9km</span>
                   </div>
                 </div>
@@ -230,14 +253,14 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
                 <div className="flex gap-2">
                   <button 
                     onClick={handleAction('Ver portafolio')}
-                    className="w-8 h-8 rounded-full border border-[#bb00aa] text-white flex items-center justify-center hover:bg-[#FF7A00]/20 transition-colors"
+                    className="w-8 h-8 rounded-full border border-[#bb00aa] text-white flex items-center justify-center hover:bg-[#bb00aa]]/20 transition-colors"
                     title="Ver portafolio"
                   >
                     <Info className="w-4 h-4" />
                   </button>
                   <button 
                     onClick={handleAction('Contactar')}
-                    className="w-8 h-8 rounded-full bg-[#bb00aa] text-white flex items-center justify-center hover:bg-[#FF7A00]/90 transition-colors"
+                    className="w-8 h-8 rounded-full bg-[#bb00aa] text-white flex items-center justify-center hover:bg-[#bb00aa]]/90 transition-colors"
                     title="Contactar"
                   >
                     <CalendarCheck className="w-4 h-4" />
@@ -250,7 +273,7 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
       </div>
 
       {/* Botones de acción flotantes - Solo en móvil */}
-      <div className="md:hidden absolute right-2 top-[calc(50%-60px)] transform -translate-y-1/2 flex flex-col gap-3 z-10 items-end">
+      <div className="md:hidden absolute right-2 top-[calc(50%-45px)] transform -translate-y-1/2 flex flex-col gap-3 z-10 items-end">
         <div className="flex flex-col items-center">
           <button 
             onClick={handleAction('Me gusta')}
@@ -258,7 +281,7 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
           >
             <Heart className="w-5 h-5 fill-current" />
           </button>
-          <span className="text-white text-[10px] font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">1.2K</span>
+                                      <span className="text-white text-base font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">1.2K</span>
         </div>
         
         <div className="flex flex-col items-center">
@@ -268,7 +291,7 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
           >
             <MessageSquare className="w-5 h-5 fill-current" />
           </button>
-          <span className="text-white text-[10px] font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">24</span>
+                                      <span className="text-white text-base font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">24</span>
         </div>
         
         <div className="flex flex-col items-center">

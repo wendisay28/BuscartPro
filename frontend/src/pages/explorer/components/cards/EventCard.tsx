@@ -2,9 +2,6 @@ import { useState } from 'react';
 import { EventItem } from '../../types';
 import { 
   Ticket, 
-  Music, 
-  Headphones, 
-  UserCheck, 
   Calendar, 
   Clock, 
   MapPin, 
@@ -17,8 +14,45 @@ import {
   MessageSquare,
   Share2,
   Bookmark,
-  MoreVertical
+  MoreVertical,
+  Music, 
+  Film, 
+  Camera, 
+  Code, 
+  Palette, 
+  Zap, 
+  Coffee, 
+  Wifi
 } from 'lucide-react';
+
+// Función para obtener el ícono según el tag
+const getTagIcon = (tag: string) => {
+  const tagLower = tag.toLowerCase();
+  
+  if (tagLower.includes('concierto') || tagLower.includes('música') || tagLower.includes('musica')) {
+    return <Music className="w-3 h-3" />;
+  } else if (tagLower.includes('cine') || tagLower.includes('película') || tagLower.includes('pelicula')) {
+    return <Film className="w-3 h-3" />;
+  } else if (tagLower.includes('foto') || tagLower.includes('fotografía') || tagLower.includes('fotografia')) {
+    return <Camera className="w-3 h-3" />;
+  } else if (tagLower.includes('tecnología') || tagLower.includes('tecnologia') || tagLower.includes('digital')) {
+    return <Code className="w-3 h-3" />;
+  } else if (tagLower.includes('arte') || tagLower.includes('exposición') || tagLower.includes('exposicion')) {
+    return <Palette className="w-3 h-3" />;
+  } else if (tagLower.includes('café') || tagLower.includes('cafe')) {
+    return <Coffee className="w-3 h-3" />;
+  } else if (tagLower.includes('wifi') || tagLower.includes('internet')) {
+    return <Wifi className="w-3 h-3" />;
+  } else if (tagLower.includes('ubicación') || tagLower.includes('ubicacion') || tagLower.includes('lugar')) {
+    return <MapPin className="w-3 h-3" />;
+  } else if (tagLower.includes('fecha') || tagLower.includes('día') || tagLower.includes('dia')) {
+    return <Calendar className="w-3 h-3" />;
+  } else if (tagLower.includes('hora') || tagLower.includes('tiempo')) {
+    return <Clock className="w-3 h-3" />;
+  } else {
+    return <Zap className="w-3 h-3" />;
+  }
+};
 
 interface EventCardProps {
   data: EventItem;
@@ -59,12 +93,12 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
   };
 
   return (
-    <div className="relative w-full h-[calc(100vh-180px)] mx-auto md:h-[calc(75vh-1cm)]">
+            <div className="relative w-full h-[calc(100vh-180px)] mx-auto md:h-[80vh]">
       <div 
-        className="flex flex-col w-full h-full bg-gray-900 rounded-[20px] overflow-hidden shadow-xl"
+        className="flex flex-col w-full h-full bg-gray-900 rounded-[20px] overflow-hidden shadow-xl mb-0"
         onClick={handleCardClick}
       >
-      {/* Sección superior - Imagen (70% de la altura) */}
+      {/* Sección superior - Imagen (65% de la altura) */}
       <div className="relative overflow-hidden h-[70%] md:h-[70%]">
         <div className="absolute inset-0 w-full h-full bg-gray-900 image-container cursor-pointer">
           {images.length > 0 ? (
@@ -123,77 +157,77 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
       </div>
       
       {/* Sección de contenido */}
-      <div className="flex-1 p-4 pb-6 md:pb-4 flex flex-col h-[40%] md:h-[50%] overflow-y-auto">
-        <div className="h-full flex flex-col">
+      <div className="flex-1 p-4 pb-2 flex flex-col h-[30%] md:h-[30%] overflow-y-auto">
+        <div className="h-full flex flex-col justify-between">
           {/* Encabezado */}
-          <div className="flex justify-between items-start mb-2">
-            <div className="flex-1 min-w-0">
-              <h2 className="text-[16px] font-bold text-white">{data.name}</h2>
+          <div className="flex justify-between items-start mb-1">
+            <div>
+              <div className="hidden md:flex items-baseline gap-3">
+                <h2 className="text-2xl font-bold text-white">{data.name}</h2>
+              </div>
+              <div className="md:hidden">
+                <h2 className="text-2xl font-bold text-white">{data.name}</h2>
+              </div>
             </div>
-            <div className="flex items-center text-[#bb00aa] text-[14px] font-bold whitespace-nowrap">
-              <Ticket className="w-3.5 h-3.5 mr-1 flex-shrink-0 text-[#bb00aa]" />
-              <span>{data.type === 'free' ? 'Entrada libre' : `$${data.price?.toLocaleString()}`}</span>
+            <div className="text-[#bb00aa] text-xl font-bold whitespace-nowrap">
+              {data.price && (
+                <div className="flex items-center">
+                  <Ticket className="w-5 h-5 mr-1 flex-shrink-0" />
+                  <span>{data.type === 'free' ? 'Entrada libre' : `$${data.price.toLocaleString()}`}</span>
+                </div>
+              )}
             </div>
           </div>
           
           {/* Etiquetas */}
-          <div className="flex flex-wrap gap-1.5 mb-2">
-            <span className="px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[10px] rounded-full flex items-center gap-1 whitespace-nowrap">
-              <Music className="w-2.5 h-2.5 flex-shrink-0" />
-              Música
-            </span>
-            <span className="px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[10px] rounded-full flex items-center gap-1 whitespace-nowrap">
-              <Headphones className="w-2.5 h-2.5 flex-shrink-0" />
-              Pop/Rock
-            </span>
-            <span className="px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[10px] rounded-full flex items-center gap-1 whitespace-nowrap">
-              <UserCheck className="w-2.5 h-2.5 flex-shrink-0" />
-              Presencial
-            </span>
-          </div>
-          
-          {/* Tipo de evento */}
-          <div className="flex items-center gap-1.5 mb-1">
-            <span className="px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[9px] md:text-[8px] rounded-full flex items-center gap-1">
-              <Music className="w-2.5 h-2.5 flex-shrink-0" />
-              Música en Vivo
-            </span>
-            <span className="px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[9px] md:text-[8px] rounded-full flex items-center gap-1">
-              <UserCheck className="w-2.5 h-2.5 flex-shrink-0" />
-              Presencial
-            </span>
-          </div>
+          {data.tags?.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5 mb-1">
+              {data.tags.slice(0, 3).map((tag, index) => (
+                <div 
+                  key={index}
+                  className="flex-shrink-0 px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-xs rounded-full flex items-center gap-1"
+                >
+                  {getTagIcon(tag)}
+                  <span>{tag}</span>
+                </div>
+              ))}
+            </div>
+          )}
           
           {/* Fecha y hora */}
-          <div className="flex gap-3 text-[#CCCCCC] text-[11px] md:text-[10px] mb-1">
-            <div className="flex items-center whitespace-nowrap">
-              <Calendar className="w-3 h-3 mr-1 text-white flex-shrink-0" />
-              <span>28 de junio</span>
+          <div className="flex gap-4 text-xs text-gray-400">
+            <div className="flex items-center gap-1">
+              <Calendar className="w-3 h-3 text-gray-400" />
+              <span>{data.date}</span>
             </div>
-            <div className="flex items-center whitespace-nowrap">
-              <Clock className="w-3 h-3 mr-1 text-white flex-shrink-0" />
-              <span>3 PM - 10 PM</span>
+            <div className="flex items-center gap-1">
+              <Clock className="w-3 h-3 text-gray-400" />
+              <span>{data.time}</span>
             </div>
           </div>
           
           {/* Descripción */}
           <div className="flex-1">
-            <p className="text-[#CCCCCC] text-[11px] md:text-[10px] leading-tight line-clamp-3">
-              {data.description || 'Un evento para toda la familia con música en vivo, arte callejero, presentaciones en tarima y experiencias interactivas. ¡No te lo pierdas!'}
-            </p>
+            <p className="text-base text-gray-300 leading-snug mt-2">
+                {data.description && data.description.length > 90
+                  ? `${data.description.substring(0, 90)}...`
+                  : data.description || 'Un evento para toda la familia con música en vivo, arte callejero, presentaciones en tarima y experiencias interactivas. ¡No te lo pierdas!'}
+              </p>
           </div>
           
           {/* Pie de tarjeta */}
-          <div className="mt-1.5 pt-1.5 border-t border-[#1A2C4A]">
+          <div className="relative mt-1">
+            <div className="absolute -top-2 left-0 w-full h-2 bg-gradient-to-b from-transparent to-[#0F172A]/80"></div>
+            <div className="h-px w-full bg-[#1A2C4A] mb-1"></div>
             <div className="flex justify-between items-center">
               {/* Información adicional */}
-              <div className="flex items-center gap-2 text-[#CCCCCC] text-[11px] md:text-[10px]">
+              <div className="flex items-center gap-4 text-[#CCCCCC] text-sm">
                 <div className="flex items-center whitespace-nowrap">
-                  <MessageCircle className="w-3 h-3 mr-0.5 text-white flex-shrink-0" />
+                  <MessageCircle className="w-4 h-4 mr-1.5 text-white flex-shrink-0" />
                   <span>18 reseñas</span>
                 </div>
                 <div className="flex items-center whitespace-nowrap">
-                  <MapPin className="w-3 h-3 mr-0.5 text-white flex-shrink-0" />
+                  <MapPin className="w-4 h-4 mr-1.5 text-white flex-shrink-0" />
                   <span>Bogotá • 2.7km</span>
                 </div>
               </div>
@@ -201,7 +235,7 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
               {/* Botones */}
               <div className="flex gap-2">
                 <button 
-                  className="w-8 h-8 rounded-full border border-[#bb00aa] text-white flex items-center justify-center hover:bg-[#FF7A00]/20 transition-colors"
+                  className="w-8 h-8 rounded-full border border-[#bb00aa] text-white flex items-center justify-center hover:bg-[#bb00aa]]/20 transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
                     // Acción para ver más información
@@ -210,7 +244,7 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
                   <Info className="w-4 h-4" />
                 </button>
                 <button 
-                  className="w-8 h-8 rounded-full bg-[#bb00aa] text-white flex items-center justify-center hover:bg-[#FF7A00]/90 transition-colors"
+                  className="w-8 h-8 rounded-full bg-[#bb00aa] text-white flex items-center justify-center hover:bg-[#bb00aa]]/90 transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
                     // Acción para agregar al calendario
@@ -237,7 +271,7 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
           >
             <Heart className="w-5 h-5 fill-current" />
           </button>
-          <span className="text-white text-[10px] font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">1.2K</span>
+                              <span className="text-white text-base font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">1.2K</span>
         </div>
         
         <div className="flex flex-col items-center">
@@ -251,7 +285,7 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
           >
             <MessageSquare className="w-5 h-5 fill-current" />
           </button>
-          <span className="text-white text-[10px] font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">24</span>
+                              <span className="text-white text-base font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">24</span>
         </div>
         
         <div className="flex flex-col items-center">
