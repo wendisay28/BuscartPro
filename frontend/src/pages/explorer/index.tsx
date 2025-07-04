@@ -4,12 +4,14 @@ import { mockArtists, mockEvents, mockVenues } from './data/mockData';
 import { Artist, EventItem, VenueItem } from './types';
 import { ContentCard } from './components/ContentCard';
 import NavigationTabs from './components/NavigationTabs';
+import { FiltersPanel } from './components/FiltersPanel';
 import { 
   User as UserIcon, 
   Calendar, 
   MapPin, 
   Image as ImageIcon, 
-  Handshake
+  Handshake,
+  Filter
 } from 'lucide-react';
 
 type ExplorerTab = 'artists' | 'events' | 'venues' | 'gallery';
@@ -18,6 +20,8 @@ type ExplorerItem = Artist | EventItem | VenueItem;
 export default function Explorer() {
   const [activeTab, setActiveTab] = useState<ExplorerTab>('artists');
   const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [showFilters, setShowFilters] = useState(false);
+  const [activeButton, setActiveButton] = useState<string | null>(null);
   
   // Get the current items based on active tab
   const getCurrentItems = () => {
@@ -74,9 +78,8 @@ export default function Explorer() {
         {/* Barra de navegación - Solo móviles */}
         <div className="md:hidden fixed top-3 left-3 z-10">
           <NavigationTabs 
-            activeTab={activeTab} 
-            onTabChange={setActiveTab} 
-            className="!mb-0"
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
           />
         </div>
         
@@ -132,9 +135,67 @@ export default function Explorer() {
           </div>
         </div>
         
-        {/* Card Container */}
-        <div className="w-full max-w-md mx-auto px-2 md:px-4 pt-2">
-          <div className="w-full">
+        {/* Main Content Area: Card and Desktop Controls */}
+        <div className="w-full max-w-4xl mx-auto flex items-center justify-center gap-x-8 px-4 pt-2">
+          {/* Botones de acción flotantes */}
+          <div className="hidden md:flex flex-col gap-6 fixed left-[29.25rem] top-1/2 -translate-y-1/2 z-50">
+            {/* Botón de descartar */}
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveButton('rechazar');
+                setTimeout(() => setActiveButton(null), 300);
+                if (activeCardIndex < currentItems.length - 1) {
+                  setActiveCardIndex(activeCardIndex + 1);
+                } else if (activeCardIndex > 0) {
+                  setActiveCardIndex(0);
+                }
+              }}
+              className={`w-14 h-14 flex items-center justify-center rounded-full transition-all duration-300 transform ${
+                activeButton === 'rechazar' 
+                  ? 'bg-gradient-to-br from-pink-500 to-pink-600 scale-110 shadow-lg shadow-pink-500/30' 
+                  : 'bg-white/10 hover:bg-pink-500/80 backdrop-blur-sm hover:scale-105 -rotate-2 hover:rotate-0'
+              }`}
+              aria-label="Descartar"
+            >
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className={`h-7 w-7 transition-colors duration-300 ${
+                  activeButton === 'rechazar' ? 'text-white' : 'text-white/80 group-hover:text-white'
+                }`} 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            {/* Botón de conectar */}
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveButton('conectar');
+                setTimeout(() => setActiveButton(null), 300);
+                // Acción de conectar
+              }}
+              className={`w-14 h-14 flex items-center justify-center rounded-full transition-all duration-300 transform ${
+                activeButton === 'conectar' 
+                  ? 'bg-gradient-to-br from-pink-500 to-pink-600 scale-110 shadow-lg shadow-pink-500/30' 
+                  : 'bg-white/10 hover:bg-pink-500/80 backdrop-blur-sm hover:scale-105 rotate-2 hover:rotate-0'
+              }`}
+              aria-label="Conectar"
+            >
+              <Handshake 
+                className={`h-7 w-7 transition-colors duration-300 ${
+                  activeButton === 'conectar' ? 'text-white' : 'text-white/80 group-hover:text-white'
+                }`} 
+              />
+            </button>
+          </div>
+
+          {/* Card Container */}
+          <div className="w-full max-w-lg">
             <div className="transition-transform duration-300 transform hover:scale-[1.02] hover:shadow-xl -mt-2 md:mt-0" {...swipeHandlers}>
               <ContentCard 
                 type={activeTab === 'artists' ? 'artist' : 
@@ -154,40 +215,22 @@ export default function Explorer() {
             </div>
           </div>
         </div>
-        
-        {/* Controles de navegación - Solo escritorio */}
-        <div className="hidden md:flex justify-center items-center mt-6 space-x-8">
-          <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              // Acción de conectar
-              // Lógica de conexión aquí
-            }}
-            className="w-14 h-14 flex items-center justify-center rounded-full bg-gradient-to-br from-pink-500 to-pink-600 text-white hover:from-pink-600 hover:to-pink-700 transition-all duration-200 shadow-lg hover:scale-105 transform hover:rotate-2"
-            aria-label="Conectar"
-          >
-            <Handshake className="h-6 w-6" />
-          </button>
-          
-          <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              // Acción de descartar
-              if (activeCardIndex < currentItems.length - 1) {
-                setActiveCardIndex(activeCardIndex + 1);
-              } else if (activeCardIndex > 0) {
-                setActiveCardIndex(0);
-              }
-            }}
-            className="w-14 h-14 flex items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-purple-600 text-white hover:from-purple-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:scale-105 transform hover:-rotate-2"
-            aria-label="Descartar"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
       </div>
+      
+      {/* Botón flotante para filtros en móvil */}
+      <button 
+        onClick={() => setShowFilters(!showFilters)}
+        className="fixed right-4 bottom-24 bg-[#bb00aa] text-white p-4 rounded-full shadow-lg z-40 md:hidden"
+      >
+        <Filter size={24} />
+      </button>
+      
+      {/* Panel de filtros */}
+      <FiltersPanel 
+        isOpen={showFilters} 
+        onClose={() => setShowFilters(false)}
+        filterType={activeTab}
+      />
     </div>
   );
 }

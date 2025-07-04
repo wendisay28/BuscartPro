@@ -29,7 +29,7 @@ export const mockArtists: Artist[] = [
     id: 'artist-1',
     name: 'Carla Ortiz',
     profession: 'Ilustradora Digital',
-    description: 'Artista visual especializada en ilustración digital y muralismo urbano. Con más de 7 años de experiencia creando piezas únicas para marcas y clientes internacionales.',
+    description: 'Artista visual especializada en ilustración digital y muralismo. Crea piezas únicas.',
     image: '/images/explorador/artistas/artista1.jpeg',
     images: [
       '/images/explorador/artistas/artista1.jpeg',
@@ -56,7 +56,7 @@ export const mockArtists: Artist[] = [
     id: 'artist-2',
     name: 'Juan Pérez',
     profession: 'Fotógrafo Profesional',
-    description: 'Especialista en fotografía de retrato y moda con más de 5 años de experiencia. Capturando momentos únicos y contando historias a través de mi lente.',
+    description: 'Fotógrafo de retrato y moda. Captura momentos únicos y cuenta historias con su lente.',
     image: '/images/explorador/eventos/artist1.jpg',
     images: [
       '/images/explorador/eventos/artist1.jpg',
@@ -83,7 +83,7 @@ export const mockArtists: Artist[] = [
     id: 'artist-3',
     name: 'María García',
     profession: 'Diseñadora de Interiores',
-    description: 'Transformo espacios en experiencias únicas. Especializada en diseño residencial y comercial con un toque moderno y funcional.',
+    description: 'Transforma espacios en experiencias únicas con un toque moderno y funcional.',
     image: '/images/explorador/eventos/artist1.jpg',
     images: [
       '/images/explorador/eventos/artist1.jpg',
@@ -113,7 +113,7 @@ export const mockEvents: any[] = [
   {
     id: 'event-1',
     name: 'Festival de Arte Urbano',
-    description: 'Música en vivo, arte callejero, presentaciones en tarima y experiencias interactivas. ¡No te lo pierdas! Un evento para toda la familia con lo mejor del arte callejero local e internacional.',
+    description: 'Festival de arte con música en vivo, arte callejero y experiencias interactivas.',
     image: '/images/explorador/sitios/sitio1.jpg',
     images: [
       '/images/explorador/sitios/sitio1.jpg',
@@ -181,7 +181,7 @@ export const mockVenues = [
   {
     id: 'venue-1',
     name: 'Café Literario',
-    description: 'Un acogedor café con ambiente bohemio, perfecto para trabajar, leer o disfrutar de un buen café. Con espacios al aire libre y una amplia selección de libros.',
+    description: 'Acogedor café bohemio, ideal para trabajar, leer o disfrutar. Con terraza y libros.',
     image: '/images/explorador/artistas/artista2.jpg',
     images: [
       '/images/explorador/artistas/artista2.jpg',
@@ -210,7 +210,7 @@ export const mockVenues = [
   {
     id: 'venue-2',
     name: 'Galería de Arte Moderno',
-    description: 'Espacio cultural que exhibe obras de artistas contemporáneos emergentes y consagrados. Cuenta con tres pisos de exposición y una cafetería en la terraza.',
+    description: 'Galería de arte que exhibe obras de artistas contemporáneos. Con cafetería en la terraza.',
     image: '/images/explorador/artistas/artista5.jpg',
     images: [
       '/images/explorador/artistas/artista5.jpg',
@@ -239,7 +239,7 @@ export const mockVenues = [
   {
     id: 'venue-3',
     name: 'Estudio de Grabación Sonora',
-    description: 'Estudio profesional de grabación equipado con tecnología de punta. Ideal para músicos, podcasters y productores. Ofrecemos paquetes por hora o por proyecto.',
+    description: 'Estudio de grabación profesional para músicos y productores. Equipado con alta tecnología.',
     image: '/images/explorador/artistas/artista3.jpg',
     images: [
       '/images/explorador/artistas/artista3.jpg',

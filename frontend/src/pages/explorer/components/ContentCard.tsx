@@ -54,11 +54,10 @@ const GalleryCard = ({ galleryItem }: { galleryItem: GalleryItem }) => {
   };
 
   return (
-    <div className="relative w-full h-[700px] mx-auto bg-gray-900 rounded-[20px] overflow-hidden shadow-xl md:h-[800px] md:w-[500px] flex flex-col">
-      {/* Contenedor de la imagen - 65% en escritorio */}
+    <div className="relative w-full h-[calc(100vh-180px)] mx-auto bg-gray-900 rounded-[20px] overflow-hidden shadow-xl md:h-[80vh] md:w-[500px] flex flex-col">
+      {/* Contenedor de la imagen - 65% */}
       <div 
-        className="relative w-full h-[600px] md:flex-[0_0_65%] bg-gray-900 image-container" 
-        style={{ flex: '0 0 65%' }}
+        className="relative w-full h-[65%] bg-gray-900 image-container"
         onClick={handleCardClick}
       >
         <img 
@@ -111,22 +110,26 @@ const GalleryCard = ({ galleryItem }: { galleryItem: GalleryItem }) => {
       <div className="p-4">
         <div className="flex justify-between items-start">
           <div>
-            <h3 className="font-bold text-[16px] text-white">{galleryItem.name}</h3>
-            <div className="flex items-center gap-1 mt-0.5">
-              <MapPin className="w-3 h-3 text-gray-400" />
-              <span className="text-gray-400 text-[10px]">{galleryItem.city || 'Ubicación no disponible'}</span>
+                                    <h3 className="font-bold text-2xl text-white">{galleryItem.name}</h3>
+            <div className="flex items-center gap-1.5 mt-1">
+              <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                            <span className="text-gray-300 text-base">{galleryItem.city || 'Ubicación no disponible'}</span>
             </div>
           </div>
           <div className="flex items-center gap-1 bg-black/5 px-2 py-1 rounded-full">
             <MapPin size={14} className="text-[#bb00aa]" />
-            <span className="text-xs font-medium">{galleryItem.distance} km</span>
+                        <span className="text-base font-medium">{galleryItem.distance} km</span>
           </div>
         </div>
         
         {/* Sección de información adicional */}
         {showMoreInfo && (
           <div className="mt-3 pt-3 border-t border-gray-100">
-            <p className="text-gray-300 text-[10px] leading-tight">{galleryItem.description}</p>
+                                    <p className="text-gray-300 text-base leading-relaxed">
+                                      {galleryItem.description && galleryItem.description.length > 90
+                                        ? `${galleryItem.description.substring(0, 90)}...`
+                                        : galleryItem.description}
+                                    </p>
             <div className="mt-2 flex flex-wrap gap-2">
               {galleryItem.tags?.map((tag, index) => (
                 <span 
