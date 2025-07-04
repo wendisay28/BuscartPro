@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { User, Calendar, MapPin, Image, ChevronDown } from 'lucide-react';
-import { ExplorerTab } from '../hooks/useExplorer';
+import { ExplorerTab } from '../types';
 
 interface NavigationTabsProps {
   activeTab: ExplorerTab;

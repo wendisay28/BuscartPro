@@ -1,5 +1,7 @@
 export type CardType = 'artist' | 'event' | 'venue' | 'gallery';
 
+export type ExplorerTab = 'artists' | 'events' | 'venues' | 'gallery';
+
 export interface BaseItem {
   id: string;
   name: string;
@@ -59,4 +61,6 @@ export interface ContentCardProps {
   data: Artist | EventItem | VenueItem | GalleryItem;
   onSwipe?: (direction: 'left' | 'right') => void;
   className?: string;
+  activeTab: ExplorerTab;
+  onTabChange: (tab: ExplorerTab) => void;
 }

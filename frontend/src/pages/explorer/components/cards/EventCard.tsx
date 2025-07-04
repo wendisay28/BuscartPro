@@ -59,13 +59,13 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
   };
 
   return (
-    <div className="relative w-[380px] h-[calc(75vh-1cm)] mx-auto">
+    <div className="relative w-full h-[calc(100vh-180px)] mx-auto md:h-[calc(75vh-1cm)]">
       <div 
         className="flex flex-col w-full h-full bg-gray-900 rounded-[20px] overflow-hidden shadow-xl"
         onClick={handleCardClick}
       >
-      {/* Sección superior - Imagen (65% de la altura) */}
-      <div className="relative overflow-hidden" style={{ height: '65%' }}>
+      {/* Sección superior - Imagen (70% de la altura) */}
+      <div className="relative overflow-hidden h-[70%] md:h-[70%]">
         <div className="absolute inset-0 w-full h-full bg-gray-900 image-container cursor-pointer">
           {images.length > 0 ? (
             <div className="w-full h-full relative">
@@ -122,39 +122,50 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
         )}
       </div>
       
-      {/* Sección inferior - Contenido (35% de la altura) */}
-      <div className="flex flex-col bg-gray-900 overflow-hidden" style={{ height: '35%' }}>
-        <div className="p-4 h-full flex flex-col">
-          {/* Contenedor para las filas 1 y 2 con margen reducido */}
-          <div className="-mt-1">
-            {/* Fila 1 - Encabezado con nombre y precio */}
-            <div className="flex justify-between items-start">
-              <h3 className="text-white font-bold text-[15px] truncate">{data.name}</h3>
-              <div className="flex items-center text-[#bb00aa] text-[13px] font-bold">
-                <Ticket className="w-3 h-3 mr-1 flex-shrink-0 text-[#bb00aa]" />
-                <span>{data.type === 'free' ? 'Entrada libre' : `$${data.price?.toLocaleString()}`}</span>
-              </div>
+      {/* Sección de contenido */}
+      <div className="flex-1 p-4 pb-6 md:pb-4 flex flex-col h-[40%] md:h-[50%] overflow-y-auto">
+        <div className="h-full flex flex-col">
+          {/* Encabezado */}
+          <div className="flex justify-between items-start mb-2">
+            <div className="flex-1 min-w-0">
+              <h2 className="text-[16px] font-bold text-white">{data.name}</h2>
             </div>
-            
-            {/* Fila 2 - Etiquetas */}
-          <div className="flex flex-wrap gap-1.5 mt-1.5">
-            <span className="px-1.5 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[9px] rounded-full flex items-center gap-1 whitespace-nowrap">
-              <Music className="w-3 h-3 flex-shrink-0" />
+            <div className="flex items-center text-[#bb00aa] text-[14px] font-bold whitespace-nowrap">
+              <Ticket className="w-3.5 h-3.5 mr-1 flex-shrink-0 text-[#bb00aa]" />
+              <span>{data.type === 'free' ? 'Entrada libre' : `$${data.price?.toLocaleString()}`}</span>
+            </div>
+          </div>
+          
+          {/* Etiquetas */}
+          <div className="flex flex-wrap gap-1.5 mb-2">
+            <span className="px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[10px] rounded-full flex items-center gap-1 whitespace-nowrap">
+              <Music className="w-2.5 h-2.5 flex-shrink-0" />
               Música
             </span>
-            <span className="px-1.5 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[9px] rounded-full flex items-center gap-1 whitespace-nowrap">
-              <Headphones className="w-3 h-3 flex-shrink-0" />
+            <span className="px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[10px] rounded-full flex items-center gap-1 whitespace-nowrap">
+              <Headphones className="w-2.5 h-2.5 flex-shrink-0" />
               Pop/Rock
             </span>
-            <span className="px-1.5 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[9px] rounded-full flex items-center gap-1 whitespace-nowrap">
-              <UserCheck className="w-3 h-3 flex-shrink-0" />
+            <span className="px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[10px] rounded-full flex items-center gap-1 whitespace-nowrap">
+              <UserCheck className="w-2.5 h-2.5 flex-shrink-0" />
               Presencial
             </span>
           </div>
+          
+          {/* Tipo de evento */}
+          <div className="flex items-center gap-1.5 mb-1">
+            <span className="px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[9px] md:text-[8px] rounded-full flex items-center gap-1">
+              <Music className="w-2.5 h-2.5 flex-shrink-0" />
+              Música en Vivo
+            </span>
+            <span className="px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-[9px] md:text-[8px] rounded-full flex items-center gap-1">
+              <UserCheck className="w-2.5 h-2.5 flex-shrink-0" />
+              Presencial
+            </span>
           </div>
           
-          {/* Fila 3 - Fecha y hora */}
-          <div className="flex gap-3 mt-1.5 text-[#CCCCCC] text-[11px]">
+          {/* Fecha y hora */}
+          <div className="flex gap-3 text-[#CCCCCC] text-[11px] md:text-[10px] mb-1">
             <div className="flex items-center whitespace-nowrap">
               <Calendar className="w-3 h-3 mr-1 text-white flex-shrink-0" />
               <span>28 de junio</span>
@@ -165,32 +176,46 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
             </div>
           </div>
           
-          {/* Fila 4 - Descripción */}
-          <p className="text-[#CCCCCC] text-[11px] leading-tight line-clamp-3 mt-1.5">
-            Un evento para toda la familia con música en vivo, arte callejero, presentaciones en tarima y experiencias interactivas. ¡No te lo pierdas!
-          </p>
+          {/* Descripción */}
+          <div className="flex-1">
+            <p className="text-[#CCCCCC] text-[11px] md:text-[10px] leading-tight line-clamp-3">
+              {data.description || 'Un evento para toda la familia con música en vivo, arte callejero, presentaciones en tarima y experiencias interactivas. ¡No te lo pierdas!'}
+            </p>
+          </div>
           
-          {/* Fila 5 - Información adicional y botones */}
-          <div className="mt-auto pt-2 border-t border-[#1A2C4A]">
+          {/* Pie de tarjeta */}
+          <div className="mt-1.5 pt-1.5 border-t border-[#1A2C4A]">
             <div className="flex justify-between items-center">
               {/* Información adicional */}
-              <div className="flex items-center gap-3 text-[#CCCCCC] text-[11px]">
+              <div className="flex items-center gap-2 text-[#CCCCCC] text-[11px] md:text-[10px]">
                 <div className="flex items-center whitespace-nowrap">
-                  <MessageCircle className="w-3 h-3 mr-1 text-white flex-shrink-0" />
+                  <MessageCircle className="w-3 h-3 mr-0.5 text-white flex-shrink-0" />
                   <span>18 reseñas</span>
                 </div>
                 <div className="flex items-center whitespace-nowrap">
-                  <MapPin className="w-3 h-3 mr-1 text-white flex-shrink-0" />
+                  <MapPin className="w-3 h-3 mr-0.5 text-white flex-shrink-0" />
                   <span>Bogotá • 2.7km</span>
                 </div>
               </div>
               
               {/* Botones */}
               <div className="flex gap-2">
-                <button className="w-8 h-8 rounded-full border border-[#bb00aa] text-white flex items-center justify-center hover:bg-[#FF7A00]/20 transition-colors">
+                <button 
+                  className="w-8 h-8 rounded-full border border-[#bb00aa] text-white flex items-center justify-center hover:bg-[#FF7A00]/20 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Acción para ver más información
+                  }}
+                >
                   <Info className="w-4 h-4" />
                 </button>
-                <button className="w-8 h-8 rounded-full bg-[#bb00aa] text-white flex items-center justify-center hover:bg-[#FF7A00]/90 transition-colors">
+                <button 
+                  className="w-8 h-8 rounded-full bg-[#bb00aa] text-white flex items-center justify-center hover:bg-[#FF7A00]/90 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Acción para agregar al calendario
+                  }}
+                >
                   <CalendarCheck className="w-4 h-4" />
                 </button>
               </div>
@@ -200,7 +225,7 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
       </div>
 
       {/* Botones de acción flotantes - Solo en móvil */}
-      <div className="md:hidden absolute right-1 top-1/2 transform -translate-y-1/2 translate-y-[-120px] flex flex-col gap-1 z-10 items-end">
+      <div className="md:hidden absolute right-2 top-[calc(50%-60px)] transform -translate-y-1/2 flex flex-col gap-3 z-10 items-end">
         <div className="flex flex-col items-center">
           <button 
             onClick={(e) => {
@@ -208,57 +233,61 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
               e.preventDefault();
               console.log('Me gusta');
             }}
-            className="action-button w-9 h-9 flex items-center justify-center text-white hover:text-pink-400 transition-all duration-200 transform hover:scale-110"
+            className="w-10 h-10 flex items-center justify-center bg-black/40 rounded-full text-white hover:text-pink-400 transition-all duration-200 transform hover:scale-110 shadow-lg shadow-black/30 backdrop-blur-sm"
           >
             <Heart className="w-5 h-5 fill-current" />
           </button>
-          <span className="text-white text-[10px] font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center">1.2K</span>
+          <span className="text-white text-[10px] font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">1.2K</span>
         </div>
-                <div className="flex flex-col items-center">
+        
+        <div className="flex flex-col items-center">
           <button 
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
               console.log('Comentarios');
             }}
-            className="action-button w-9 h-9 flex items-center justify-center text-white hover:text-pink-400 transition-all duration-200 transform hover:scale-110"
+            className="w-10 h-10 flex items-center justify-center bg-black/40 rounded-full text-white hover:text-pink-400 transition-all duration-200 transform hover:scale-110 shadow-lg shadow-black/30 backdrop-blur-sm"
           >
             <MessageSquare className="w-5 h-5 fill-current" />
           </button>
-          <span className="text-white text-[10px] font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center">24</span>
+          <span className="text-white text-[10px] font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">24</span>
         </div>
-                <div className="flex flex-col items-center">
+        
+        <div className="flex flex-col items-center">
           <button 
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
               console.log('Guardar');
             }}
-            className="action-button w-9 h-9 flex items-center justify-center text-white hover:text-pink-400 transition-all duration-200 transform hover:scale-110"
+            className="w-10 h-10 flex items-center justify-center bg-black/40 rounded-full text-white hover:text-pink-400 transition-all duration-200 transform hover:scale-110 shadow-lg shadow-black/30 backdrop-blur-sm"
           >
             <Bookmark className="w-5 h-5 fill-current" />
           </button>
         </div>
-                <div className="flex flex-col items-center">
+        
+        <div className="flex flex-col items-center">
           <button 
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
               console.log('Compartir');
             }}
-            className="action-button w-9 h-9 flex items-center justify-center text-white hover:text-pink-400 transition-all duration-200 transform hover:scale-110"
+            className="w-10 h-10 flex items-center justify-center bg-black/40 rounded-full text-white hover:text-pink-400 transition-all duration-200 transform hover:scale-110 shadow-lg shadow-black/30 backdrop-blur-sm"
           >
             <Share2 className="w-5 h-5 fill-current" />
           </button>
         </div>
-                <div className="flex flex-col items-center">
+        
+        <div className="flex flex-col items-center">
           <button 
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
               console.log('Más opciones');
             }}
-            className="action-button w-9 h-9 flex items-center justify-center text-white hover:text-pink-400 transition-all duration-200 transform hover:scale-110"
+            className="w-10 h-10 flex items-center justify-center bg-black/40 rounded-full text-white hover:text-pink-400 transition-all duration-200 transform hover:scale-110 shadow-lg shadow-black/30 backdrop-blur-sm"
           >
             <MoreVertical className="w-5 h-5 fill-current" />
           </button>
