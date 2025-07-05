@@ -54,117 +54,119 @@ const GalleryCard = ({ galleryItem }: { galleryItem: GalleryItem }) => {
   };
 
   return (
-    <div className="relative w-full h-[calc(100vh-180px)] mx-auto bg-gray-900 rounded-[20px] overflow-hidden shadow-xl md:h-[80vh] md:w-[500px] flex flex-col">
-      {/* Contenedor de la imagen - 65% */}
-      <div 
-        className="relative w-full h-[65%] bg-gray-900 image-container"
-        onClick={handleCardClick}
-      >
-        <img 
-          src={images[currentImageIndex]} 
-          alt={galleryItem.name} 
-          className="w-full h-full object-cover"
-        />
-        
-        {/* Navegación de imágenes */}
-        {images.length > 1 && (
-          <>
-            <button 
-              onClick={handlePrevImage}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full navigation-button z-10"
-            >
-              <ChevronLeft size={24} />
-            </button>
-            <button 
-              onClick={handleNextImage}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full navigation-button z-10"
-            >
-              <ChevronRight size={24} />
-            </button>
-            
-            {/* Indicadores de imagen */}
-            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
-              {images.map((_, index) => (
-                <div 
-                  key={index}
-                  className={`h-2 rounded-full transition-all ${index === currentImageIndex ? 'w-6 bg-[#bb00aa]' : 'w-2 bg-white/50'}`}
-                />
-              ))}
-            </div>
-          </>
-        )}
-        
-        {/* Botón de información */}
-        <button 
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowMoreInfo(!showMoreInfo);
-          }}
-          className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full z-10"
+    <div className="relative w-full h-full">
+      <div className="relative w-full h-full overflow-visible">
+        {/* Contenedor de la imagen - 65% */}
+        <div 
+          className="relative w-full h-[65%] bg-gray-900 image-container"
+          onClick={handleCardClick}
         >
-          <Info size={20} />
-        </button>
-      </div>
-      
-      {/* Contenido de la tarjeta */}
-      <div className="p-4">
-        <div className="flex justify-between items-start">
-          <div>
-            <h3 className="font-bold text-xl text-white">{galleryItem.name}</h3>
-            <div className="flex items-center gap-1.5 mt-1">
-              <MapPin className="w-3.5 h-3.5 text-gray-400" />
-              <span className="text-gray-300 text-base">{galleryItem.city || 'Ubicación no disponible'}</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-1 bg-black/5 px-2 py-1 rounded-full">
-            <MapPin size={14} className="text-[#bb00aa]" />
-            <span className="text-base font-medium">{galleryItem.distance} km</span>
-          </div>
+          <img 
+            src={images[currentImageIndex]} 
+            alt={galleryItem.name} 
+            className="w-full h-full object-cover"
+          />
+          
+          {/* Navegación de imágenes */}
+          {images.length > 1 && (
+            <>
+              <button 
+                onClick={handlePrevImage}
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full navigation-button z-10"
+              >
+                <ChevronLeft size={24} />
+              </button>
+              <button 
+                onClick={handleNextImage}
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full navigation-button z-10"
+              >
+                <ChevronRight size={24} />
+              </button>
+              
+              {/* Indicadores de imagen */}
+              <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+                {images.map((_, index) => (
+                  <div 
+                    key={index}
+                    className={`h-2 rounded-full transition-all ${index === currentImageIndex ? 'w-6 bg-[#bb00aa]' : 'w-2 bg-white/50'}`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+          
+          {/* Botón de información */}
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowMoreInfo(!showMoreInfo);
+            }}
+            className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full z-10"
+          >
+            <Info size={20} />
+          </button>
         </div>
         
-        {/* Sección de información adicional */}
-        {showMoreInfo && (
-          <div className="mt-3 pt-3 border-t border-gray-100">
-            <p className="text-gray-300 text-base leading-relaxed">
-              {galleryItem.description && galleryItem.description.length > 90
-                ? `${galleryItem.description.substring(0, 90)}...`
-                : galleryItem.description}
-            </p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {galleryItem.tags?.map((tag, index) => (
-                <span 
-                  key={index}
-                  className="inline-flex items-center gap-1 bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"
-                >
-                  {tag}
-                </span>
-              ))}
+        {/* Contenido de la tarjeta */}
+        <div className="p-4">
+          <div className="flex justify-between items-start">
+            <div>
+              <h3 className="font-bold text-xl text-white">{galleryItem.name}</h3>
+              <div className="flex items-center gap-1.5 mt-1">
+                <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                <span className="text-gray-300 text-base">{galleryItem.city || 'Ubicación no disponible'}</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-1 bg-black/5 px-2 py-1 rounded-full">
+              <MapPin size={14} className="text-[#bb00aa]" />
+              <span className="text-base font-medium">{galleryItem.distance} km</span>
             </div>
           </div>
-        )}
-        
-        {/* Acciones */}
-        <div className="mt-3 flex justify-between items-center pt-2 border-t border-gray-800">
-          <div className="flex gap-4">
+          
+          {/* Sección de información adicional */}
+          {showMoreInfo && (
+            <div className="mt-3 pt-3 border-t border-gray-100">
+              <p className="text-gray-300 text-base leading-relaxed">
+                {galleryItem.description && galleryItem.description.length > 90
+                  ? `${galleryItem.description.substring(0, 90)}...`
+                  : galleryItem.description}
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {galleryItem.tags?.map((tag, index) => (
+                  <span 
+                    key={index}
+                    className="inline-flex items-center gap-1 bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {/* Acciones */}
+          <div className="mt-3 flex justify-between items-center pt-2 border-t border-gray-800">
+            <div className="flex gap-4">
+              <button 
+                onClick={() => setIsLiked(!isLiked)}
+                className="text-gray-400 hover:text-[#bb00aa] transition-colors"
+              >
+                <Heart size={16} fill={isLiked ? '#bb00aa' : 'none'} />
+              </button>
+              <button className="text-gray-400 hover:text-[#bb00aa] transition-colors">
+                <MessageSquare size={16} />
+              </button>
+              <button className="text-gray-400 hover:text-[#bb00aa] transition-colors">
+                <Share2 size={16} />
+              </button>
+            </div>
             <button 
-              onClick={() => setIsLiked(!isLiked)}
+              onClick={() => setIsSaved(!isSaved)}
               className="text-gray-400 hover:text-[#bb00aa] transition-colors"
             >
-              <Heart size={16} fill={isLiked ? '#bb00aa' : 'none'} />
-            </button>
-            <button className="text-gray-400 hover:text-[#bb00aa] transition-colors">
-              <MessageSquare size={16} />
-            </button>
-            <button className="text-gray-400 hover:text-[#bb00aa] transition-colors">
-              <Share2 size={16} />
+              <Bookmark size={16} fill={isSaved ? '#bb00aa' : 'none'} />
             </button>
           </div>
-          <button 
-            onClick={() => setIsSaved(!isSaved)}
-            className="text-gray-400 hover:text-[#bb00aa] transition-colors"
-          >
-            <Bookmark size={16} fill={isSaved ? '#bb00aa' : 'none'} />
-          </button>
         </div>
       </div>
     </div>
@@ -255,7 +257,7 @@ export const ContentCard = ({
   };
 
   return (
-    <div className={`w-full h-full ${className} relative`}>
+    <div className={`w-full h-full ${className} relative flex flex-col justify-between`}>
       {/* Menú desplegable para móviles - Dentro de la tarjeta */}
       <div className="md:hidden absolute top-3 left-3 z-10">
         <div className="relative">
@@ -292,7 +294,9 @@ export const ContentCard = ({
       </div>
       
       <SwipeableContent onSwipe={onSwipe}>
-        {renderContent()}
+        <div className="relative w-full h-full overflow-visible">
+          {renderContent()}
+        </div>
       </SwipeableContent>
     </div>
   );
