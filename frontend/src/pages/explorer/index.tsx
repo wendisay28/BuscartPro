@@ -74,71 +74,18 @@ export default function Explorer() {
 
   return (
     <div className="min-h-screen bg-black overflow-hidden">
-      <div className="pt-12 md:pt-2">
-        {/* Barra de navegación - Solo móviles */}
-        <div className="md:hidden fixed top-3 left-3 z-10">
-          <NavigationTabs 
-            activeTab={activeTab}
-            onTabChange={setActiveTab}
-          />
-        </div>
-        
-        {/* Barra de navegación - Solo escritorio */}
-        <div className="hidden md:flex justify-center mb-1">
-          <div className="w-[90%] max-w-sm bg-gray-900/90 backdrop-blur-sm border border-gray-700 rounded-full px-1 py-1">
-            <div className="grid grid-cols-4 h-full gap-1">
-              <button 
-                className={`flex flex-col items-center justify-center h-full rounded-full transition-all duration-200 ${
-                  activeTab === 'artists' 
-                    ? 'text-white bg-[#bb00aa] shadow-md' 
-                    : 'text-gray-300 hover:text-white hover:bg-[#bb00aa]/20'
-                }`}
-                onClick={() => setActiveTab('artists')}
-              >
-                <UserIcon className="w-3.5 h-3.5 mb-0.5" />
-                <span className="text-[9px] font-medium leading-none">Artistas</span>
-              </button>
-              <button 
-                className={`flex flex-col items-center justify-center h-full rounded-full transition-all duration-200 ${
-                  activeTab === 'events' 
-                    ? 'text-white bg-[#bb00aa] shadow-md' 
-                    : 'text-gray-300 hover:text-white hover:bg-[#bb00aa]/20'
-                }`}
-                onClick={() => setActiveTab('events')}
-              >
-                <Calendar className="w-3.5 h-3.5 mb-0.5" />
-                <span className="text-[9px] font-medium leading-none">Eventos</span>
-              </button>
-              <button 
-                className={`flex flex-col items-center justify-center h-full rounded-full transition-all duration-200 ${
-                  activeTab === 'venues' 
-                    ? 'text-white bg-[#bb00aa] shadow-md' 
-                    : 'text-gray-300 hover:text-white hover:bg-[#bb00aa]/20'
-                }`}
-                onClick={() => setActiveTab('venues')}
-              >
-                <MapPin className="w-3.5 h-3.5 mb-0.5" />
-                <span className="text-[9px] font-medium leading-none">Sitios</span>
-              </button>
-              <button 
-                className={`flex flex-col items-center justify-center h-full rounded-full transition-all duration-200 ${
-                  activeTab === 'gallery' 
-                    ? 'text-white bg-[#bb00aa] shadow-md' 
-                    : 'text-gray-300 hover:text-white hover:bg-[#bb00aa]/20'
-                }`}
-                onClick={() => setActiveTab('gallery')}
-              >
-                <ImageIcon className="w-3.5 h-3.5 mb-0.5" />
-                <span className="text-[9px] font-medium leading-none">Galería</span>
-              </button>
-            </div>
-          </div>
-        </div>
+      <div className="pt-8 md:pt-0">
+        {/* Barra de navegación */}
+        <NavigationTabs 
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          className="md:mt-2"
+        />
         
         {/* Main Content Area: Card and Desktop Controls */}
-        <div className="w-full max-w-4xl mx-auto flex items-center justify-center gap-x-8 px-4 pt-2">
+        <div className="w-full max-w-4xl mx-auto flex items-center justify-center gap-x-8 px-4 pt-4">
           {/* Botones de acción flotantes */}
-          <div className="hidden md:flex flex-col gap-6 fixed left-[29.25rem] top-1/2 -translate-y-1/2 z-50">
+          <div className="hidden md:flex flex-col gap-6 fixed left-[31.5rem] top-1/3 -translate-y-1/3 z-50">
             {/* Botón de descartar */}
             <button 
               onClick={(e) => {
@@ -195,8 +142,8 @@ export default function Explorer() {
           </div>
 
           {/* Card Container */}
-          <div className="w-full max-w-lg">
-            <div className="transition-transform duration-300 transform hover:scale-[1.02] hover:shadow-xl -mt-2 md:mt-0" {...swipeHandlers}>
+          <div className="w-full max-w-md">
+            <div className="transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl -mt-2 md:mt-0 border border-gray-800 rounded-2xl overflow-hidden" {...swipeHandlers}>
               <ContentCard 
                 type={activeTab === 'artists' ? 'artist' : 
                       activeTab === 'events' ? 'event' : 
@@ -215,22 +162,22 @@ export default function Explorer() {
             </div>
           </div>
         </div>
+        
+        {/* Botón flotante para filtros en móvil */}
+        <button 
+          onClick={() => setShowFilters(!showFilters)}
+          className="fixed right-4 bottom-24 bg-[#bb00aa] text-white p-4 rounded-full shadow-lg z-40 md:hidden"
+        >
+          <Filter size={24} />
+        </button>
+        
+        {/* Panel de filtros */}
+        <FiltersPanel 
+          isOpen={showFilters} 
+          onClose={() => setShowFilters(false)}
+          filterType={activeTab}
+        />
       </div>
-      
-      {/* Botón flotante para filtros en móvil */}
-      <button 
-        onClick={() => setShowFilters(!showFilters)}
-        className="fixed right-4 bottom-24 bg-[#bb00aa] text-white p-4 rounded-full shadow-lg z-40 md:hidden"
-      >
-        <Filter size={24} />
-      </button>
-      
-      {/* Panel de filtros */}
-      <FiltersPanel 
-        isOpen={showFilters} 
-        onClose={() => setShowFilters(false)}
-        filterType={activeTab}
-      />
     </div>
   );
 }

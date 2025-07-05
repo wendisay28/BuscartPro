@@ -93,13 +93,13 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
   };
 
   return (
-            <div className="relative w-full h-[calc(100vh-180px)] mx-auto md:h-[80vh]">
+            <div className="relative w-full h-[calc(100vh-180px)] mx-auto md:h-[75vh]">
       <div 
-        className="flex flex-col w-full h-full bg-gray-900 rounded-[20px] overflow-hidden shadow-xl mb-0"
+        className="flex flex-col w-full h-full bg-gray-900 rounded-[20px] overflow-hidden shadow-xl cursor-pointer"
         onClick={handleCardClick}
       >
-      {/* Sección superior - Imagen (65% de la altura) */}
-      <div className="relative overflow-hidden h-[70%] md:h-[70%]">
+      {/* Sección superior - Imagen */}
+      <div className="relative overflow-hidden h-[65%] md:h-[70%]">
         <div className="absolute inset-0 w-full h-full bg-gray-900 image-container cursor-pointer">
           {images.length > 0 ? (
             <div className="w-full h-full relative">
@@ -157,16 +157,16 @@ export const EventCard: React.FC<EventCardProps> = ({ data }) => {
       </div>
       
       {/* Sección de contenido */}
-      <div className="flex-1 p-4 pb-2 flex flex-col h-[30%] md:h-[30%] overflow-y-auto">
+      <div className="flex-1 p-4 pb-2 flex flex-col h-[35%] md:h-[30%] overflow-y-auto">
         <div className="h-full flex flex-col justify-between">
           {/* Encabezado */}
           <div className="flex justify-between items-start mb-1">
             <div>
               <div className="hidden md:flex items-baseline gap-3">
-                <h2 className="text-2xl font-bold text-white">{data.name}</h2>
+                <h2 className="text-xl font-bold text-white">{data.name}</h2>
               </div>
               <div className="md:hidden">
-                <h2 className="text-2xl font-bold text-white">{data.name}</h2>
+                <h2 className="text-xl font-bold text-white">{data.name}</h2>
               </div>
             </div>
             <div className="text-[#bb00aa] text-xl font-bold whitespace-nowrap">

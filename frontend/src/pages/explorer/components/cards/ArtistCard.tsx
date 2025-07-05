@@ -105,7 +105,7 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
   };
 
   return (
-            <div className="relative w-full h-[calc(100vh-180px)] mx-auto md:h-[80vh]">
+            <div className="relative w-full h-[calc(100vh-180px)] mx-auto md:h-[75vh]">
       {/* Tarjeta principal */}
       <div 
         className="flex flex-col w-full h-full bg-gray-900 rounded-[20px] overflow-hidden shadow-xl"
@@ -114,7 +114,7 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
   
 
       {/* Sección de imagen */}
-      <div className="relative overflow-hidden h-[70%] md:h-[70%]">
+      <div className="relative overflow-hidden h-[65%] md:h-[70%]">
           <div className="absolute inset-0 w-full h-full bg-gray-900 image-container cursor-pointer">
             {images.length > 0 ? (
               <div className="w-full h-full relative">
@@ -165,23 +165,23 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
         </div>
         
         {/* Sección de contenido */}
-        <div className="flex-1 p-4 pb-2 flex flex-col h-[30%] md:h-[30%] overflow-y-auto">
+        <div className="flex-1 p-4 pb-2 flex flex-col h-[35%] md:h-[30%] overflow-y-auto">
           <div className="h-full flex flex-col justify-between">
             {/* Nombre, profesión y precio */}
             <div className="flex justify-between items-start mb-1">
               <div>
                 {/* --- Vista de Escritorio: Nombre Profesión --- */}
                 <div className="hidden md:flex items-baseline gap-3">
-                  <h2 className="text-2xl font-bold text-white drop-shadow-lg">{artist.name}</h2>
-                  <p className="text-sm text-white bg-black/20 backdrop-blur-md rounded-full px-3 py-0.5">
+                  <h2 className="text-xl font-bold text-white drop-shadow-lg">{artist.name}</h2>
+                  <p className="text-xs text-white bg-black/20 backdrop-blur-md rounded-full px-2 py-0.5">
                     {formatProfession(artist.profession)}
                   </p>
                 </div>
 
                 {/* --- Vista Móvil: Nombre y debajo Profesión --- */}
                 <div className="md:hidden">
-                  <h2 className="text-2xl font-bold text-white drop-shadow-lg">{artist.name}</h2>
-                  <p className="text-md text-gray-300 -mt-1 bg-black/20 backdrop-blur-sm px-2 rounded-md inline-block">
+                  <h2 className="text-xl font-bold text-white drop-shadow-lg">{artist.name}</h2>
+                  <p className="text-xs text-gray-300 -mt-1 bg-black/20 backdrop-blur-sm px-2 rounded-md inline-block">
                     {formatProfession(artist.profession)}
                   </p>
                 </div>
@@ -198,16 +198,25 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
             
             {/* Etiquetas */}
             {artist.tags?.length > 0 && (
-              <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                {artist.tags.slice(0, 3).map((tag, index) => (
-                  <div 
-                    key={index}
-                    className="flex-shrink-0 px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-xs rounded-full flex items-center gap-1"
-                  >
-                    {getTagIcon(tag)}
-                    <span>{tag}</span>
-                  </div>
-                ))}
+              <div className="flex items-center gap-1.5 mb-1 overflow-hidden">
+                {artist.tags.slice(0, 3).map((tag, index) => {
+                  // Solo aplicar el estilo de recorte al tercer tag del artista específico
+                  const shouldTruncate = artist.name === 'Diseño de Interiores Decoración Espacios Comerciales' && index === 2;
+                  
+                  return (
+                    <div 
+                      key={index}
+                      className={`flex-shrink-0 px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-xs rounded-full flex items-center gap-1 ${
+                        shouldTruncate ? 'flex-1 min-w-0 overflow-hidden' : ''
+                      }`}
+                    >
+                      {getTagIcon(tag)}
+                      <span className={`${shouldTruncate ? 'block whitespace-nowrap overflow-hidden text-ellipsis' : ''}`}>
+                        {tag}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             )}
             
