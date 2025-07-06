@@ -86,8 +86,10 @@ export default function Explorer() {
       {/* Layout de 3 columnas */}
       <div className="flex w-full relative">
         {/* Columna izquierda - Sidebar */}
-        <div className="w-1/4 fixed left-45 top-28 bottom-40 z-50">
-          <Sidebar />
+        <div className="w-1/4 fixed left-45 top-28 bottom-[calc(4rem-9px)] z-50 overflow-y-auto">
+          <div className="h-full pr-6">
+            <Sidebar />
+          </div>
         </div>
 
         {/* Columna central - Contenido principal */}
