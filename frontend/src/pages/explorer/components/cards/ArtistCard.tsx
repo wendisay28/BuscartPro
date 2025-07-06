@@ -1,36 +1,10 @@
 import { Artist } from '../../types';
-import {
-  MapPin,
-  Calendar,
-  Clock,
-  Palette,
-  Camera,
-  Code,
-  Music,
-  Film,
-  Brush,
-  Zap,
-  Info,
-  CalendarCheck,
-  Heart,
-  MessageSquare,
-  Share2,
-  Bookmark,
-  MoreVertical,
-  Star
-} from 'lucide-react';
+import { Palette, Camera, Code, Music, Film, Brush, Zap, MapPin, Calendar, Clock, Info, CalendarCheck } from 'lucide-react';
 import { useState } from 'react';
 
 interface ArtistCardProps {
   artist: Artist;
 }
-
-// Función para limitar la profesión a dos palabras
-const formatProfession = (profession: string): string => {
-  const words = profession.split(' ').filter(word => word.trim() !== '');
-  // Tomar solo las primeras dos palabras y unirlas con espacio
-  return words.slice(0, 2).join(' ');
-};
 
 // Función para obtener el ícono según el tag
 const getTagIcon = (tag: string) => {
@@ -64,32 +38,21 @@ const getTagIcon = (tag: string) => {
 };
 
 export const ArtistCard = ({ artist }: ArtistCardProps) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const images = artist.images || [];
-  const [isRated, setIsRated] = useState(false);
-
-  const prevImage = () => {
-    if (images.length <= 1) return;
-    setCurrentImageIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
-  };
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const nextImage = () => {
     if (images.length <= 1) return;
     setCurrentImageIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
-  const toggleRating = () => {
-    setIsRated(!isRated);
-  };
-
-  const handleAction = (action: string) => (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    console.log(action);
+  const prevImage = () => {
+    if (images.length <= 1) return;
+    setCurrentImageIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
   return (
-    <div className="relative w-full h-[calc(100vh-180px)] mx-auto md:h-[75vh]">
+    <div className="relative w-full max-w-md h-[calc(100vh-180px)] mx-auto md:h-[75vh]">
       {/* Tarjeta principal */}
       <div 
         className="flex flex-col w-full h-full bg-gray-900 rounded-[20px] overflow-hidden shadow-xl cursor-pointer transition-all hover:shadow-2xl hover:scale-[1.01]"
@@ -147,30 +110,6 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
               </button>
             </div>
           )}
-
-          {/* Botones de acción en esquina superior derecha */}
-          <div className="absolute top-3 right-3 flex flex-col gap-2">
-            <button 
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleRating();
-              }}
-              className={`p-2 rounded-full ${isRated ? 'bg-yellow-500/90 text-yellow-100' : 'bg-gray-900/80 text-gray-300 hover:bg-gray-800/90'}`}
-              aria-label={isRated ? 'Quitar de favoritos' : 'Añadir a favoritos'}
-            >
-              <Star className={`w-4 h-4 ${isRated ? 'fill-current' : ''}`} />
-            </button>
-            <button 
-              onClick={(e) => {
-                e.stopPropagation();
-                // Acción para compartir
-              }}
-              className="p-2 rounded-full bg-gray-900/80 text-gray-300 hover:bg-gray-800/90"
-              aria-label="Compartir"
-            >
-              <Share2 className="w-4 h-4" />
-            </button>
-          </div>
         </div>
 
         {/* Contenido de la tarjeta - 35% */}
@@ -195,8 +134,10 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
               </div>
               <span className="flex items-center text-gray-400 ml-3 text-xs">
                 <MapPin className="w-3.5 h-3.5 mr-1 flex-shrink-0" />
-                <span className="truncate">{artist.city || 'Ubicación no disponible'}</span>
-                {artist.distance && ` • ${artist.distance}km`}
+                <span className="truncate">
+                  {artist.city || 'Ubicación no disponible'}
+                  {artist.distance && ` • ${artist.distance}km`}
+                </span>
               </span>
             </div>
           </div>
@@ -228,14 +169,18 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
             <div className="flex justify-between items-center">
               <div className="flex items-center">
                 {artist.price ? (
-                  <div className="flex items-center">
-                    <span className="text-[#bb00aa] font-medium">
-                      ${artist.price.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
+                  <div className="flex items-center bg-gray-800/80 rounded-full px-3 py-1">
+                    <Palette className="w-3.5 h-3.5 mr-1.5 text-[#bb00aa]" />
+                    <span className="text-sm text-white font-medium">$</span>
+                    <span className="text-sm text-white">
+                      {artist.price.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
                     </span>
-                    <span className="text-xs text-gray-400 ml-1">/hora</span>
                   </div>
                 ) : (
-                  <span className="text-sm text-gray-300">Precio a convenir</span>
+                  <div className="flex items-center bg-gray-800/80 rounded-full px-3 py-1">
+                    <Palette className="w-3.5 h-3.5 mr-1.5 text-[#bb00aa]" />
+                    <span className="text-sm text-white">A convenir</span>
+                  </div>
                 )}
               </div>
               
@@ -264,90 +209,6 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Botones de acción flotantes - Solo en móvil */}
-      <div className="md:hidden absolute right-2 top-[calc(50%-45px)] transform -translate-y-1/2 flex flex-col gap-3 z-10 items-end">
-        <div className="flex flex-col items-center">
-          <button 
-            onClick={handleAction('Me gusta')}
-            className="w-10 h-10 flex items-center justify-center bg-black/40 rounded-full text-white hover:text-pink-400 transition-all duration-200 transform hover:scale-110 shadow-lg shadow-black/30 backdrop-blur-sm"
-          >
-            <Heart className="w-5 h-5 fill-current" />
-          </button>
-          <span className="text-white text-base font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">1.2K</span>
-        </div>
-        
-        <div className="flex flex-col items-center">
-          <button 
-            onClick={handleAction('Comentarios')}
-            className="w-10 h-10 flex items-center justify-center bg-black/40 rounded-full text-white hover:text-pink-400 transition-all duration-200 transform hover:scale-110 shadow-lg shadow-black/30 backdrop-blur-sm"
-          >
-            <MessageSquare className="w-5 h-5 fill-current" />
-          </button>
-          <span className="text-white text-base font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">24</span>
-        </div>
-        
-        <div className="flex flex-col items-center">
-          <button 
-            onClick={handleAction('Guardar')}
-            className="w-10 h-10 flex items-center justify-center bg-black/40 rounded-full text-white hover:text-pink-400 transition-all duration-200 transform hover:scale-110 shadow-lg shadow-black/30 backdrop-blur-sm"
-          >
-            <Bookmark className="w-5 h-5 fill-current" />
-          </button>
-        </div>
-        
-        <div className="flex flex-col items-center">
-          <button 
-            onClick={handleAction('Compartir')}
-            className="w-10 h-10 flex items-center justify-center bg-black/40 rounded-full text-white hover:text-pink-400 transition-all duration-200 transform hover:scale-110 shadow-lg shadow-black/30 backdrop-blur-sm"
-          >
-            <Share2 className="w-5 h-5 fill-current" />
-          </button>
-        </div>
-        
-        <div className="flex flex-col items-center">
-          <button 
-            onClick={handleAction('Más opciones')}
-            className="w-10 h-10 flex items-center justify-center bg-black/40 rounded-full text-white hover:text-pink-400 transition-all duration-200 transform hover:scale-110 shadow-lg shadow-black/30 backdrop-blur-sm"
-          >
-            <MoreVertical className="w-5 h-5 fill-current" />
-          </button>
-        </div>
-      </div>
-
-      {/* Botones de acción - Solo en escritorio */}
-      <div className="hidden md:flex absolute top-[50%] right-0 transform translate-x-16 -translate-y-1/2 flex-col gap-3 z-10">
-        <button 
-          onClick={handleAction('Me gusta')}
-          className="action-button w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-        >
-          <Heart className="w-5 h-5" />
-        </button>
-        <button 
-          onClick={handleAction('Comentarios')}
-          className="action-button w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-        >
-          <MessageSquare className="w-5 h-5" />
-        </button>
-        <button 
-          onClick={handleAction('Guardar')}
-          className="action-button w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-        >
-          <Bookmark className="w-5 h-5" />
-        </button>
-        <button 
-          onClick={handleAction('Compartir')}
-          className="action-button w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-        >
-          <Share2 className="w-5 h-5" />
-        </button>
-        <button 
-          onClick={handleAction('Más opciones')}
-          className="action-button w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-        >
-          <MoreVertical className="w-5 h-5" />
-        </button>
       </div>
     </div>
   );

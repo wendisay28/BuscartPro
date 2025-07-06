@@ -7,8 +7,6 @@ import {
   MapPin, 
   Info, 
   CalendarCheck, 
-  ChevronLeft, 
-  ChevronRight,
   Star,
   Share2,
   Music, 
