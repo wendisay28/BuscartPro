@@ -3,8 +3,6 @@ import {
   MapPin,
   Calendar,
   Clock,
-  ChevronLeft,
-  ChevronRight,
   Palette,
   Camera,
   Code,
@@ -12,14 +10,14 @@ import {
   Film,
   Brush,
   Zap,
-  MessageCircle,
   Info,
   CalendarCheck,
   Heart,
   MessageSquare,
   Share2,
   Bookmark,
-  MoreVertical
+  MoreVertical,
+  Star
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -68,34 +66,20 @@ const getTagIcon = (tag: string) => {
 export const ArtistCard = ({ artist }: ArtistCardProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const images = artist.images || [];
-  
-  const handlePrevImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const [isRated, setIsRated] = useState(false);
+
+  const prevImage = () => {
     if (images.length <= 1) return;
     setCurrentImageIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
-  const handleNextImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const nextImage = () => {
     if (images.length <= 1) return;
     setCurrentImageIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
-  const handleCardClick = (e: React.MouseEvent) => {
-    const target = e.target as HTMLElement;
-    if (target.closest('.image-container') && !target.closest('.navigation-button')) {
-      const rect = target.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const width = rect.width;
-      
-      if (images.length <= 1) return;
-      
-      if (clickX < width * 0.4) {
-        setCurrentImageIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
-      } else if (clickX > width * 0.6) {
-        setCurrentImageIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
-      }
-    }
+  const toggleRating = () => {
+    setIsRated(!isRated);
   };
 
   const handleAction = (action: string) => (e: React.MouseEvent) => {
@@ -105,176 +89,177 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
   };
 
   return (
-            <div className="relative w-full h-[calc(100vh-180px)] mx-auto md:h-[75vh]">
+    <div className="relative w-full h-[calc(100vh-180px)] mx-auto md:h-[75vh]">
       {/* Tarjeta principal */}
       <div 
-        className="flex flex-col w-full h-full bg-gray-900 rounded-[20px] overflow-hidden shadow-xl"
-        onClick={handleCardClick}
+        className="flex flex-col w-full h-full bg-gray-900 rounded-[20px] overflow-hidden shadow-xl cursor-pointer transition-all hover:shadow-2xl hover:scale-[1.01]"
       >
-  
+        {/* Sección de imagen - 65% */}
+        <div className="relative h-[65%] w-full overflow-hidden">
+          {images.length > 0 ? (
+            <img
+              src={images[currentImageIndex]}
+              alt={artist.name}
+              className="w-full h-full object-cover transition-opacity duration-300"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.onerror = null;
+                target.src = `data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWYyYTM1Ii8+PHRleHQgeD0iNTAlIiB5PSI1JSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBhbGlnbm1lbnQtYmFzZWxpbmU9Im1pZGRsZSIgZmlsbD0iI2ZmZiI+U2luIGltYWdlbiBkZSBwcmV2aXN0YTwvdGV4dD48L3N2Zz4=`;
+              }}
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+              <Palette className="w-12 h-12 text-gray-600" />
+            </div>
+          )}
 
-      {/* Sección de imagen */}
-      <div className="relative overflow-hidden h-[65%] md:h-[70%]">
-          <div className="absolute inset-0 w-full h-full bg-gray-900 image-container cursor-pointer">
-            {images.length > 0 ? (
-              <div className="w-full h-full relative">
-                <img
-                  src={images[currentImageIndex]}
-                  alt={artist.name}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzODAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgMzgwIDQwMCI+PHJlY3Qgd2lkdGg9IjM4MCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMwQTFBMzUiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSIjY2NjY2NjIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5JbWFnZW4gbm8gZGlzcG9uaWJsZTwvdGV4dD48L3N2Zz4=';
-                  }}
-                />
+          {/* Navegación de imágenes */}
+          {images.length > 1 && (
+            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex items-center gap-1 bg-black/60 backdrop-blur-sm rounded-full p-0.5 z-10 text-xs">
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  prevImage();
+                }}
+                className="w-6 h-6 flex items-center justify-center text-white hover:bg-black/50 rounded-full transition-all"
+                aria-label="Imagen anterior"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
+              
+              <span className="text-white/80 px-1">
+                {currentImageIndex + 1} / {images.length}
+              </span>
+              
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  nextImage();
+                }}
+                className="w-6 h-6 flex items-center justify-center text-white hover:bg-black/50 rounded-full transition-all"
+                aria-label="Siguiente imagen"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+            </div>
+          )}
+
+          {/* Botones de acción en esquina superior derecha */}
+          <div className="absolute top-3 right-3 flex flex-col gap-2">
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleRating();
+              }}
+              className={`p-2 rounded-full ${isRated ? 'bg-yellow-500/90 text-yellow-100' : 'bg-gray-900/80 text-gray-300 hover:bg-gray-800/90'}`}
+              aria-label={isRated ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+            >
+              <Star className={`w-4 h-4 ${isRated ? 'fill-current' : ''}`} />
+            </button>
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                // Acción para compartir
+              }}
+              className="p-2 rounded-full bg-gray-900/80 text-gray-300 hover:bg-gray-800/90"
+              aria-label="Compartir"
+            >
+              <Share2 className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Contenido de la tarjeta - 35% */}
+        <div className="flex flex-col h-[35%] overflow-hidden">
+          <div className="p-4 pb-2">
+            <div className="flex items-baseline gap-2">
+              <h3 className="font-semibold text-lg text-white line-clamp-1">
+                {artist.name}
+              </h3>
+              <span className="text-xs text-[#bb00aa] font-medium">
+                • {artist.profession || 'Artista'}
+              </span>
+            </div>
+            
+            {/* Fecha, hora y ubicación */}
+            <div className="flex items-center mt-1.5 text-sm text-gray-300">
+              <div className="flex items-center">
+                <Calendar className="w-3.5 h-3.5 mr-1 flex-shrink-0" />
+                <span>15 Jul</span>
+                <Clock className="w-3.5 h-3.5 mx-1.5 flex-shrink-0" />
+                <span>7:00 PM</span>
               </div>
-            ) : (
-              <div className="w-full h-full bg-gray-800 flex items-center justify-center">
-                <span className="text-gray-500">No hay imágenes</span>
+              <span className="flex items-center text-gray-400 ml-3 text-xs">
+                <MapPin className="w-3.5 h-3.5 mr-1 flex-shrink-0" />
+                <span className="truncate">{artist.city || 'Ubicación no disponible'}</span>
+                {artist.distance && ` • ${artist.distance}km`}
+              </span>
+            </div>
+          </div>
+
+          <div className="px-4 pb-3 flex-1 overflow-y-auto">
+            {/* Descripción */}
+            <p className="text-sm text-gray-300 mb-3 leading-relaxed">
+              {artist.description || 'Artista apasionado por crear experiencias únicas a través de su trabajo.'}
+            </p>
+
+            {/* Etiquetas */}
+            {artist.tags && artist.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1.5">
+                {artist.tags.slice(0, 3).map((tag, index) => (
+                  <div 
+                    key={index}
+                    className="text-xs bg-gray-800/80 text-gray-200 px-2.5 py-1 rounded-full flex items-center gap-1"
+                  >
+                    {getTagIcon(tag)}
+                    <span>{tag}</span>
+                  </div>
+                ))}
               </div>
             )}
           </div>
-          
-          {/* Controles de navegación */}
-          {images.length > 1 && (
-            <>
-              <button
-                onClick={handlePrevImage}
-                className="hidden md:block absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-1.5 rounded-full hover:bg-black/70 transition-colors z-10 navigation-button"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                onClick={handleNextImage}
-                className="hidden md:block absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-1.5 rounded-full hover:bg-black/70 transition-colors z-10 navigation-button"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-              
-              {/* Indicador de imágenes */}
-              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
-                {images.map((_, index) => (
-                  <div
-                    key={index}
-                    className={`w-1.5 h-1.5 rounded-full ${index === currentImageIndex ? 'bg-white' : 'bg-white/50'}`}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-        
-        {/* Sección de contenido */}
-        <div className="flex-1 p-4 pb-2 flex flex-col h-[35%] md:h-[30%] overflow-y-auto">
-          <div className="h-full flex flex-col justify-between">
-            {/* Nombre, profesión y precio */}
-            <div className="flex justify-between items-start mb-1">
-              <div>
-                {/* --- Vista de Escritorio: Nombre Profesión --- */}
-                <div className="hidden md:flex items-baseline gap-3">
-                  <h2 className="text-xl font-bold text-white drop-shadow-lg">{artist.name}</h2>
-                  <p className="text-xs text-white bg-black/20 backdrop-blur-md rounded-full px-2 py-0.5">
-                    {formatProfession(artist.profession)}
-                  </p>
-                </div>
 
-                {/* --- Vista Móvil: Nombre y debajo Profesión --- */}
-                <div className="md:hidden">
-                  <h2 className="text-xl font-bold text-white drop-shadow-lg">{artist.name}</h2>
-                  <p className="text-xs text-gray-300 -mt-1 bg-black/20 backdrop-blur-sm px-2 rounded-md inline-block">
-                    {formatProfession(artist.profession)}
-                  </p>
-                </div>
+          {/* Pie de tarjeta con precio y botones */}
+          <div className="border-t border-gray-700/50 px-4 py-3">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center">
+                {artist.price ? (
+                  <div className="flex items-center">
+                    <span className="text-[#bb00aa] font-medium">
+                      ${artist.price.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
+                    </span>
+                    <span className="text-xs text-gray-400 ml-1">/hora</span>
+                  </div>
+                ) : (
+                  <span className="text-sm text-gray-300">Precio a convenir</span>
+                )}
               </div>
               
-              {artist.price && (
-                <div className="text-right flex-shrink-0 ml-2">
-                  <p className="text-xl font-bold text-[#bb00aa] drop-shadow-lg">
-                    ${artist.price.toLocaleString()}<span className="text-xs text-gray-400 font-normal"> /hr</span>
-                  </p>
-                </div>
-              )}
-            </div>
-            
-            {/* Etiquetas */}
-            {artist.tags?.length > 0 && (
-              <div className="flex items-center gap-1.5 mb-1 overflow-hidden">
-                {artist.tags.slice(0, 3).map((tag, index) => {
-                  // Solo aplicar el estilo de recorte al tercer tag del artista específico
-                  const shouldTruncate = artist.name === 'Diseño de Interiores Decoración Espacios Comerciales' && index === 2;
-                  
-                  return (
-                    <div 
-                      key={index}
-                      className={`flex-shrink-0 px-2 py-0.5 bg-[#bb00aa26] text-[#bb00aa] text-xs rounded-full flex items-center gap-1 ${
-                        shouldTruncate ? 'flex-1 min-w-0 overflow-hidden' : ''
-                      }`}
-                    >
-                      {getTagIcon(tag)}
-                      <span className={`${shouldTruncate ? 'block whitespace-nowrap overflow-hidden text-ellipsis' : ''}`}>
-                        {tag}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-            
-            {/* Horario */}
-            <div className="flex gap-4 text-xs text-gray-400">
-              <div className="flex items-center gap-1">
-                <Calendar className="w-3 h-3 text-gray-400" />
-                <span>Lun-Sáb</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Clock className="w-3 h-3 text-gray-400" />
-                <span>10am-8pm</span>
-              </div>
-            </div>
-            
-            {/* Descripción */}
-            <div className="flex-1">
-                            <p className="text-base text-gray-300 leading-snug mt-2">
-                {artist.description && artist.description.length > 90
-                  ? `${artist.description.substring(0, 90)}...`
-                  : artist.description || 'Artista apasionado por crear experiencias únicas a través de su trabajo.'}
-              </p>
-            </div>
-            
-            {/* Pie de tarjeta */}
-            <div className="relative mt-1">
-              <div className="absolute -top-2 left-0 w-full h-2 bg-gradient-to-b from-transparent to-[#0F172A]/80"></div>
-              <div className="h-px w-full bg-[#1A2C4A] mb-1"></div>
-              <div className="flex justify-between items-center">
-                {/* Información adicional */}
-                <div className="flex items-center gap-4 text-[#CCCCCC] text-sm">
-                  <div className="flex items-center whitespace-nowrap">
-                    <MessageCircle className="w-4 h-4 mr-1.5 text-white flex-shrink-0" />
-                    <span>30 reseñas</span>
-                  </div>
-                  <div className="flex items-center whitespace-nowrap">
-                    <MapPin className="w-4 h-4 mr-1.5 text-white flex-shrink-0" />
-                    <span>Bogotá • 4.9km</span>
-                  </div>
-                </div>
-                
-                {/* Botones de acción */}
-                <div className="flex gap-2">
-                  <button 
-                    onClick={handleAction('Ver portafolio')}
-                    className="w-8 h-8 rounded-full border border-[#bb00aa] text-white flex items-center justify-center hover:bg-[#bb00aa]]/20 transition-colors"
-                    title="Ver portafolio"
-                  >
-                    <Info className="w-4 h-4" />
-                  </button>
-                  <button 
-                    onClick={handleAction('Contactar')}
-                    className="w-8 h-8 rounded-full bg-[#bb00aa] text-white flex items-center justify-center hover:bg-[#bb00aa]]/90 transition-colors"
-                    title="Contactar"
-                  >
-                    <CalendarCheck className="w-4 h-4" />
-                  </button>
-                </div>
+              <div className="flex gap-2">
+                <button 
+                  className="w-8 h-8 rounded-full border border-[#bb00aa] text-white flex items-center justify-center hover:bg-[#bb00aa]/20 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Acción para ver más información
+                  }}
+                  aria-label="Ver más información"
+                >
+                  <Info className="w-4 h-4" />
+                </button>
+                <button 
+                  className="w-8 h-8 rounded-full bg-[#bb00aa] text-white flex items-center justify-center hover:bg-[#bb00aa]/90 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Acción para reservar
+                  }}
+                  aria-label="Reservar"
+                >
+                  <CalendarCheck className="w-4 h-4" />
+                </button>
               </div>
             </div>
           </div>
@@ -290,7 +275,7 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
           >
             <Heart className="w-5 h-5 fill-current" />
           </button>
-                                      <span className="text-white text-base font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">1.2K</span>
+          <span className="text-white text-base font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">1.2K</span>
         </div>
         
         <div className="flex flex-col items-center">
@@ -300,7 +285,7 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
           >
             <MessageSquare className="w-5 h-5 fill-current" />
           </button>
-                                      <span className="text-white text-base font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">24</span>
+          <span className="text-white text-base font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-center mt-0.5">24</span>
         </div>
         
         <div className="flex flex-col items-center">

@@ -1,185 +1,231 @@
-import { useState } from 'react';
-import { X, Filter } from 'lucide-react';
+import {
+  Sliders,
+  MapPin,
+  DollarSign,
+  Tag,
+  Calendar,
+  Star,
+} from 'lucide-react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
-type FilterType = 'artists' | 'events' | 'venues' | 'gallery';
-
-type FilterProps = {
+export type FilterProps = {
   isOpen: boolean;
-  onClose: () => void;
-  filterType: FilterType;
+  onToggle: () => void;
+  distance: number;
+  setDistance: (value: number) => void;
+  price: number;
+  setPrice: (value: number) => void;
+  category: string;
+  setCategory: (value: string) => void;
+  subCategory: string;
+  setSubCategory: (value: string) => void;
+  profession: string;
+  setProfession: (value: string) => void;
+  selectedDate: Date | null;
+  setSelectedDate: (date: Date | null) => void;
 };
 
-export const FiltersPanel = ({ isOpen, onClose, filterType }: FilterProps) => {
-  const [isExpanded, setIsExpanded] = useState({
-    category: false,
-    price: false,
-    rating: false,
-    distance: false,
-    availability: false,
-  });
+const subCategories: { [key: string]: string[] } = {
+  musica: [
+    'Pop',
+    'Balada',
+    'Mariachis',
+    'Reguetón',
+    'Guaracha',
+    'Rock',
+    'Jazz',
+    'Salsa',
+    'Vallenato',
+    'Música Clásica',
+  ],
+  fotografia: [
+    'Retrato',
+    'Boda',
+    'Evento',
+    'Producto',
+    'Moda',
+    'Documental',
+    'Arquitectura',
+    'Deporte',
+    'Paisaje',
+    'Estudio',
+  ],
+  danza: [
+    'Ballet',
+    'Hip Hop',
+    'Salsa',
+    'Contemporánea',
+    'Folclórica',
+    'Breakdance',
+    'Jazz Dance',
+    'Tap',
+    'Flamenco',
+    'K-Pop',
+  ],
+  // Puedes agregar más categorías aquí...
+};
 
-  const toggleSection = (section: keyof typeof isExpanded) => {
-    setIsExpanded(prev => ({
-      ...prev,
-      [section]: !prev[section]
-    }));
-  };
-
-  const renderArtistFilters = () => (
-    <>
-      <div className="mb-4">
-        <button 
-          className="w-full text-left font-medium flex justify-between items-center"
-          onClick={() => toggleSection('category')}
-        >
-          Categoría
-          <span>{isExpanded.category ? '−' : '+'}</span>
-        </button>
-        {isExpanded.category && (
-          <div className="mt-2 space-y-2 pl-4">
-            {['Músico', 'Pintor', 'Escultor', 'Fotógrafo', 'Actor'].map(cat => (
-              <div key={cat} className="flex items-center">
-                <input type="checkbox" id={`cat-${cat}`} className="mr-2" />
-                <label htmlFor={`cat-${cat}`} className="text-sm">{cat}</label>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div className="mb-4">
-        <button 
-          className="w-full text-left font-medium flex justify-between items-center"
-          onClick={() => toggleSection('price')}
-        >
-          Rango de precios
-          <span>{isExpanded.price ? '−' : '+'}</span>
-        </button>
-        {isExpanded.price && (
-          <div className="mt-2 pl-4">
-            <input type="range" min="0" max="1000" className="w-full" />
-            <div className="flex justify-between text-xs mt-1">
-              <span>$0</span>
-              <span>$1000+</span>
-            </div>
-          </div>
-        )}
-      </div>
-    </>
-  );
-
-  const renderEventFilters = () => (
-    <div className="space-y-4">
-      <div>
-        <h4 className="font-medium mb-2">Tipo de evento</h4>
-        {['Concierto', 'Exposición', 'Taller', 'Conferencia', 'Otro'].map(type => (
-          <div key={type} className="flex items-center mb-2">
-            <input type="checkbox" id={`event-${type}`} className="mr-2" />
-            <label htmlFor={`event-${type}`} className="text-sm">{type}</label>
-          </div>
-        ))}
-      </div>
-      
-      <div>
-        <h4 className="font-medium mb-2">Fecha</h4>
-        <input type="date" className="w-full p-2 border rounded-lg" />
-      </div>
-    </div>
-  );
-
-  const renderVenueFilters = () => (
-    <div className="space-y-4">
-      <div>
-        <h4 className="font-medium mb-2">Tipo de lugar</h4>
-        {['Galería', 'Teatro', 'Café', 'Al aire libre', 'Otro'].map(type => (
-          <div key={type} className="flex items-center mb-2">
-            <input type="checkbox" id={`venue-${type}`} className="mr-2" />
-            <label htmlFor={`venue-${type}`} className="text-sm">{type}</label>
-          </div>
-        ))}
-      </div>
-      
-      <div>
-        <h4 className="font-medium mb-2">Distancia máxima</h4>
-        <input type="range" min="1" max="50" className="w-full" />
-        <div className="flex justify-between text-xs mt-1">
-          <span>1 km</span>
-          <span>50+ km</span>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderGalleryFilters = () => (
-    <div className="space-y-4">
-      <div>
-        <h4 className="font-medium mb-2">Tipo de arte</h4>
-        {['Pintura', 'Fotografía', 'Escultura', 'Digital', 'Mixta'].map(type => (
-          <div key={type} className="flex items-center mb-2">
-            <input type="checkbox" id={`art-${type}`} className="mr-2" />
-            <label htmlFor={`art-${type}`} className="text-sm">{type}</label>
-          </div>
-        ))}
-      </div>
-      
-      <div>
-        <h4 className="font-medium mb-2">Precio</h4>
-        <div className="flex gap-2">
-          <input type="number" placeholder="Mín" className="w-1/2 p-2 border rounded-lg" />
-          <input type="number" placeholder="Máx" className="w-1/2 p-2 border rounded-lg" />
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderFilters = () => {
-    switch (filterType) {
-      case 'artists':
-        return renderArtistFilters();
-      case 'events':
-        return renderEventFilters();
-      case 'venues':
-        return renderVenueFilters();
-      case 'gallery':
-        return renderGalleryFilters();
-      default:
-        return null;
-    }
-  };
-
-  if (!isOpen) return null;
+export const FiltersPanel = ({
+  isOpen,
+  onToggle,
+  distance,
+  setDistance,
+  price,
+  setPrice,
+  category,
+  setCategory,
+  subCategory,
+  setSubCategory,
+  profession,
+  setProfession,
+  selectedDate,
+  setSelectedDate,
+}: FilterProps) => {
+  const currentSubCategories = subCategories[category] || [];
 
   return (
-    <div className="fixed right-0 top-1/2 transform -translate-y-1/2 z-50 flex">
-      <div className="bg-white shadow-xl rounded-l-3xl p-6 w-72 h-[80vh] overflow-y-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-xl font-bold">Filtros</h3>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-            <X size={24} />
-          </button>
-        </div>
-        
-        <div className="space-y-6">
-          {renderFilters()}
-          
-          <div className="pt-4 border-t">
-            <button className="w-full bg-[#bb00aa] text-white py-2 rounded-full font-medium">
-              Aplicar filtros
+    <div className="bg-gray-800 rounded-xl shadow-lg text-white">
+      {/* Header clickable */}
+      <div
+        className="flex justify-between items-center p-3 cursor-pointer select-none"
+        onClick={onToggle}
+      >
+        <h2 className="flex items-center gap-2 text-base font-semibold">
+          <Sliders className="w-5 h-5" /> Filtro Avanzado
+        </h2>
+        <span className="text-xs text-gray-400">
+          {isOpen ? 'Cerrar' : 'Abrir'}
+        </span>
+      </div>
+
+      <div
+        className={`transition-all duration-500 overflow-hidden px-4 ${
+          isOpen ? 'max-h-[600px] opacity-100 pb-4' : 'max-h-0 opacity-0 pb-0'
+        }`}
+      >
+        <div className="space-y-3">
+          {/* Distancia */}
+          <div>
+            <label className="flex items-center gap-2 mb-1 text-sm">
+              <MapPin className="w-4 h-4" /> Distancia (km)
+            </label>
+            <input
+              type="range"
+              min={1}
+              max={100}
+              value={distance}
+              onChange={(e) => setDistance(Number(e.target.value))}
+              className="w-full"
+            />
+            <p className="text-xs text-gray-300">{distance} km</p>
+          </div>
+
+          {/* Precio */}
+          <div>
+            <label className="flex items-center gap-2 mb-1 text-sm">
+              <DollarSign className="w-4 h-4" /> Precio mínimo (COP)
+            </label>
+            <input
+              type="number"
+              min={0}
+              step={5000}
+              value={price}
+              onChange={(e) => setPrice(Number(e.target.value))}
+              className="w-full bg-gray-700 p-2 rounded text-sm"
+              placeholder="$"
+            />
+          </div>
+
+          {/* Categoría */}
+          <div>
+            <label className="flex items-center gap-2 mb-1 text-sm">
+              <Tag className="w-4 h-4" /> Categoría
+            </label>
+            <select
+              value={category}
+              onChange={(e) => {
+                setCategory(e.target.value);
+                setSubCategory('');
+              }}
+              className="w-full bg-gray-700 p-2 rounded text-sm"
+            >
+              <option value="">Selecciona categoría</option>
+              <option value="musica">Música</option>
+              <option value="fotografia">Fotografía</option>
+              <option value="danza">Danza</option>
+            </select>
+          </div>
+
+          {/* Subcategoría */}
+          {currentSubCategories.length > 0 && (
+            <div>
+              <label className="flex items-center gap-2 mb-1 text-sm">
+                <Star className="w-4 h-4" /> Subcategoría
+              </label>
+              <select
+                value={subCategory}
+                onChange={(e) => setSubCategory(e.target.value)}
+                className="w-full bg-gray-700 p-2 rounded text-sm"
+              >
+                <option value="">Selecciona subcategoría</option>
+                {currentSubCategories.map((sub) => (
+                  <option key={sub} value={sub}>
+                    {sub}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/* Profesión */}
+          <div>
+            <label className="flex items-center gap-2 mb-1 text-sm">
+              <Tag className="w-4 h-4" /> Profesión
+            </label>
+            <input
+              type="text"
+              value={profession}
+              onChange={(e) => setProfession(e.target.value)}
+              className="w-full bg-gray-700 p-2 rounded text-sm"
+              placeholder="Ej: Cantante, Fotógrafo..."
+            />
+          </div>
+
+          {/* Disponibilidad */}
+          <div>
+            <label className="flex items-center gap-2 mb-1 text-sm">
+              <Calendar className="w-4 h-4" /> Disponibilidad
+            </label>
+            <DatePicker
+              selected={selectedDate}
+              onChange={(date) => setSelectedDate(date)}
+              className="w-full bg-gray-700 p-2 rounded text-sm"
+              placeholderText="Selecciona una fecha"
+            />
+          </div>
+
+          {/* Botones */}
+          <div className="flex gap-2 mt-2">
+            <button className="flex-1 bg-pink-600 py-2 rounded text-sm hover:bg-pink-700">
+              Aplicar Filtros
             </button>
-            <button className="w-full mt-2 text-[#bb00aa] py-2 rounded-full font-medium border border-[#bb00aa]">
-              Limpiar filtros
+            <button
+              onClick={() => {
+                setDistance(50);
+                setPrice(50000);
+                setCategory('');
+                setSubCategory('');
+                setProfession('');
+                setSelectedDate(null);
+              }}
+              className="flex-1 bg-gray-700 py-2 rounded text-sm hover:bg-gray-600"
+            >
+              Limpiar
             </button>
           </div>
         </div>
       </div>
-      
-      {/* Botón flotante para abrir/cerrar */}
-      <button 
-        onClick={onClose}
-        className="self-center -ml-4 bg-white p-3 rounded-full shadow-lg flex items-center justify-center"
-      >
-        <Filter size={20} />
-      </button>
     </div>
   );
 };

@@ -177,6 +177,108 @@ export const mockEvents: any[] = [
   }
 ];
 
+export const mockGalleryItems = [
+  {
+    id: 'gallery-1',
+    name: 'Atardecer en los Andes',
+    description: 'Pintura al óleo que captura la majestuosidad de los Andes colombianos al atardecer. Obra original firmada por el artista.',
+    image: '/images/explorador/galeria/pintura/pintura1.jpg',
+    images: [
+      '/images/explorador/galeria/pintura/pintura1.jpg',
+      '/images/explorador/galeria/pintura/pintura2.jpg',
+      '/images/explorador/galeria/pintura/pintura3.jpg'
+    ],
+    type: 'image',
+    category: 'pintura',
+    price: 2500000,
+    views: 1245,
+    likes: 87,
+    comments: 23,
+    city: 'Bogotá',
+    distance: '1.2 km',
+    verified: true,
+    rating: 4.9,
+    reviews: 12,
+    tags: ['Óleo', 'Paisaje', 'Arte Colombiano', 'Obra Original'],
+    artist: {
+      id: 'artist-1',
+      name: 'Carla Ortiz',
+      avatar: '/images/explorador/artistas/artista1.jpeg'
+    },
+    dimensions: '80 x 60 cm',
+    materials: ['Óleo', 'Lienzo'],
+    year: 2023,
+    isForSale: true,
+    stock: 1
+  },
+  {
+    id: 'gallery-2',
+    name: 'La Danza de la Vida',
+    description: 'Escultura en bronce que representa la fluidez del movimiento y la expresión humana. Edición limitada de 10 piezas.',
+    image: '/images/explorador/galeria/escultura/escultura1.jpg',
+    images: [
+      '/images/explorador/galeria/escultura/escultura1.jpg',
+      '/images/explorador/galeria/escultura/escultura2.jpg',
+      '/images/explorador/galeria/escultura/escultura3.jpg'
+    ],
+    type: '3d',
+    category: 'escultura',
+    price: 5800000,
+    views: 892,
+    likes: 64,
+    comments: 15,
+    city: 'Medellín',
+    distance: '2.5 km',
+    verified: true,
+    rating: 5.0,
+    reviews: 8,
+    tags: ['Bronce', 'Edición Limitada', 'Arte Figurativo', 'Escultura Contemporánea'],
+    artist: {
+      id: 'artist-4',
+      name: 'Alejandro Gutiérrez',
+      avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
+    },
+    dimensions: '45 x 25 x 30 cm',
+    materials: ['Bronce', 'Base de mármol'],
+    year: 2024,
+    isForSale: true,
+    stock: 3
+  },
+  {
+    id: 'gallery-3',
+    name: 'Crónicas del Caribe',
+    description: 'Libro de arte fotográfico que documenta la vida y cultura en la costa caribeña colombiana. Edición de colección con fotografías inéditas.',
+    image: '/images/explorador/galeria/libros/libro1.jpg',
+    images: [
+      '/images/explorador/galeria/libros/libro1.jpg',
+      '/images/explorador/galeria/libros/libro2.jpg',
+      '/images/explorador/galeria/libros/libro3.jpg'
+    ],
+    type: 'image',
+    category: 'libro',
+    price: 185000,
+    views: 1567,
+    likes: 203,
+    comments: 42,
+    city: 'Cartagena',
+    distance: '4.2 km',
+    verified: true,
+    rating: 4.8,
+    reviews: 36,
+    tags: ['Fotografía', 'Libro de Arte', 'Cultura Colombiana', 'Edición Limitada'],
+    artist: {
+      id: 'artist-5',
+      name: 'María López',
+      avatar: 'https://randomuser.me/api/portraits/women/44.jpg'
+    },
+    dimensions: '25 x 30 cm',
+    materials: ['Papel de alta calidad', 'Tapa dura'],
+    year: 2023,
+    isForSale: true,
+    stock: 15
+  }
+];
+
 export const mockVenues = [
   {
     id: 'venue-1',

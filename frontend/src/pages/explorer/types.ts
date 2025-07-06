@@ -50,10 +50,21 @@ export interface VenueItem extends BaseItem {
 }
 
 export interface GalleryItem extends BaseItem {
-  type: 'image' | 'video';
+  type: 'image' | 'video' | '3d';
+  category: string;
   views: number;
   likes: number;
   comments: number;
+  artist?: {
+    id: string;
+    name: string;
+    avatar?: string;
+  };
+  dimensions?: string;
+  materials?: string[];
+  year?: number;
+  isForSale: boolean;
+  stock?: number;
 }
 
 export interface ContentCardProps {
