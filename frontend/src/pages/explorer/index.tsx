@@ -82,18 +82,18 @@ export default function Explorer() {
   }
 
   return (
-    <div className="min-h-screen bg-black overflow-hidden relative">
+    <div className="min-h-screen bg-black overflow-x-visible relative">
       {/* Layout de 3 columnas */}
-      <div className="flex w-full">
+      <div className="flex w-full relative">
         {/* Columna izquierda - Sidebar */}
-        <div className="w-1/4 fixed left-0 top-0 bottom-0 z-50">
+        <div className="w-1/4 fixed left-45 top-28 bottom-40 z-50">
           <Sidebar />
         </div>
 
         {/* Columna central - Contenido principal */}
-        <div className="w-2/4 mx-auto px-4 pt-8">
+        <div className="w-[40%] mx-auto px-4 pt-2">
           {/* Navegación */}
-          <div className="flex justify-center w-full mb-6">
+          <div className="flex justify-center w-full mb-3">
             <NavigationTabs
               activeTab={activeTab}
               onTabChange={setActiveTab}
@@ -117,27 +117,29 @@ export default function Explorer() {
         </div>
 
         {/* Columna derecha - Filtros */}
-        <div className="w-1/4 fixed right-0 top-0 bottom-0 overflow-y-auto pt-24 pr-4">
-          <FiltersPanel
-            isOpen={showFilters}
-            onToggle={() => setShowFilters(!showFilters)}
-            distance={distance}
-            setDistance={setDistance}
-            price={price}
-            setPrice={setPrice}
-            category={category}
-            setCategory={setCategory}
-            subCategory={subCategory}
-            setSubCategory={setSubCategory}
-            profession={profession}
-            setProfession={setProfession}
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-          />
+        <div className={`w-72 fixed right-32 ${showFilters ? 'top-40' : 'h-auto top-40'} overflow-y-auto z-50 transform -translate-x-[5.25rem]`}>
+          <div className={`bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg p-4 ${showFilters ? 'h-full' : 'h-auto'}`}>
+            <FiltersPanel
+              isOpen={showFilters}
+              onToggle={() => setShowFilters(!showFilters)}
+              distance={distance}
+              setDistance={setDistance}
+              price={price}
+              setPrice={setPrice}
+              category={category}
+              setCategory={setCategory}
+              subCategory={subCategory}
+              setSubCategory={setSubCategory}
+              profession={profession}
+              setProfession={setProfession}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+            />
+          </div>
         </div>
 
         {/* Botones de acción flotantes */}
-        <div className="hidden md:flex flex-col gap-6 fixed left-1/4 top-1/2 -translate-y-1/2 transform -translate-x-16 z-50">
+        <div className="hidden md:flex flex-col gap-6 fixed left-1/4 top-1/2 -translate-y-1/2 transform translate-x-28 z-50">
           {/* Botón descartar */}
           <button
             onClick={(e) => {

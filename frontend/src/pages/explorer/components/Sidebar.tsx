@@ -19,7 +19,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="hidden md:flex flex-col w-72 fixed left-8 top-32 bottom-8 bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg p-4 overflow-y-auto z-50 shadow-xl">
+    <div className="hidden md:flex flex-col w-72 h-full bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg p-4 overflow-y-auto shadow-xl">
       {/* Sección de perfil */}
       <div className="flex flex-col items-center py-4 border-b border-gray-800">
         <div className="relative w-20 h-20 rounded-full overflow-hidden mb-3">
