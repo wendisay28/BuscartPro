@@ -38,9 +38,9 @@ const Sidebar = () => {
             <MapPin className="h-4 w-4 mr-1" />
             <span>{userProfile.city}</span>
           </div>
-          <Button variant="outline" size="sm" className="w-full hover:bg-gray-800 border-gray-700 text-white">
+          <Button variant="outline" size="sm" className="w-full bg-gray-800 hover:bg-gray-700 border-gray-700 text-white flex items-center justify-center">
             <Edit3 className="h-4 w-4 mr-2" />
-            Ver Perfil
+            <span>Ver Perfil</span>
           </Button>
         </CardContent>
       </Card>

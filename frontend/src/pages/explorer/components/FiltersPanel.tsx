@@ -24,6 +24,9 @@ export type FilterProps = {
   setProfession: (value: string) => void;
   selectedDate: Date | null;
   setSelectedDate: (date: Date | null) => void;
+  sortBy: string;
+  setSortBy: (value: string) => void;
+  onResetFilters: () => void;
 };
 
 const subCategories: { [key: string]: string[] } = {
@@ -81,18 +84,22 @@ export const FiltersPanel = ({
   setProfession,
   selectedDate,
   setSelectedDate,
+  sortBy,
+  setSortBy,
+  onResetFilters,
 }: FilterProps) => {
   const currentSubCategories = subCategories[category] || [];
 
   return (
-    <div className="bg-gray-800 rounded-xl shadow-lg text-white">
+    <div className="bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg overflow-hidden transition-all duration-300">
       {/* Header clickable */}
       <div
-        className="flex justify-between items-center p-3 cursor-pointer select-none"
+        className="flex justify-between items-center p-3 cursor-pointer select-none hover:bg-gray-800/50"
         onClick={onToggle}
       >
-        <h2 className="flex items-center gap-2 text-base font-semibold">
-          <Sliders className="w-5 h-5" /> Filtro Avanzado
+        <h2 className="flex items-center gap-2 text-sm font-medium text-white">
+          <Sliders className="w-4 h-4" />
+          {isOpen ? 'Filtro Avanzado' : 'Filtros'}
         </h2>
         <span className="text-xs text-gray-400">
           {isOpen ? 'Cerrar' : 'Abrir'}
@@ -100,116 +107,135 @@ export const FiltersPanel = ({
       </div>
 
       <div
-        className={`transition-all duration-500 overflow-hidden px-4 ${
-          isOpen ? 'max-h-[600px] opacity-100 pb-4' : 'max-h-0 opacity-0 pb-0'
+        className={`transition-all duration-300 overflow-y-auto ${
+          isOpen ? 'max-h-[70vh] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <div className="space-y-3">
-          {/* Distancia */}
-          <div>
-            <label className="flex items-center gap-2 mb-1 text-sm">
-              <MapPin className="w-4 h-4" /> Distancia (km)
-            </label>
-            <input
-              type="range"
-              min={1}
-              max={100}
-              value={distance}
-              onChange={(e) => setDistance(Number(e.target.value))}
-              className="w-full"
-            />
-            <p className="text-xs text-gray-300">{distance} km</p>
-          </div>
-
-          {/* Precio */}
-          <div>
-            <label className="flex items-center gap-2 mb-1 text-sm">
-              <DollarSign className="w-4 h-4" /> Precio mínimo (COP)
-            </label>
-            <input
-              type="number"
-              min={0}
-              step={5000}
-              value={price}
-              onChange={(e) => setPrice(Number(e.target.value))}
-              className="w-full bg-gray-700 p-2 rounded text-sm"
-              placeholder="$"
-            />
-          </div>
-
-          {/* Categoría */}
-          <div>
-            <label className="flex items-center gap-2 mb-1 text-sm">
-              <Tag className="w-4 h-4" /> Categoría
-            </label>
-            <select
-              value={category}
-              onChange={(e) => {
-                setCategory(e.target.value);
-                setSubCategory('');
-              }}
-              className="w-full bg-gray-700 p-2 rounded text-sm"
-            >
-              <option value="">Selecciona categoría</option>
-              <option value="musica">Música</option>
-              <option value="fotografia">Fotografía</option>
-              <option value="danza">Danza</option>
-            </select>
-          </div>
-
-          {/* Subcategoría */}
-          {currentSubCategories.length > 0 && (
+        <div className="p-4 space-y-4">
+          {/* Sección: Búsqueda principal */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-medium text-gray-300 border-b border-gray-700 pb-1">Búsqueda</h3>
+            
+            {/* Profesión */}
             <div>
               <label className="flex items-center gap-2 mb-1 text-sm">
-                <Star className="w-4 h-4" /> Subcategoría
+                <Tag className="w-4 h-4" /> Profesión o servicio
+              </label>
+              <input
+                type="text"
+                value={profession}
+                onChange={(e) => setProfession(e.target.value)}
+                className="w-full bg-gray-700 p-2 rounded text-sm focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                placeholder="Ej: Cantante, Fotógrafo..."
+              />
+            </div>
+
+            {/* Categoría */}
+            <div>
+              <label className="flex items-center gap-2 mb-1 text-sm">
+                <Tag className="w-4 h-4" /> Categoría
               </label>
               <select
-                value={subCategory}
-                onChange={(e) => setSubCategory(e.target.value)}
-                className="w-full bg-gray-700 p-2 rounded text-sm"
+                value={category}
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                  setSubCategory('');
+                }}
+                className="w-full bg-gray-700 p-2 rounded text-sm focus:ring-2 focus:ring-pink-500 focus:border-transparent"
               >
-                <option value="">Selecciona subcategoría</option>
-                {currentSubCategories.map((sub) => (
-                  <option key={sub} value={sub}>
-                    {sub}
-                  </option>
-                ))}
+                <option value="">Selecciona categoría</option>
+                <option value="musica">Música</option>
+                <option value="fotografia">Fotografía</option>
+                <option value="danza">Danza</option>
               </select>
             </div>
-          )}
 
-          {/* Profesión */}
-          <div>
-            <label className="flex items-center gap-2 mb-1 text-sm">
-              <Tag className="w-4 h-4" /> Profesión
-            </label>
-            <input
-              type="text"
-              value={profession}
-              onChange={(e) => setProfession(e.target.value)}
-              className="w-full bg-gray-700 p-2 rounded text-sm"
-              placeholder="Ej: Cantante, Fotógrafo..."
-            />
+            {/* Subcategoría */}
+            {currentSubCategories.length > 0 && (
+              <div>
+                <label className="flex items-center gap-2 mb-1 text-sm">
+                  <Star className="w-4 h-4" /> Subcategoría
+                </label>
+                <select
+                  value={subCategory}
+                  onChange={(e) => setSubCategory(e.target.value)}
+                  className="w-full bg-gray-700 p-2 rounded text-sm focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                >
+                  <option value="">Todas las subcategorías</option>
+                  {currentSubCategories.map((sub) => (
+                    <option key={sub} value={sub}>
+                      {sub}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
 
-          {/* Disponibilidad */}
-          <div>
-            <label className="flex items-center gap-2 mb-1 text-sm">
-              <Calendar className="w-4 h-4" /> Disponibilidad
-            </label>
-            <DatePicker
-              selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
-              className="w-full bg-gray-700 p-2 rounded text-sm"
-              placeholderText="Selecciona una fecha"
-            />
+          {/* Sección: Ubicación */}
+          <div className="space-y-3 pt-2">
+            <h3 className="text-sm font-medium text-gray-300 border-b border-gray-700 pb-1">Ubicación</h3>
+            
+            {/* Distancia */}
+            <div>
+              <label className="flex items-center gap-2 mb-1 text-sm">
+                <MapPin className="w-4 h-4" /> Distancia máxima
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="range"
+                  min={1}
+                  max={100}
+                  value={distance}
+                  onChange={(e) => setDistance(Number(e.target.value))}
+                  className="flex-1"
+                />
+                <span className="text-sm w-12 text-right">{distance} km</span>
+              </div>
+            </div>
           </div>
 
-          {/* Botones */}
-          <div className="flex gap-2 mt-2">
-            <button className="flex-1 bg-pink-600 py-2 rounded text-sm hover:bg-pink-700">
-              Aplicar Filtros
-            </button>
+          {/* Sección: Precio */}
+          <div className="space-y-3 pt-2">
+            <h3 className="text-sm font-medium text-gray-300 border-b border-gray-700 pb-1">
+              <DollarSign className="w-4 h-4 inline mr-2" /> Precio máximo (COP)
+            </h3>
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-xs text-gray-400">${price.toLocaleString()}</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1000000"
+                step="10000"
+                value={price}
+                onChange={(e) => setPrice(Number(e.target.value))}
+                className="w-full"
+              />
+            </div>
+          </div>
+
+          {/* Sección: Disponibilidad */}
+          <div className="space-y-3 pt-2">
+            <h3 className="text-sm font-medium text-gray-300 border-b border-gray-700 pb-1">Disponibilidad</h3>
+            
+            <div>
+              <label className="flex items-center gap-2 mb-1 text-sm">
+                <Calendar className="w-4 h-4" /> Fecha específica
+              </label>
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                className="w-full bg-gray-700 p-2 rounded text-sm focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                placeholderText="Selecciona una fecha"
+                dateFormat="dd/MM/yyyy"
+              />
+            </div>
+          </div>
+
+          {/* Acciones */}
+          <div className="flex gap-2 pt-2">
             <button
               onClick={() => {
                 setDistance(50);
@@ -219,9 +245,9 @@ export const FiltersPanel = ({
                 setProfession('');
                 setSelectedDate(null);
               }}
-              className="flex-1 bg-gray-700 py-2 rounded text-sm hover:bg-gray-600"
+              className="flex-1 bg-gray-700 py-2 rounded text-sm hover:bg-gray-600 transition-colors"
             >
-              Limpiar
+              Limpiar filtros
             </button>
           </div>
         </div>

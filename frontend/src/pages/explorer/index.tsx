@@ -5,7 +5,9 @@ import { Artist, EventItem, VenueItem, GalleryItem, CardType, ExplorerTab } from
 import { ContentCard } from './components/ContentCard';
 import NavigationTabs from './components/NavigationTabs';
 import { FiltersPanel } from './components/FiltersPanel';
+import { EventFiltersPanel } from './components/EventFiltersPanel';
 import Sidebar from './components/Sidebar';
+import { Sliders } from 'lucide-react';
 
 type ExplorerItem = Artist | EventItem | VenueItem | GalleryItem;
 
@@ -23,6 +25,8 @@ export default function Explorer() {
   const [subCategory, setSubCategory] = useState<string>('');
   const [profession, setProfession] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [format, setFormat] = useState<string>('');
+  const [sortBy, setSortBy] = useState<string>('popularity');
 
   // Obtener items según pestaña activa
   const getCurrentItems = (): ExplorerItem[] => {
@@ -73,6 +77,16 @@ export default function Explorer() {
     trackMouse: true,
   });
 
+  // Función para resetear los filtros
+  const handleResetFilters = () => {
+    setDistance(50);
+    setPrice(50000);
+    setCategory('');
+    setSubCategory('');
+    setFormat('');
+    setSortBy('relevance');
+  };
+
   if (!currentItem) {
     return (
       <div className="flex flex-col items-center justify-center h-64">
@@ -119,25 +133,58 @@ export default function Explorer() {
         </div>
 
         {/* Columna derecha - Filtros */}
-        <div className={`w-72 fixed right-32 ${showFilters ? 'top-40' : 'h-auto top-40'} overflow-y-auto z-50 transform -translate-x-[5.25rem]`}>
-          <div className={`bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg p-4 ${showFilters ? 'h-full' : 'h-auto'}`}>
-            <FiltersPanel
-              isOpen={showFilters}
-              onToggle={() => setShowFilters(!showFilters)}
-              distance={distance}
-              setDistance={setDistance}
-              price={price}
-              setPrice={setPrice}
-              category={category}
-              setCategory={setCategory}
-              subCategory={subCategory}
-              setSubCategory={setSubCategory}
-              profession={profession}
-              setProfession={setProfession}
-              selectedDate={selectedDate}
-              setSelectedDate={setSelectedDate}
-            />
-          </div>
+        <div className="w-64 fixed right-32 top-28 bottom-[calc(4rem-9px)] overflow-y-auto z-50 transform -translate-x-[5.25rem]">
+          {showFilters ? (
+            <div className="bg-gray-900 border border-gray-800 rounded-lg p-3 h-full overflow-y-auto">
+              {activeTab === 'events' ? (
+                <EventFiltersPanel
+                  isOpen={true}
+                  onToggle={() => setShowFilters(false)}
+                  distance={distance}
+                  setDistance={setDistance}
+                  price={price}
+                  setPrice={setPrice}
+                  category={category}
+                  setCategory={setCategory}
+                  subCategory={subCategory}
+                  setSubCategory={setSubCategory}
+                  format={format}
+                  setFormat={setFormat}
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
+                  onResetFilters={handleResetFilters}
+                />
+              ) : (
+                <FiltersPanel
+                  isOpen={true}
+                  onToggle={() => setShowFilters(false)}
+                  distance={distance}
+                  setDistance={setDistance}
+                  price={price}
+                  setPrice={setPrice}
+                  category={category}
+                  setCategory={setCategory}
+                  subCategory={subCategory}
+                  setSubCategory={setSubCategory}
+                  profession={profession}
+                  setProfession={setProfession}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
+                  onResetFilters={handleResetFilters}
+                />
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowFilters(true)}
+              className="w-full bg-gray-800 hover:bg-gray-700 border border-gray-700 text-white py-2 px-4 rounded-lg text-sm flex items-center justify-center gap-2 transition-colors"
+            >
+              <Sliders className="w-4 h-4" />
+              <span>Filtros</span>
+            </button>
+          )}
         </div>
 
         {/* Botones de acción flotantes */}
