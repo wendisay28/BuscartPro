@@ -71,14 +71,12 @@ export default function Explorer() {
     }
   };
 
-  // Manejador de gestos deslizantes para móviles
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => handleSwipe('left'),
     onSwipedRight: () => handleSwipe('right'),
     trackMouse: true,
   });
 
-  // Manejador para reiniciar todos los filtros
   const handleResetFilters = () => {
     setDistance(50);
     setPrice(50000);
@@ -100,18 +98,16 @@ export default function Explorer() {
 
   return (
     <div className="min-h-screen bg-black overflow-x-visible relative">
-      {/* Layout de 3 columnas */}
       <div className="flex w-full relative">
-        {/* Columna izquierda - Sidebar */}
+        {/* Sidebar */}
         <div className="w-1/4 fixed left-45 top-28 bottom-[calc(4rem-9px)] z-50 overflow-y-auto">
           <div className="h-full pr-6">
             <Sidebar />
           </div>
         </div>
 
-        {/* Columna central - Contenido principal */}
+        {/* Contenido principal */}
         <div className="w-[40%] mx-auto px-4 pt-2">
-          {/* Navegación */}
           <div className="flex justify-center w-full mb-3">
             <NavigationTabs
               activeTab={activeTab}
@@ -120,10 +116,9 @@ export default function Explorer() {
             />
           </div>
 
-          {/* Contenedor de tarjeta */}
           <div 
             className="relative w-full max-w-md mx-auto"
-            {...swipeHandlers} // Aplicar gestos deslizantes
+            {...swipeHandlers}
           >
             <ContentCard
               type={getCardType(activeTab)}
@@ -135,7 +130,7 @@ export default function Explorer() {
           </div>
         </div>
 
-        {/* Columna derecha - Filtros */}
+        {/* Panel de filtros */}
         <div className="w-64 fixed right-32 top-28 bottom-[calc(4rem-9px)] overflow-y-auto z-50 transform -translate-x-[5.25rem]">
           {showFilters ? (
             <div className="bg-gray-900 border border-gray-800 rounded-lg p-3 h-full overflow-y-auto">
@@ -175,7 +170,7 @@ export default function Explorer() {
                   setSelectedDate={setSelectedDate}
                   onResetFilters={handleResetFilters}
                 />
-              ) : (
+              ) : activeTab === 'gallery' || activeTab === 'artists' ? (
                 <FiltersPanel
                   isOpen={true}
                   onToggle={() => setShowFilters(false)}
@@ -195,6 +190,8 @@ export default function Explorer() {
                   setSortBy={setSortBy}
                   onResetFilters={handleResetFilters}
                 />
+              ) : (
+                <div className="text-white p-2">No hay filtros disponibles para esta pestaña.</div>
               )}
             </div>
           ) : (
@@ -208,9 +205,8 @@ export default function Explorer() {
           )}
         </div>
 
-        {/* Botones de acción flotantes */}
+        {/* Botones flotantes */}
         <div className="hidden md:flex flex-col gap-6 fixed left-1/4 top-1/2 -translate-y-1/2 transform translate-x-28 z-50">
-          {/* Botón descartar */}
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -230,16 +226,10 @@ export default function Explorer() {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
 
-          {/* Botón conectar */}
           <button
             onClick={(e) => {
               e.stopPropagation();

@@ -61,7 +61,8 @@ const sortOptions = [
 ];
 
 export const VenueFiltersPanel = ({
-
+  isOpen,
+  onToggle,
   distance,
   setDistance,
   price,
@@ -79,145 +80,164 @@ export const VenueFiltersPanel = ({
   const currentSubCategories = venueSubCategories[category] || [];
 
   return (
-    <div className="space-y-4">
-      {/* Ordenar por */}
-      <div className="space-y-2">
-        <div className="flex items-center gap-2 text-sm font-medium text-gray-300">
+    <div className="bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg overflow-hidden transition-all duration-300">
+      {/* Header */}
+      <div
+        className="flex justify-between items-center p-3 cursor-pointer hover:bg-gray-800/50"
+        onClick={onToggle}
+      >
+        <h2 className="flex items-center gap-2 text-sm font-medium text-white">
           <ArrowUpDown className="w-4 h-4" />
-          <span>Ordenar por</span>
-        </div>
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          className="w-full bg-gray-800 border border-gray-700 rounded-lg p-2 text-sm text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-        >
-          {sortOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+          {isOpen ? 'Filtro Avanzado' : 'Filtros'}
+        </h2>
+        <span className="text-xs text-gray-400">{isOpen ? 'Cerrar' : 'Abrir'}</span>
       </div>
 
-      {/* Categoría */}
-      <div className="space-y-2">
-        <div className="flex items-center gap-2 text-sm font-medium text-gray-300">
-          <Tag className="w-4 h-4" />
-          <span>Categoría</span>
-        </div>
-        <select
-          value={category}
-          onChange={(e) => {
-            setCategory(e.target.value);
-            setSubCategory('');
-          }}
-          className="w-full bg-gray-800 border border-gray-700 rounded-lg p-2 text-sm text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-        >
-          <option value="">Todas las categorías</option>
-          {venueCategories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      <div
+        className={`transition-all duration-300 overflow-y-auto ${
+          isOpen ? 'max-h-[70vh] opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <div className="p-4 space-y-4 text-sm text-gray-300">
+          {/* Búsqueda */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-medium border-b border-gray-700 pb-1">Búsqueda</h3>
 
-      {/* Subcategoría */}
-      {category && currentSubCategories.length > 0 && (
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-sm font-medium text-gray-300">
-            <Tag className="w-4 h-4 opacity-0" />
-            <span>Subcategoría</span>
+            {/* Ordenar por */}
+            <div>
+              <label className="flex items-center gap-2 mb-1">
+                <ArrowUpDown className="w-4 h-4" /> Ordenar por
+              </label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="w-full bg-gray-700 p-2 rounded focus:ring-2 focus:ring-pink-500"
+              >
+                {sortOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Categoría */}
+            <div>
+              <label className="flex items-center gap-2 mb-1">
+                <Tag className="w-4 h-4" /> Categoría
+              </label>
+              <select
+                value={category}
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                  setSubCategory('');
+                }}
+                className="w-full bg-gray-700 p-2 rounded focus:ring-2 focus:ring-pink-500"
+              >
+                <option value="">Todas las categorías</option>
+                {venueCategories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Subcategoría */}
+            {currentSubCategories.length > 0 && (
+              <div>
+                <label className="flex items-center gap-2 mb-1">
+                  <Tag className="w-4 h-4 opacity-0" /> Subcategoría
+                </label>
+                <select
+                  value={subCategory}
+                  onChange={(e) => setSubCategory(e.target.value)}
+                  className="w-full bg-gray-700 p-2 rounded focus:ring-2 focus:ring-pink-500"
+                >
+                  <option value="">Todas las subcategorías</option>
+                  {currentSubCategories.map((subCat) => (
+                    <option key={subCat.id} value={subCat.id}>
+                      {subCat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
-          <select
-            value={subCategory}
-            onChange={(e) => setSubCategory(e.target.value)}
-            className="w-full bg-gray-800 border border-gray-700 rounded-lg p-2 text-sm text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-          >
-            <option value="">Todas las subcategorías</option>
-            {currentSubCategories.map((subCat) => (
-              <option key={subCat.id} value={subCat.id}>
-                {subCat.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
 
-      {/* Distancia */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-sm font-medium text-gray-300">
-            <MapPin className="w-4 h-4" />
-            <span>Distancia</span>
+          {/* Distancia */}
+          <div className="space-y-3 pt-2">
+            <h3 className="text-sm font-medium border-b border-gray-700 pb-1">Ubicación</h3>
+            <div>
+              <label className="flex items-center gap-2 mb-1">
+                <MapPin className="w-4 h-4" /> Distancia máxima
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="range"
+                  min="1"
+                  max="50"
+                  value={distance}
+                  onChange={(e) => setDistance(Number(e.target.value))}
+                  className="flex-1 accent-gray-400"
+                />
+                <span className="text-sm w-12 text-right">{distance} km</span>
+              </div>
+            </div>
           </div>
-          <span className="text-xs text-gray-400">Hasta {distance} km</span>
-        </div>
-        <input
-          type="range"
-          min="1"
-          max="50"
-          value={distance}
-          onChange={(e) => setDistance(Number(e.target.value))}
-          className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-pink-500"
-        />
-      </div>
 
-      {/* Precio */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-sm font-medium text-gray-300">
-            <DollarSign className="w-4 h-4" />
-            <span>Precio máximo</span>
+          {/* Precio */}
+          <div className="space-y-3 pt-2">
+            <h3 className="text-sm font-medium border-b border-gray-700 pb-1">
+              <DollarSign className="w-4 h-4 inline mr-2" /> Precio máximo (COP)
+            </h3>
+            <div>
+              <div className="flex justify-between items-center mb-1 text-xs text-gray-400">
+                <span>$0</span>
+                <span>${price.toLocaleString()}</span>
+                <span>$500.000</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="500000"
+                step="10000"
+                value={price}
+                onChange={(e) => setPrice(Number(e.target.value))}
+                className="w-full accent-gray-400"
+              />
+            </div>
           </div>
-          <span className="text-xs text-gray-400">
-            {price === 0 ? 'Gratis' : `Hasta $${price.toLocaleString()}`}
-          </span>
-        </div>
-        <input
-          type="range"
-          min="0"
-          max="500000"
-          step="10000"
-          value={price}
-          onChange={(e) => setPrice(Number(e.target.value))}
-          className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-pink-500"
-        />
-        <div className="flex justify-between text-xs text-gray-400">
-          <span>Gratis</span>
-          <span>$500.000+</span>
-        </div>
-      </div>
 
-      {/* Fecha */}
-      <div className="space-y-2">
-        <div className="flex items-center gap-2 text-sm font-medium text-gray-300">
-          <Calendar className="w-4 h-4" />
-          <span>Fecha</span>
-        </div>
-        <DatePicker
-          selected={selectedDate}
-          onChange={(date) => setSelectedDate(date)}
-          placeholderText="Seleccionar fecha"
-          className="w-full bg-gray-800 border border-gray-700 rounded-lg p-2 text-sm text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-          dateFormat="dd/MM/yyyy"
-          isClearable
-          clearButtonClassName="text-white"
-        />
-      </div>
+          {/* Fecha */}
+          <div className="space-y-3 pt-2">
+            <h3 className="text-sm font-medium border-b border-gray-700 pb-1">Disponibilidad</h3>
+            <div>
+              <label className="flex items-center gap-2 mb-1">
+                <Calendar className="w-4 h-4" /> Fecha específica
+              </label>
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                className="w-full bg-gray-700 p-2 rounded text-white focus:ring-2 focus:ring-pink-500"
+                placeholderText="Selecciona una fecha"
+                dateFormat="dd/MM/yyyy"
+                isClearable
+              />
+            </div>
+          </div>
 
-      {/* Botón de limpiar filtros */}
-      <div className="pt-2">
-        <button
-          onClick={onResetFilters}
-          className="w-full bg-gray-700 hover:bg-gray-600 py-2 rounded text-sm flex items-center justify-center gap-2 transition-colors"
-        >
-          <X className="w-4 h-4" />
-          Limpiar filtros
-        </button>
+          {/* Acción */}
+          <div className="pt-2 pb-1">
+            <button
+              onClick={onResetFilters}
+              className="w-full bg-gray-700 hover:bg-gray-600 py-2 rounded text-sm text-white flex items-center justify-center gap-2 transition-colors"
+            >
+              Limpiar filtros
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
-
-export default VenueFiltersPanel;
