@@ -4,10 +4,10 @@ import {
   DollarSign,
   Tag,
   Calendar,
-  ArrowUpDown,
-  RefreshCw,
+  Star,
 } from 'lucide-react';
-import { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export type EventFilterProps = {
   isOpen: boolean;
@@ -22,6 +22,8 @@ export type EventFilterProps = {
   setSubCategory: (value: string) => void;
   format: string;
   setFormat: (value: string) => void;
+  selectedDate: Date | null;
+  setSelectedDate: (value: Date | null) => void;
   sortBy: string;
   setSortBy: (value: string) => void;
   onResetFilters: () => void;
@@ -62,22 +64,14 @@ export const EventFiltersPanel = ({
   setSubCategory,
   format,
   setFormat,
+  selectedDate,
+  setSelectedDate,
   sortBy,
   setSortBy,
   onResetFilters,
 }: EventFilterProps) => {
-  const currentSubCategories = category ? subcategoriesByCategory[category] || [] : [];
+  const currentSubCategories = subcategoriesByCategory[category] || [];
   const formats = ['Presencial', 'Virtual', 'Híbrido'];
-  const [priceType, setPriceType] = useState<string>(price === 0 ? 'gratis' : 'pago');
-
-  const handlePriceTypeChange = (type: 'gratis' | 'pago') => {
-    setPriceType(type);
-    if (type === 'gratis') {
-      setPrice(0);
-    } else if (type === 'pago' && price === 0) {
-      setPrice(50000);
-    }
-  };
 
   return (
     <div className="bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg overflow-hidden transition-all duration-300">
@@ -90,9 +84,7 @@ export const EventFiltersPanel = ({
           <Sliders className="w-4 h-4" />
           {isOpen ? 'Filtro Avanzado' : 'Filtros'}
         </h2>
-        <span className="text-xs text-gray-400">
-          {isOpen ? 'Cerrar' : 'Abrir'}
-        </span>
+        <span className="text-xs text-gray-400">{isOpen ? 'Cerrar' : 'Abrir'}</span>
       </div>
 
       <div
@@ -101,136 +93,135 @@ export const EventFiltersPanel = ({
         }`}
       >
         <div className="p-4 space-y-4 text-sm text-gray-300">
-          {/* Ordenar por */}
-          <div>
-            <h3 className="text-sm font-medium border-b border-gray-700 pb-1 mb-2">Ordenar por</h3>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="w-full bg-gray-700 p-2 rounded focus:ring-2 focus:ring-pink-500"
-            >
-              <option value="popularity">Popularidad</option>
-              <option value="price">Más económico</option>
-              <option value="distance">Más cercano</option>
-              <option value="date">Más reciente</option>
-            </select>
-          </div>
+          {/* Búsqueda */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-medium text-gray-300 border-b border-gray-700 pb-1">Búsqueda</h3>
 
-          {/* Categoría */}
-          <div>
-            <h3 className="text-sm font-medium border-b border-gray-700 pb-1 mb-2">Categoría</h3>
-            <select
-              value={category}
-              onChange={(e) => {
-                setCategory(e.target.value);
-                setSubCategory('');
-              }}
-              className="w-full bg-gray-700 p-2 rounded focus:ring-2 focus:ring-pink-500"
-            >
-              <option value="">Todas las categorías</option>
-              {eventCategories.map((cat) => (
-                <option key={cat.id} value={cat.id}>{cat.name}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Subcategoría */}
-          {currentSubCategories.length > 0 && (
+            {/* Ordenar por */}
             <div>
-              <h3 className="text-sm font-medium border-b border-gray-700 pb-1 mb-2">Subcategoría</h3>
+              <label className="flex items-center gap-2 mb-1 text-sm">
+                <Tag className="w-4 h-4" />
+                Ordenar por
+              </label>
               <select
-                value={subCategory}
-                onChange={(e) => setSubCategory(e.target.value)}
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
                 className="w-full bg-gray-700 p-2 rounded focus:ring-2 focus:ring-pink-500"
               >
-                <option value="">Todas las subcategorías</option>
-                {currentSubCategories.map((sub) => (
-                  <option key={sub} value={sub}>{sub}</option>
+                <option value="popularity">Popularidad</option>
+                <option value="price">Precio</option>
+                <option value="distance">Distancia</option>
+                <option value="date">Fecha</option>
+              </select>
+            </div>
+
+            {/* Categoría */}
+            <div>
+              <label className="flex items-center gap-2 mb-1 text-sm">
+                <Tag className="w-4 h-4" /> Categoría
+              </label>
+              <select
+                value={category}
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                  setSubCategory('');
+                }}
+                className="w-full bg-gray-700 p-2 rounded text-sm focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+              >
+                <option value="">Selecciona categoría</option>
+                {eventCategories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
               </select>
             </div>
-          )}
 
-          {/* Formato */}
-          <div>
-            <h3 className="text-sm font-medium border-b border-gray-700 pb-1 mb-2">Formato</h3>
-            <select
-              value={format}
-              onChange={(e) => setFormat(e.target.value)}
-              className="w-full bg-gray-700 p-2 rounded focus:ring-2 focus:ring-pink-500"
-            >
-              <option value="">Cualquier formato</option>
-              {formats.map((f) => (
-                <option key={f} value={f}>{f}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Tipo de precio */}
-          <div>
-            <h3 className="text-sm font-medium border-b border-gray-700 pb-1 mb-2">Precio</h3>
-            <div className="flex gap-2 mb-2">
-              <button
-                onClick={() => handlePriceTypeChange('gratis')}
-                className={`flex-1 py-2 rounded ${
-                  priceType === 'gratis'
-                    ? 'bg-pink-600 text-white'
-                    : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
-                }`}
-              >
-                Gratis
-              </button>
-              <button
-                onClick={() => handlePriceTypeChange('pago')}
-                className={`flex-1 py-2 rounded ${
-                  priceType === 'pago'
-                    ? 'bg-pink-600 text-white'
-                    : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
-                }`}
-              >
-                Pago
-              </button>
-            </div>
-
-            {priceType === 'pago' && (
+            {/* Subcategoría */}
+            {currentSubCategories.length > 0 && (
               <div>
-                <span className="text-xs text-gray-400 block mb-1">Hasta ${price.toLocaleString()} COP</span>
-                <input
-                  type="range"
-                  min="0"
-                  max="500000"
-                  step="10000"
-                  value={price}
-                  onChange={(e) => setPrice(Number(e.target.value))}
-                  className="w-full"
-                />
+                <label className="flex items-center gap-2 mb-1 text-sm">
+                  <Star className="w-4 h-4" /> Subcategoría
+                </label>
+                <select
+                  value={subCategory}
+                  onChange={(e) => setSubCategory(e.target.value)}
+                  className="w-full bg-gray-700 p-2 rounded text-sm focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                >
+                  <option value="">Todas las subcategorías</option>
+                  {currentSubCategories.map((sub) => (
+                    <option key={sub} value={sub}>{sub}</option>
+                  ))}
+                </select>
               </div>
             )}
           </div>
 
-          {/* Distancia */}
-          <div>
-            <h3 className="text-sm font-medium border-b border-gray-700 pb-1 mb-2">Distancia</h3>
-            <div className="flex items-center gap-2">
-              <input
-                type="range"
-                min={1}
-                max={100}
-                value={distance}
-                onChange={(e) => setDistance(Number(e.target.value))}
-                className="flex-1"
-              />
-              <span className="text-sm w-12 text-right">{distance} km</span>
+          {/* Ubicación */}
+          <div className="space-y-3 pt-2">
+            <h3 className="text-sm font-medium text-gray-300 border-b border-gray-700 pb-1">Ubicación</h3>
+            <div>
+              <label className="flex items-center gap-2 mb-1 text-sm">
+                <MapPin className="w-4 h-4" /> Distancia máxima
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="range"
+                  min={1}
+                  max={100}
+                  value={distance}
+                  onChange={(e) => setDistance(Number(e.target.value))}
+                  className="flex-1"
+                />
+                <span className="text-sm w-12 text-right">{distance} km</span>
+              </div>
             </div>
           </div>
 
-          {/* Botón de reinicio */}
-          <div className="pt-2">
+          {/* Precio */}
+          <div className="space-y-3 pt-2">
+            <h3 className="text-sm font-medium text-gray-300 border-b border-gray-700 pb-1">
+              <DollarSign className="w-4 h-4 inline mr-2" /> Precio máximo (COP)
+            </h3>
+            <div>
+              <div className="flex justify-between items-center mb-1 text-xs text-gray-400">
+                <span>$0</span>
+                <span>${price.toLocaleString()}</span>
+                <span>$1.000.000</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1000000"
+                step="10000"
+                value={price}
+                onChange={(e) => setPrice(Number(e.target.value))}
+                className="w-full"
+              />
+            </div>
+          </div>
+
+          {/* Disponibilidad */}
+          <div className="space-y-3 pt-2">
+            <h3 className="text-sm font-medium text-gray-300 border-b border-gray-700 pb-1">Disponibilidad</h3>
+            <div>
+              <label className="flex items-center gap-2 mb-1 text-sm">
+                <Calendar className="w-4 h-4" /> Fecha específica
+              </label>
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                className="w-full bg-gray-700 p-2 rounded text-sm text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                placeholderText="Selecciona una fecha"
+                dateFormat="dd/MM/yyyy"
+              />
+            </div>
+          </div>
+
+          {/* Acciones */}
+          <div className="pt-2 pb-1">
             <button
               onClick={onResetFilters}
-              className="w-full bg-gray-700 hover:bg-gray-600 py-2 rounded text-sm flex items-center justify-center gap-2"
+              className="w-full bg-gray-700 hover:bg-gray-600 py-2 rounded text-sm text-white transition-colors"
             >
-              <RefreshCw className="w-4 h-4" />
               Limpiar filtros
             </button>
           </div>

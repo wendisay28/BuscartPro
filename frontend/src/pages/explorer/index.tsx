@@ -8,6 +8,7 @@ import { FiltersPanel } from './components/FiltersPanel';
 import { EventFiltersPanel } from './components/EventFiltersPanel';
 import Sidebar from './components/Sidebar';
 import { Sliders } from 'lucide-react';
+import { VenueFiltersPanel } from './components/VenueFiltersPanel';
 
 type ExplorerItem = Artist | EventItem | VenueItem | GalleryItem;
 
@@ -77,14 +78,16 @@ export default function Explorer() {
     trackMouse: true,
   });
 
-  // Función para resetear los filtros
+  // Manejador para reiniciar todos los filtros
   const handleResetFilters = () => {
     setDistance(50);
     setPrice(50000);
     setCategory('');
     setSubCategory('');
+    setProfession('');
     setFormat('');
-    setSortBy('relevance');
+    setSortBy('rating');
+    setSelectedDate(null);
   };
 
   if (!currentItem) {
@@ -152,6 +155,24 @@ export default function Explorer() {
                   setFormat={setFormat}
                   sortBy={sortBy}
                   setSortBy={setSortBy}
+                  onResetFilters={handleResetFilters}
+                />
+              ) : activeTab === 'venues' ? (
+                <VenueFiltersPanel
+                  isOpen={true}
+                  onToggle={() => setShowFilters(false)}
+                  distance={distance}
+                  setDistance={setDistance}
+                  price={price}
+                  setPrice={setPrice}
+                  category={category}
+                  setCategory={setCategory}
+                  subCategory={subCategory}
+                  setSubCategory={setSubCategory}
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
                   onResetFilters={handleResetFilters}
                 />
               ) : (
