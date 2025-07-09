@@ -6,6 +6,7 @@ import { ContentCard } from './components/ContentCard';
 import NavigationTabs from './components/NavigationTabs';
 import { FiltersPanel } from './components/FiltersPanel';
 import { EventFiltersPanel } from './components/EventFiltersPanel';
+import { GalleryFiltersPanel } from './components/GalleryFiltersPanel';
 import Sidebar from './components/Sidebar';
 import { Sliders } from 'lucide-react';
 import { VenueFiltersPanel } from './components/VenueFiltersPanel';
@@ -127,6 +128,56 @@ export default function Explorer() {
               activeTab={activeTab}
               onTabChange={setActiveTab}
             />
+            
+            {/* Botones de acción debajo de la tarjeta - Solo visibles en md y superiores */}
+            <div className="hidden md:flex justify-center gap-6 -mt-2 -translate-y-1">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (activeCardIndex < currentItems.length - 1) {
+                    setActiveCardIndex(activeCardIndex + 1);
+                  } else if (activeCardIndex > 0) {
+                    setActiveCardIndex(0);
+                  }
+                }}
+                className="w-14 h-14 flex items-center justify-center rounded-full transition-all duration-300 transform bg-white/10 hover:bg-[#bb00aa] backdrop-blur-sm hover:scale-105 -rotate-2 hover:rotate-0"
+                aria-label="Descartar"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-7 w-7 text-white/80"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // Aquí va la lógica de conectar
+                }}
+                className="w-14 h-14 flex items-center justify-center rounded-full transition-all duration-300 transform bg-white/10 hover:bg-[#bb00aa] backdrop-blur-sm hover:scale-105 rotate-2 hover:rotate-0"
+                aria-label="Conectar"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-7 w-7 text-white/80"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -150,6 +201,8 @@ export default function Explorer() {
                   setFormat={setFormat}
                   sortBy={sortBy}
                   setSortBy={setSortBy}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
                   onResetFilters={handleResetFilters}
                 />
               ) : activeTab === 'venues' ? (
@@ -170,7 +223,25 @@ export default function Explorer() {
                   setSelectedDate={setSelectedDate}
                   onResetFilters={handleResetFilters}
                 />
-              ) : activeTab === 'gallery' || activeTab === 'artists' ? (
+              ) : activeTab === 'gallery' ? (
+                <GalleryFiltersPanel
+                  isOpen={true}
+                  onToggle={() => setShowFilters(false)}
+                  distance={distance}
+                  setDistance={setDistance}
+                  price={price}
+                  setPrice={setPrice}
+                  category={category}
+                  setCategory={setCategory}
+                  subCategory={subCategory}
+                  setSubCategory={setSubCategory}
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
+                  onResetFilters={handleResetFilters}
+                />
+              ) : activeTab === 'artists' ? (
                 <FiltersPanel
                   isOpen={true}
                   onToggle={() => setShowFilters(false)}
@@ -184,10 +255,10 @@ export default function Explorer() {
                   setSubCategory={setSubCategory}
                   profession={profession}
                   setProfession={setProfession}
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
                   sortBy={sortBy}
                   setSortBy={setSortBy}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
                   onResetFilters={handleResetFilters}
                 />
               ) : (
@@ -195,64 +266,17 @@ export default function Explorer() {
               )}
             </div>
           ) : (
-            <button
-              onClick={() => setShowFilters(true)}
-              className="w-full bg-gray-800 hover:bg-gray-700 border border-gray-700 text-white py-2 px-4 rounded-lg text-sm flex items-center justify-center gap-2 transition-colors"
-            >
-              <Sliders className="w-4 h-4" />
-              <span>Filtros</span>
-            </button>
+            <div className="bg-gray-900 border border-gray-800 rounded-lg p-2">
+              <button
+                onClick={() => setShowFilters(true)}
+                className="w-full bg-gray-900 hover:bg-gray-800 border border-gray-700 text-white py-2 px-4 rounded-lg text-sm flex items-center justify-center gap-2 transition-colors"
+              >
+                <Sliders className="w-4 h-4 md:hidden" />
+                <span className="hidden md:inline">Filtros</span>
+                <Sliders className="hidden md:inline w-4 h-4" />
+              </button>
+            </div>
           )}
-        </div>
-
-        {/* Botones flotantes */}
-        <div className="hidden md:flex flex-col gap-6 fixed left-1/4 top-1/2 -translate-y-1/2 transform translate-x-28 z-50">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              if (activeCardIndex < currentItems.length - 1) {
-                setActiveCardIndex(activeCardIndex + 1);
-              } else if (activeCardIndex > 0) {
-                setActiveCardIndex(0);
-              }
-            }}
-            className="w-14 h-14 flex items-center justify-center rounded-full transition-all duration-300 transform bg-white/10 hover:bg-pink-500/80 backdrop-blur-sm hover:scale-105 -rotate-2 hover:rotate-0"
-            aria-label="Descartar"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-7 w-7 text-white/80"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              // Aquí va la lógica de conectar
-            }}
-            className="w-14 h-14 flex items-center justify-center rounded-full transition-all duration-300 transform bg-white/10 hover:bg-pink-500/80 backdrop-blur-sm hover:scale-105 rotate-2 hover:rotate-0"
-            aria-label="Conectar"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-7 w-7 text-white/80"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-              />
-            </svg>
-          </button>
         </div>
       </div>
     </div>

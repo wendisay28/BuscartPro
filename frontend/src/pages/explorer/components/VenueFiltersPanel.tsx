@@ -1,4 +1,4 @@
-import { MapPin, DollarSign, Tag, Calendar, ArrowUpDown, X } from 'lucide-react';
+import { MapPin, DollarSign, Tag, Calendar, ArrowUpDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -219,10 +219,61 @@ export const VenueFiltersPanel = ({
               <DatePicker
                 selected={selectedDate}
                 onChange={(date) => setSelectedDate(date)}
-                className="w-full bg-gray-700 p-2 rounded text-white focus:ring-2 focus:ring-pink-500"
+                className="w-full bg-white/10 p-2 rounded-lg text-sm text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent border border-white/20"
+                wrapperClassName="w-full"
+                calendarClassName="!bg-white !text-gray-900 border border-gray-200 rounded-lg shadow-xl p-2"
+                dayClassName={(_) => 'hover:bg-pink-100 rounded-md'}
+                monthClassName={() => 'bg-white'}
+                weekDayClassName={() => 'text-gray-500 text-xs'}
+                renderCustomHeader={({
+                  date,
+                  decreaseMonth,
+                  increaseMonth,
+                  prevMonthButtonDisabled,
+                  nextMonthButtonDisabled,
+                }) => (
+                  <div className="flex items-center justify-between px-2 py-2 border-b border-gray-200 mb-2">
+                    <button
+                      onClick={decreaseMonth}
+                      disabled={prevMonthButtonDisabled}
+                      type="button"
+                      className="p-1 rounded-full hover:bg-gray-100 disabled:opacity-30 transition-colors"
+                    >
+                      <ChevronLeft className="w-5 h-5 text-gray-600" />
+                    </button>
+                    <div className="text-sm font-semibold text-gray-800">
+                      {new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' }).format(date)}
+                    </div>
+                    <button
+                      onClick={increaseMonth}
+                      disabled={nextMonthButtonDisabled}
+                      type="button"
+                      className="p-1 rounded-full hover:bg-gray-100 disabled:opacity-30 transition-colors"
+                    >
+                      <ChevronRight className="w-5 h-5 text-gray-600" />
+                    </button>
+                  </div>
+                )}
+                renderDayContents={(day, date) => {
+                  const isToday = date ? new Date().toDateString() === date.toDateString() : false;
+                  const isSelected = selectedDate ? date?.toDateString() === selectedDate.toDateString() : false;
+                  
+                  return (
+                    <div 
+                      className={`w-8 h-8 flex items-center justify-center mx-auto rounded-md transition-colors ${
+                        isToday ? 'bg-pink-100 text-pink-700 font-medium' : ''
+                      } ${
+                        isSelected 
+                          ? 'bg-pink-500 text-white font-medium' 
+                          : 'hover:bg-pink-100'
+                      }`}
+                    >
+                      {day}
+                    </div>
+                  );
+                }}
                 placeholderText="Selecciona una fecha"
                 dateFormat="dd/MM/yyyy"
-                isClearable
               />
             </div>
           </div>

@@ -5,13 +5,11 @@ import {
   Tag,
   Calendar,
   Star,
-  ChevronLeft,
-  ChevronRight,
 } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-export type EventFilterProps = {
+export type GalleryFilterProps = {
   isOpen: boolean;
   onToggle: () => void;
   distance: number;
@@ -22,38 +20,34 @@ export type EventFilterProps = {
   setCategory: (value: string) => void;
   subCategory: string;
   setSubCategory: (value: string) => void;
-  format: string;
-  setFormat: (value: string) => void;
-  selectedDate: Date | null;
-  setSelectedDate: (value: Date | null) => void;
   sortBy: string;
   setSortBy: (value: string) => void;
+  selectedDate: Date | null;
+  setSelectedDate: (date: Date | null) => void;
   onResetFilters: () => void;
 };
 
-const eventCategories = [
-  { id: 'music', name: 'Música' },
-  { id: 'performing_arts', name: 'Artes Escénicas' },
-  { id: 'cinema', name: 'Cine' },
-  { id: 'exhibitions', name: 'Exposiciones' },
-  { id: 'workshops', name: 'Talleres / Conferencias' },
-  { id: 'festivals', name: 'Festivales' },
-  { id: 'fairs', name: 'Ferias / Mercados' },
-  { id: 'tech', name: 'Tecnología' },
+const galleryCategories = [
+  { id: 'pinturas', name: 'Pinturas' },
+  { id: 'esculturas', name: 'Esculturas' },
+  { id: 'libros', name: 'Libros' },
+  { id: 'instrumentos', name: 'Instrumentos' },
+  { id: 'artesanias', name: 'Artesanías' },
+  { id: 'decoraciones', name: 'Decoraciones' },
+  { id: 'alta-costura', name: 'Alta Costura' },
 ];
 
-const subcategoriesByCategory: Record<string, string[]> = {
-  music: ['Conciertos', 'Recitales', 'Tributos', 'Festivales Musicales'],
-  performing_arts: ['Teatro', 'Danza', 'Circo / Performance', 'Stand Up / Impro'],
-  cinema: ['Proyecciones', 'Estrenos', 'Cine Arte', 'Festivales de Cine'],
-  exhibitions: ['Arte Visual', 'Fotografía', 'Diseño', 'Arte Urbano'],
-  workshops: ['Talleres Creativos', 'Talleres Profesionales', 'Charlas / Conferencias', 'Seminarios / Cursos'],
-  festivals: ['Música', 'Artes Escénicas', 'Cine', 'Cultura / Tradiciones'],
-  fairs: ['Feria de Arte', 'Feria Gastronómica', 'Mercados Locales', 'Moda/Belleza', 'Literatura / Editorial'],
-  tech: ['Hackathons', 'Lanzamientos de Apps', 'Muestras de Realidad Virtual'],
+const gallerySubCategories: Record<string, string[]> = {
+  pinturas: ['Óleo', 'Acrílico', 'Acuarela', 'Digital', 'Mural'],
+  esculturas: ['Madera', 'Metal', 'Piedra', 'Cerámica', 'Resina'],
+  libros: ['Arte', 'Historia', 'Técnicas', 'Biografías', 'Catálogos'],
+  instrumentos: ['Tradicionales', 'Modernos', 'De cuerda', 'De viento', 'Percusión'],
+  artesanias: ['Tejidos', 'Cerámica', 'Vidrio', 'Cuero', 'Joyería artesanal'],
+  decoraciones: ['Murales decorativos', 'Tapices', 'Objetos decorativos'],
+  'alta-costura': ['Vestidos', 'Trajes', 'Accesorios', 'Diseño personalizado'],
 };
 
-export const EventFiltersPanel = ({
+export const GalleryFiltersPanel = ({
   isOpen,
   onToggle,
   distance,
@@ -64,14 +58,13 @@ export const EventFiltersPanel = ({
   setCategory,
   subCategory,
   setSubCategory,
-  selectedDate,
-  setSelectedDate,
   sortBy,
   setSortBy,
+  selectedDate,
+  setSelectedDate,
   onResetFilters,
-}: EventFilterProps) => {
-  const currentSubCategories = subcategoriesByCategory[category] || [];
-// const formats = ['Presencial', 'Virtual', 'Híbrido']; // Comentada para futura referencia
+}: GalleryFilterProps) => {
+  const currentSubCategories = gallerySubCategories[category] || [];
 
   return (
     <div className="bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg overflow-hidden transition-all duration-300">
@@ -106,11 +99,11 @@ export const EventFiltersPanel = ({
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="w-full bg-gray-700 p-2 rounded focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                className="w-full bg-gray-700 p-2 rounded focus:ring-2 focus:ring-pink-500"
               >
-                <option value="presencial">Presencial</option>
-                <option value="virtual">Virtual</option>
-                <option value="hibrido">Híbrido</option>
+                <option value="popularity">Popularidad</option>
+                <option value="price">Precio</option>
+                <option value="date">Fecha</option>
               </select>
             </div>
 
@@ -125,10 +118,10 @@ export const EventFiltersPanel = ({
                   setCategory(e.target.value);
                   setSubCategory('');
                 }}
-                className="w-full bg-gray-700 p-2 rounded text-sm focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                className="w-full bg-gray-700 p-2 rounded text-sm focus:ring-2 focus:ring-pink-500"
               >
                 <option value="">Selecciona categoría</option>
-                {eventCategories.map((cat) => (
+                {galleryCategories.map((cat) => (
                   <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
               </select>
@@ -143,7 +136,7 @@ export const EventFiltersPanel = ({
                 <select
                   value={subCategory}
                   onChange={(e) => setSubCategory(e.target.value)}
-                  className="w-full bg-gray-700 p-2 rounded text-sm focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                  className="w-full bg-gray-700 p-2 rounded text-sm focus:ring-2 focus:ring-pink-500"
                 >
                   <option value="">Todas las subcategorías</option>
                   {currentSubCategories.map((sub) => (
@@ -198,7 +191,7 @@ export const EventFiltersPanel = ({
             </div>
           </div>
 
-          {/* Disponibilidad */}
+          {/* Fecha */}
           <div className="space-y-3 pt-2">
             <h3 className="text-sm font-medium text-gray-300 border-b border-gray-700 pb-1">Disponibilidad</h3>
             <div>
@@ -214,60 +207,13 @@ export const EventFiltersPanel = ({
                 dayClassName={(_) => 'hover:bg-pink-100 rounded-md'}
                 monthClassName={() => 'bg-white'}
                 weekDayClassName={() => 'text-gray-500 text-xs'}
-                renderCustomHeader={({
-                  date,
-                  decreaseMonth,
-                  increaseMonth,
-                  prevMonthButtonDisabled,
-                  nextMonthButtonDisabled,
-                }) => (
-                  <div className="flex items-center justify-between px-2 py-2 border-b border-gray-200 mb-2">
-                    <button
-                      onClick={decreaseMonth}
-                      disabled={prevMonthButtonDisabled}
-                      type="button"
-                      className="p-1 rounded-full hover:bg-gray-100 disabled:opacity-30 transition-colors"
-                    >
-                      <ChevronLeft className="w-5 h-5 text-gray-600" />
-                    </button>
-                    <div className="text-sm font-semibold text-gray-800">
-                      {new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' }).format(date)}
-                    </div>
-                    <button
-                      onClick={increaseMonth}
-                      disabled={nextMonthButtonDisabled}
-                      type="button"
-                      className="p-1 rounded-full hover:bg-gray-100 disabled:opacity-30 transition-colors"
-                    >
-                      <ChevronRight className="w-5 h-5 text-gray-600" />
-                    </button>
-                  </div>
-                )}
-                renderDayContents={(day, date) => {
-                  const isToday = date ? new Date().toDateString() === date.toDateString() : false;
-                  const isSelected = selectedDate ? date?.toDateString() === selectedDate.toDateString() : false;
-                  
-                  return (
-                    <div 
-                      className={`w-8 h-8 flex items-center justify-center mx-auto rounded-md transition-colors ${
-                        isToday ? 'bg-pink-100 text-pink-700 font-medium' : ''
-                      } ${
-                        isSelected 
-                          ? 'bg-pink-500 text-white font-medium' 
-                          : 'hover:bg-pink-100'
-                      }`}
-                    >
-                      {day}
-                    </div>
-                  );
-                }}
                 placeholderText="Selecciona una fecha"
                 dateFormat="dd/MM/yyyy"
               />
             </div>
           </div>
 
-          {/* Acciones */}
+          {/* Botón limpiar */}
           <div className="pt-2 pb-1">
             <button
               onClick={onResetFilters}
