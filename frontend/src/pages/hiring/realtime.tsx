@@ -1,333 +1,198 @@
-import { useState } from 'react'
-import { useToast } from '@/hooks/use-toast'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+"use client";
 
-import { useAuth } from '@/hooks/useAuth'
+import { useState, useEffect } from "react";
+import dynamic from 'next/dynamic';
 
-import * as z from 'zod'
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Textarea } from '@/components/ui/textarea'
-import { CheckCircle, Send } from 'lucide-react';
-import { createRequest, respondToOffer } from '@/services/hiring'
-import { HiringRequest as HiringRequestType } from '@/types/hiring'
-
-
-type Category = {
-  id: string
-  name: string
-  subcategories: { id: string; name: string }[]
-}
-
-type City = {
-  id: string
-  name: string
-}
-
-const formSchema = z.object({
-  title: z.string().min(1, 'El título es requerido'),
-  category: z.string().min(1, 'La categoría es requerida'),
-  subcategory: z.string().min(1, 'La subcategoría es requerida'),
-  city: z.string().min(1, 'La ciudad es requerida'),
-  description: z.string().min(10, 'La descripción debe tener al menos 10 caracteres'),
-  maxPrice: z.number().min(0, 'El precio máximo debe ser mayor a 0'),
-  date: z.string().optional(),
-  time: z.string().optional(),
-  urgency: z.enum(['low', 'normal', 'high', 'urgent']).optional(),
-  status: z.enum(['pending', 'accepted', 'rejected', 'completed']).optional(),
-  userId: z.string().optional(),
-  duration: z.string().optional(),
-  id: z.string().optional(),
-  responseCount: z.number().optional(),
-  timeLeft: z.string().optional()
-})
-
-type FormData = z.infer<typeof formSchema>
-
-type OfferResponse = {
-  offerId: string
-  status: 'accept' | 'reject'
-  price?: number
-  message: string
-  userId: string
-}
-
-export const RealTimeHiring = () => {
-  const { user } = useAuth()
-  const { toast } = useToast()
-  const [currentStep, setCurrentStep] = useState(0)
-  const [messageText, setMessageText] = useState('')
-  const [selectedRequest] = useState<HiringRequestType | null>(null)
-  const [showOfferDialog, setShowOfferDialog] = useState(false)
-  const [showCreateRequest, setShowCreateRequest] = useState(false)
-  const [categories] = useState<Category[]>([])
-  const [cities] = useState<City[]>([])
-  const [price] = useState(0)
-
-  const form = useForm<FormData>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: '',
-      category: '',
-      subcategory: '',
-      city: '',
-      description: '',
-      maxPrice: 0,
-      status: 'pending',
-      urgency: 'normal'
-    }
-  })
-
-  const handleCreateRequest = async (data: FormData) => {
-    if (!user) {
-      toast({
-        title: 'Error',
-        description: 'Debes iniciar sesión para crear una solicitud',
-        variant: 'destructive'
-      })
-      return
-    }
-
-    try {
-      const request: HiringRequestType = {
-        ...data,
-        id: crypto.randomUUID(),
-        userId: user.id,
-        status: 'pending',
-        date: new Date().toISOString(),
-        time: new Date().toLocaleTimeString(),
-        urgency: 'normal',
-        responseCount: 0,
-        timeLeft: '24h'
-      }
-
-      await createRequest(request)
-
-      toast({
-        title: 'Éxito',
-        description: 'Solicitud creada correctamente'
-      })
-
-      form.reset()
-      setCurrentStep(0)
-      setShowCreateRequest(false)
-    } catch (error) {
-      console.error('Error creating request:', error)
-      toast({
-        title: 'Error',
-        description: 'Hubo un error al crear la solicitud',
-        variant: 'destructive'
-      })
-    }
+// Implementación temporal de toast
+const useToast = () => ({
+  toast: (options: { title: string; description: string }) => {
+    console.log(`${options.title}: ${options.description}`);
   }
+});
 
-  const handleOfferResponse = async (action: 'accept' | 'reject', offerPrice?: number) => {
-    if (!selectedRequest || !user) return
+// Importación dinámica para evitar errores de SSR
+const useMediaQuery = (query: string) => {
+  const [matches, setMatches] = useState(false);
 
-    try {
-      const response: OfferResponse = {
-        offerId: selectedRequest.id,
-        status: action,
-        price: offerPrice,
-        message: messageText,
-        userId: user.id
-      }
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const media = window.matchMedia(query);
+    setMatches(media.matches);
+    
+    const listener = () => setMatches(media.matches);
+    media.addEventListener('change', listener);
+    
+    return () => media.removeEventListener('change', listener);
+  }, [query]);
 
-      await respondToOffer(response)
+  return matches;
+};
 
+import InteractiveMap from "./map/interactive-map";
+import type { MapMarker } from "./lib/types";
+import { HiringForm } from "./forms/hiring-form";
+import ArtistCards from "./components/ArtistCards";
+
+interface Artist {
+  id: number;
+  name: string;
+  type: string;
+  isOnline: boolean;
+  rating: number;
+  distance: number;
+  pricePerHour: number;
+  latitude?: number;
+  longitude?: number;
+}
+
+const mockArtists: Artist[] = [
+  {
+    id: 1,
+    name: "María García",
+    type: "Cantante",
+    isOnline: true,
+    rating: 4.8,
+    distance: 1.2,
+    pricePerHour: 150000,
+    latitude: 4.7109,
+    longitude: -74.0721
+  },
+  {
+    id: 2,
+    name: "Carlos López",
+    type: "Guitarrista",
+    isOnline: true,
+    rating: 4.6,
+    distance: 2.5,
+    pricePerHour: 120000,
+    latitude: 4.7119,
+    longitude: -74.0821
+  },
+];
+
+export default function RealTimeHiring() {
+  const { toast } = useToast();
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const [activeView, setActiveView] = useState<"offer" | "artists">("offer");
+  const [showMobileForm, setShowMobileForm] = useState(!isMobile);
+  const [mapCenter, setMapCenter] = useState<[number, number]>([4.7109, -74.0721]);
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+  const [artists, setArtists] = useState<Artist[]>([]);
+
+  useEffect(() => {
+    setArtists(mockArtists);
+  }, []);
+
+  const handleOfferCreated = (offerId?: number) => {  
+    if (offerId) {
       toast({
-        title: 'Éxito',
-        description: `Oferta ${action === 'accept' ? 'aceptada' : 'rechazada'} correctamente`
-      })
-
-      setShowOfferDialog(false)
-    } catch (error) {
-      console.error('Error responding to offer:', error)
-      toast({
-        title: 'Error',
-        description: 'Hubo un error al responder a la oferta',
-        variant: 'destructive'
-      })
+        title: "Oferta creada",
+        description: `Se ha creado la oferta #${offerId} correctamente.`,
+      });
+      setActiveView("artists");
     }
-  }
+  };
+
+  const handleSelectArtist = (artist: Artist) => {
+    console.log("Artista seleccionado:", artist);
+    toast({
+      title: "Oferta enviada",
+      description: `Has enviado una oferta a ${artist.name}`,
+    });
+  };
+
+  const mapMarkers: MapMarker[] = artists.map(artist => ({
+    id: artist.id, 
+    position: [artist.latitude || 0, artist.longitude || 0] as [number, number],
+    title: artist.name,
+    type: artist.type.toLowerCase()
+  }));
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setUserLocation([latitude, longitude]);
+          setMapCenter([latitude, longitude]);
+        },
+        (error) => {
+          console.error("Error al obtener la ubicación:", error);
+        }
+      );
+    }
+  }, []);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col gap-6">
-        {showCreateRequest ? (
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleCreateRequest)} className="space-y-8">
-              {currentStep === 0 && (
-                <div className="grid gap-4">
-                  <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Título</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Escribe un título" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="category"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Categoría</FormLabel>
-                        <FormControl>
-                          <Select
-                            value={field.value}
-                            onValueChange={field.onChange}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Selecciona una categoría" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {categories?.map((category) => (
-                                <SelectItem key={category.id} value={category.id}>
-                                  {category.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="subcategory"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Subcategoría</FormLabel>
-                        <FormControl>
-                          <Select
-                            value={field.value}
-                            onValueChange={field.onChange}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Selecciona una subcategoría" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {categories
-                                ?.find((c) => c.id === form.getValues().category)
-                                ?.subcategories?.map((sub) => (
-                                  <SelectItem key={sub.id} value={sub.id}>
-                                    {sub.name}
-                                  </SelectItem>
-                                ))}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="city"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Ciudad</FormLabel>
-                        <FormControl>
-                          <Select
-                            value={field.value}
-                            onValueChange={field.onChange}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Selecciona una ciudad" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {cities?.map((city) => (
-                                <SelectItem key={city.id} value={city.id}>
-                                  {city.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              )}
-
-              <div className="flex justify-end">
-                <Button type="submit">
-                  {currentStep === 3 ? 'Crear solicitud' : 'Siguiente'}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        ) : (
-          <Button onClick={() => setShowCreateRequest(true)}>
-            Crear nueva solicitud
-          </Button>
-        )}
+    <div className="relative w-full h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
+      {/* Mapa ocupando toda la pantalla */}
+      <div className="absolute inset-0 h-[calc(100vh-4rem)]">
+        <InteractiveMap 
+          markers={mapMarkers}
+          className="w-full h-full"
+          initialLocation={{
+            address: userLocation ? 'Tu ubicación' : 'Bogotá, Colombia',
+            coordinates: mapCenter
+          }}
+          zoom={14}
+          interactive={true}
+        />
       </div>
 
-      <Dialog open={showOfferDialog} onOpenChange={setShowOfferDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Responder oferta</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="flex gap-3 pt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => handleOfferResponse('accept', price)}
-                className="flex-1 bg-green-600 hover:bg-green-700"
-              >
-                <CheckCircle className="w-4 h-4 mr-2" />
-                Aceptar Precio
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => handleOfferResponse('accept', price)}
-                className="flex-1 bg-orange-500 hover:bg-orange-600"
-              >
-                <Send className="w-4 h-4 mr-2" />
-                Contraofertar
-              </Button>
-            </div>
-            <Textarea
-              placeholder="Mensaje opcional..."
-              value={messageText}
-              onChange={(e) => setMessageText(e.target.value)}
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
-    </div>
-  )
-}
+      {/* Controles superiores */}
+      <div className="absolute top-4 left-4 right-4 z-10">
+        <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-2 inline-flex">
+          <button
+            onClick={() => setActiveView("offer")}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeView === "offer"
+                ? 'bg-[#bb00aa] text-white shadow-sm'
+                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100/50 dark:hover:bg-gray-700/50'
+            }`}
+          >
+            Crear Oferta
+          </button>
+          <button
+            onClick={() => setActiveView("artists")}
+            className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeView === "artists"
+                ? 'bg-[#bb00aa] text-white shadow-sm'
+                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100/50 dark:hover:bg-gray-700/50'
+            }`}
+          >
+            Ofertar
+          </button>
+        </div>
+      </div>
 
-export default RealTimeHiring
+      {/* Contenedor flotante del formulario */}
+      <div className="absolute left-4 top-20 z-10 transition-all duration-300 w-[350px]">
+        <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700">
+          {activeView === "offer" ? (
+            <HiringForm onOfferCreated={handleOfferCreated} />
+          ) : (
+            <div className="max-h-[calc(100vh-8rem)] overflow-y-auto">
+              <ArtistCards 
+                artists={artists}
+                onSelectArtist={handleSelectArtist}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Botón flotante para móvil - Solo visible en móviles */}
+      {isMobile && !showMobileForm && (
+        <button
+          onClick={() => setShowMobileForm(true)}
+          className="fixed bottom-6 right-6 z-30 bg-[#bb00aa] hover:bg-[#a00090] text-white rounded-full p-3 shadow-lg transition-all duration-200 transform hover:scale-105"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+        </button>
+      )}
+    </div>
+  );
+}
