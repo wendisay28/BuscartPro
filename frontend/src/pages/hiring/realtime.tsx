@@ -362,10 +362,10 @@ export default function RealTimeHiring() {
           {/* Formulario (izquierda) */}
           <div 
             ref={formRef}
-            className="h-auto max-h-[70vh] transition-all duration-300 w-[350px] overflow-hidden flex flex-col mt-2"
+            className="h-auto max-h-[75vh] transition-all duration-300 w-[350px] overflow-hidden flex flex-col mt-2"
           >
             <div className="overflow-y-auto p-3 flex-1">
-              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700">
+              <div className="bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-xl shadow-2xl overflow-hidden">
                 {activeView === "offer" ? (
                   <div className="p-3">
                     <HiringForm onOfferCreated={handleOfferCreated} />
@@ -373,16 +373,16 @@ export default function RealTimeHiring() {
                 ) : (
                   <div className="p-3">
                     <div className="mb-2">
-                      <h2 className="text-base font-semibold text-gray-800 dark:text-white">Filtros</h2>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">
+                      <h2 className="text-base font-semibold text-gray-300">Filtros</h2>
+                      <p className="text-xs text-gray-400">
                         Ajusta los filtros para encontrar al artista ideal
                       </p>
                     </div>
-                    <div className="p-3">
-                    <AdvancedFilters 
-                      onFilterChange={handleFilterChange}
-                    />
-                  </div>
+                    <div className="p-1">
+                      <AdvancedFilters 
+                        onFilterChange={handleFilterChange}
+                      />
+                    </div>
                   </div>
                 )}
               </div>
