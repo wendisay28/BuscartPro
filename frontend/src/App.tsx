@@ -73,7 +73,7 @@ export default function App() {
           <Route path="user/profile" element={<Navigate to="/profile" replace />} />
           <Route path="favorites" element={<Favorites />} />
           <Route path="blog" element={<CommunityBlog />} />
-          <Route path="hiring" element={<RealTimeHiring />} />
+          <Route path="hiring/realtime" element={<RealTimeHiring />} />
           <Route path="events/create" element={<CreateEvent />} />
         </Route>
 
