@@ -39,6 +39,27 @@ const MapContent = ({
 }) => {
   const map = useMap();
 
+  // Mostrar marcadores en el mapa
+  useEffect(() => {
+    if (!map || markers.length === 0) return;
+
+    const markerElements = markers.map(marker => {
+      const el = L.marker(marker.position, {
+        title: marker.title,
+        alt: marker.type,
+        riseOnHover: true
+      });
+
+      el.addTo(map);
+      return el;
+    });
+
+    return () => {
+      markerElements.forEach(marker => marker.remove());
+    };
+  }, [map, markers]);
+
+  // Manejar clics en el mapa
   useEffect(() => {
     if (!interactive || !onLocationSelect) return;
     
@@ -167,7 +188,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
   return (
     <div 
       ref={mapContainerRef}
-      className={`relative ${className}`} 
+      className={`relative w-full h-full ${className}`} 
       style={containerStyle}
     >
       {mapReady && (
@@ -180,15 +201,25 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
             backgroundColor: '#000000',
           }}
           zoomControl={false}
-          whenReady={() => {
-            const map = mapRef.current;
+          attributionControl={false}
+          ref={(map) => {
             if (map) {
-              setTimeout(() => {
-                map.invalidateSize();
-              }, 0);
+              mapRef.current = map;
+              
+              // Añadir control de atribución personalizado
+              L.control.attribution({
+                position: 'bottomright',
+                prefix: '<a href="https://www.openstreetmap.org/" target="_blank">OSM</a>'
+              }).addTo(map);
+              
+              // Estilo para la atribución
+              const attribution = document.querySelector('.leaflet-control-attribution');
+              if (attribution) {
+                attribution.setAttribute('style', 'background: rgba(0,0,0,0.3) !important; color: #999 !important; font-size: 10px !important; padding: 2px 5px !important;');
+              }
             }
           }}
-          className="dark-map"
+          className="z-0"
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

@@ -340,9 +340,9 @@ export default function RealTimeHiring() {
   }, []);
 
   return (
-    <div className="relative w-full h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
+    <div className="relative w-full h-[85vh] bg-gray-100 dark:bg-gray-900 overflow-hidden">
       {/* Contenedor principal del mapa y contenido */}
-      <div className="absolute inset-0 flex">
+      <div className="absolute inset-0 flex overflow-hidden">
         {/* Mapa ocupando toda la pantalla */}
         <div className="absolute inset-0 h-full touch-none">
           <InteractiveMap 
@@ -443,7 +443,7 @@ export default function RealTimeHiring() {
                   .filter(a => a.isOnline)
                   .map((artist) => (
                     <div key={artist.id} className="h-full">
-                      <div className="bg-gray-900/95 backdrop-blur-sm rounded-xl border border-gray-700 p-2 h-full flex flex-col">
+                      <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-2 h-full flex flex-col">
                         <div className="flex justify-between items-center mb-1">
                           <h3 className="text-xs font-medium text-gray-700 dark:text-gray-300">
                             {artist.subType}
