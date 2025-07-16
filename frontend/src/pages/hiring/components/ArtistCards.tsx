@@ -26,11 +26,11 @@ export default function ArtistCards({ artist, onSelectArtist }: ArtistCardsProps
 
   return (
     <div className="w-full">
-      <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg overflow-hidden">
         <div className="p-2.5">
           {/* Primera fila: Nombre y rating */}
           <div className="flex justify-between items-start mb-1.5">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+            <h3 className="text-sm font-semibold text-gray-300">
               {artist.name}
             </h3>
             {renderRating()}
@@ -60,7 +60,7 @@ export default function ArtistCards({ artist, onSelectArtist }: ArtistCardsProps
                   .map((item, i) => (
                     <span 
                       key={i}
-                      className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-200"
+                      className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-gray-800 text-gray-300 hover:bg-gray-700"
                     >
                       {item}
                     </span>
@@ -73,13 +73,13 @@ export default function ArtistCards({ artist, onSelectArtist }: ArtistCardsProps
           <div className="flex gap-2 mt-2">
             <button 
               onClick={() => onSelectArtist(artist)}
-              className="flex-1 bg-white border border-[#bb00aa] text-[#bb00aa] dark:bg-gray-800 dark:border-[#cc00bb] dark:text-[#cc00bb] text-xs py-1.5 px-2 rounded-lg hover:opacity-90 transition-opacity font-medium"
+              className="flex-1 bg-transparent hover:bg-gray-800 border border-gray-600 text-gray-300 hover:text-white text-xs py-1.5 px-2 rounded-lg transition-colors font-medium"
             >
               Ver perfil
             </button>
             <button 
               onClick={() => onSelectArtist(artist)}
-              className="flex-1 bg-gradient-to-r from-[#bb00aa] to-[#a00090] dark:from-[#cc00bb] dark:to-[#aa00a0] text-white text-xs py-1.5 px-2 rounded-lg hover:opacity-90 transition-opacity font-medium"
+              className="flex-1 bg-gray-700 hover:bg-gray-600 text-white text-xs py-1.5 px-2 rounded-lg transition-colors font-medium"
             >
               Ofertar
             </button>

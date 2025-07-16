@@ -409,7 +409,7 @@ export default function RealTimeHiring() {
                       className={`px-3 py-1 text-xs rounded-md whitespace-nowrap transition-colors ${
                         sortBy === 'price-asc' 
                           ? 'bg-[#bb00aa] text-white' 
-                          : 'hover:bg-gray-200 dark:hover:bg-gray-600'
+                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100/50 dark:hover:bg-gray-700/50'
                       }`}
                     >
                       Menor precio
@@ -419,7 +419,7 @@ export default function RealTimeHiring() {
                       className={`px-3 py-1 text-xs rounded-md whitespace-nowrap transition-colors ${
                         sortBy === 'distance' 
                           ? 'bg-[#bb00aa] text-white' 
-                          : 'hover:bg-gray-200 dark:hover:bg-gray-600'
+                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100/50 dark:hover:bg-gray-700/50'
                       }`}
                     >
                       Más cerca
@@ -429,7 +429,7 @@ export default function RealTimeHiring() {
                       className={`px-3 py-1 text-xs rounded-md whitespace-nowrap transition-colors ${
                         sortBy === 'price-desc' 
                           ? 'bg-[#bb00aa] text-white' 
-                          : 'hover:bg-gray-200 dark:hover:bg-gray-600'
+                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100/50 dark:hover:bg-gray-700/50'
                       }`}
                     >
                       Mayor precio
@@ -443,7 +443,7 @@ export default function RealTimeHiring() {
                   .filter(a => a.isOnline)
                   .map((artist) => (
                     <div key={artist.id} className="h-full">
-                      <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-2 h-full flex flex-col">
+                      <div className="bg-gray-900/95 backdrop-blur-sm rounded-xl border border-gray-700 p-2 h-full flex flex-col">
                         <div className="flex justify-between items-center mb-1">
                           <h3 className="text-xs font-medium text-gray-700 dark:text-gray-300">
                             {artist.subType}
