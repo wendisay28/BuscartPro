@@ -26,32 +26,42 @@ export const useOpenStreetMap = (
     providerRef.current = new OpenStreetMapProvider({
       params: {
         'accept-language': 'es',
-        countrycodes: initialLocation?.country.toLowerCase() || 'co',
-        city: initialLocation?.city || '',
-        addressdetails: '1',
+        countrycodes: 'co', // Priorizar Colombia
+        addressdetails: 1,
+        limit: 5,
+        dedupe: 1,
+        polygon_geojson: 0,
         format: 'json',
-        limit: '5',
-        dedupe: '1'
+        namedetails: 1
       },
     });
   }, [initialLocation]);
 
   const normalizeQuery = useCallback((query: string): string => {
-    let normalized = query
+    // Primero, limpiar la consulta básica
+    let cleanQuery = query
       .toLowerCase()
-      .replace(/\bcra\b|\bcr\b|\bkra\b/gi, 'carrera ')
-      .replace(/\bcll\b|\bcl\b/gi, 'calle ')
-      .replace(/\bav\b/gi, 'avenida ')
-      .replace(/\btransv\b/gi, 'transversal ')
       .replace(/\s+/g, ' ')
       .trim();
 
-    if (initialLocation?.city && !normalized.includes(initialLocation.city.toLowerCase())) {
-      normalized += `, ${initialLocation.city}`;
+    // Reemplazar abreviaturas comunes
+    cleanQuery = cleanQuery
+      .replace(/\b(cra|cr|kra)\b/g, 'carrera')
+      .replace(/\b(cll|cl)\b/g, 'calle')
+      .replace(/\bav\b/g, 'avenida')
+      .replace(/\btransv\b/g, 'transversal')
+      .replace(/[#°]/g, '')  // Eliminar símbolos de número
+      .replace(/no\.?\s*/gi, '')  // Eliminar "No." o "No "
+      .replace(/\s+/g, ' ')  // Eliminar espacios múltiples
+      .trim();
+
+    // Si no tiene Medellín, lo agregamos
+    if (!cleanQuery.includes('medellín') && !cleanQuery.includes('medellin')) {
+      cleanQuery += ', Medellín';
     }
 
-    return normalized;
-  }, [initialLocation]);
+    return cleanQuery;
+  }, []);
 
   const searchAddress = useCallback(async (query: string) => {
     if (!query || query.length < 3) {

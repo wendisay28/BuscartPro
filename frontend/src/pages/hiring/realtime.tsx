@@ -213,7 +213,7 @@ export default function RealTimeHiring() {
   const isMobile = useMediaQuery("(max-width: 768px");
   const [activeView, setActiveView] = useState<"offer" | "artists">("offer");
   const [showMobileForm, setShowMobileForm] = useState(!isMobile);
-  const [mapCenter, setMapCenter] = useState<[number, number]>([4.7109, -74.0721]);
+  const [mapCenter, setMapCenter] = useState<[number, number]>([6.2442, -75.5812]);
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const [artists] = useState<MockArtist[]>(mockArtists);
   const [filteredArtists, setFilteredArtists] = useState<MockArtist[]>([]);
@@ -235,11 +235,11 @@ export default function RealTimeHiring() {
     }
   };
 
-  const handleSelectArtist = (artist: Artist) => {
-    console.log("Artista seleccionado:", artist);
+  const handleSelectArtist = (selectedArtist: Artist) => {
+    console.log("Artista seleccionado:", selectedArtist);
     toast({
       title: "Oferta enviada",
-      description: `Has enviado una oferta a ${artist.name}`,
+      description: `Has enviado una oferta a ${selectedArtist.name}`,
     });
   };
 
@@ -340,39 +340,40 @@ export default function RealTimeHiring() {
   }, []);
 
   return (
-    <div className="relative w-full h-[85vh] bg-gray-100 dark:bg-gray-900 overflow-hidden">
+    <div className={`relative w-full h-[85vh] ${activeView === 'artists' ? 'bg-black' : 'bg-black/90'} overflow-hidden`}>
       {/* Contenedor principal del mapa y contenido */}
       <div className="absolute inset-0 flex overflow-hidden">
-        {/* Mapa ocupando toda la pantalla */}
-        <div className="absolute inset-0 h-full touch-none">
-          <InteractiveMap 
-            markers={mapMarkers}
-            className="w-full h-full pointer-events-none"
-            initialLocation={{
-              address: userLocation ? 'Tu ubicación' : 'Bogotá, Colombia',
-              coordinates: mapCenter
-            }}
-            zoom={14}
-            interactive={false}
-          />
-        </div>
+        {/* Mapa ocupando toda la pantalla - Solo visible en vista de oferta */}
+        {activeView === 'offer' && (
+          <div className="absolute inset-0 h-full">
+            <InteractiveMap 
+              markers={mapMarkers}
+              className="w-full h-full"
+              initialLocation={{
+                address: userLocation ? 'Tu ubicación' : 'Medellín, Colombia',
+                coordinates: mapCenter
+              }}
+              zoom={30}
+            />
+          </div>
+        )}
 
-        {/* Contenedor del contenido flotante */}
-        <div className="relative z-10 flex w-full h-full pt-16">
+          {/* Contenedor del contenido flotante */}
+        <div className="relative z-10 flex w-full h-full pt-14 pointer-events-none">
           {/* Formulario (izquierda) */}
           <div 
             ref={formRef}
-            className="h-auto max-h-[75vh] transition-all duration-300 w-[350px] overflow-hidden flex flex-col mt-2"
+            className={`h-auto max-h-[75vh] transition-all duration-300 w-[350px] overflow-hidden flex flex-col ml-2 ${activeView === 'artists' ? 'mt-2' : 'mt-2'} pointer-events-auto`}
           >
             <div className="overflow-y-auto p-3 flex-1">
-              <div className="bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-xl shadow-2xl overflow-hidden">
+              <div className="bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-xl shadow-2xl overflow-hidden -ml-1">
                 {activeView === "offer" ? (
                   <div className="p-3">
                     <HiringForm onOfferCreated={handleOfferCreated} />
                   </div>
                 ) : (
-                  <div className="p-3">
-                    <div className="mb-2">
+                  <div className="p-3 -mt-2">
+                    <div className="mb-1">
                       <h2 className="text-base font-semibold text-gray-300">Filtros</h2>
                       <p className="text-xs text-gray-400">
                         Ajusta los filtros para encontrar al artista ideal
@@ -391,7 +392,7 @@ export default function RealTimeHiring() {
 
           {/* Tarjetas de artistas (derecha) - Solo visible en vista de artistas */}
           {activeView === "artists" && filteredArtists.filter(a => a.isOnline).length > 0 && (
-            <div className="flex-1 p-4 overflow-y-auto">
+            <div className="flex-1 p-4 overflow-y-auto pointer-events-auto">
               <div className="flex justify-between items-center mb-4">
                 <div>
                   <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
