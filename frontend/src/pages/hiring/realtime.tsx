@@ -480,23 +480,23 @@ export default function RealTimeHiring() {
 
       {/* Controles superiores */}
       <div className="absolute top-4 left-4 right-4 z-10">
-        <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-2 inline-flex">
+        <div className="bg-gray-900/95 backdrop-blur-md rounded-xl shadow-lg border border-gray-800 p-2 inline-flex w-[320px] justify-between">
           <button
             onClick={() => setActiveView("offer")}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex-1 mx-1 ${
               activeView === "offer"
                 ? 'bg-[#bb00aa] text-white shadow-sm'
-                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100/50 dark:hover:bg-gray-700/50'
+                : 'text-gray-200 hover:bg-gray-800/80'
             }`}
           >
             Crear Oferta
           </button>
           <button
             onClick={() => setActiveView("artists")}
-            className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex-1 mx-1 ${
               activeView === "artists"
                 ? 'bg-[#bb00aa] text-white shadow-sm'
-                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100/50 dark:hover:bg-gray-700/50'
+                : 'text-gray-200 hover:bg-gray-800/80'
             }`}
           >
             Ofertar
