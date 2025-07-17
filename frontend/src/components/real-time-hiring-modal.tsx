@@ -100,9 +100,15 @@ export default function RealTimeHiringModal({
         maxBudget: formData.maxBudget ? parseFloat(formData.maxBudget) : undefined,
         categoryId: artist?.categoryId
       };
-      const response = await apiRequest('POST', '/api/hiring-requests', requestData);
-      const result = await response.json();
-      return result as HiringRequestDTO;
+      
+      const response = await apiRequest<{ data: HiringRequestDTO }>('POST', '/api/hiring-requests', requestData);
+      
+      // Verificar si la respuesta tiene la estructura esperada
+      if (response && typeof response === 'object' && 'data' in response) {
+        return response.data;
+      }
+      
+      throw new Error('Formato de respuesta inesperado de la API');
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/hiring-requests"] });

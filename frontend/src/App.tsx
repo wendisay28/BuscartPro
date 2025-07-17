@@ -11,7 +11,7 @@ import Register from "./pages/auth/register";
 import Home from "./pages/dashboard/home";
 import Explorer from "./pages/explorer";
 import Profile from "./pages/user/UserProfile";
-import { Favorites } from "./pages/user";
+import Favorites from "./pages/favorites";
 import CommunityBlog from "./pages/community/blog";
 import RealTimeHiring from "./pages/hiring/realtime";
 import CreateEvent from "./pages/events/create";
