@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useAuth } from "@/hooks/useAuth";
 import Button from "@/components/ui/button";
@@ -20,7 +20,9 @@ import {
   Filter,
   Scale,
   User,
-  Eye
+  Eye,
+  X,
+  Sliders
 } from "lucide-react";
 
 export default function Favorites() {
@@ -29,7 +31,61 @@ export default function Favorites() {
   const [selectedForComparison, setSelectedForComparison] = useState<number[]>([]);
   const [showComparison, setShowComparison] = useState(false);
   const [comparisonTab, setComparisonTab] = useState("artists"); 
-  const [, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState<'recent' | 'today' | 'custom' | null>(null);
+  const [customDate, setCustomDate] = useState('');
+  const [showMobileDropdown, setShowMobileDropdown] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  
+  // Nuevos estados para los filtros
+  const [selectedProfession, setSelectedProfession] = useState<string>('');
+  const [sortByPrice, setSortByPrice] = useState<'asc' | 'desc' | ''>('');
+
+  // Lista de profesiones disponibles
+  const professions = [
+    'Músico',
+    'DJ',
+    'Banda',
+    'Animador',
+    'Payaso',
+    'Magos',
+    'Chef',
+    'Fotógrafo',
+    'Decorador',
+    'Otro'
+  ];
+
+  // Efecto para cerrar el panel de filtros al hacer scroll
+  useEffect(() => {
+    if (!showFilters) return;
+
+    const handleScroll = (e: Event) => {      
+      // Obtener el elemento que está haciendo scroll (podría ser window o un elemento con overflow)
+      const scrollingElement = e.target === document ? document.scrollingElement : e.target as HTMLElement;
+      
+      // Cerrar el panel en cualquier vista cuando se detecte scroll
+      setShowFilters(false);
+    };
+
+    // Agregar el event listener al documento para capturar todos los eventos de scroll
+    document.addEventListener('scroll', handleScroll, { passive: true, capture: true });
+    
+    // También verificar si hay algún contenedor con overflow que pueda estar haciendo scroll
+    const scrollContainers = document.querySelectorAll('.overflow-y-auto, .overflow-y-scroll, [style*="overflow-y"], [class*="overflow"]');
+    scrollContainers.forEach(container => {
+      // Solo agregar el listener si el elemento tiene scroll
+      if (container.scrollHeight > container.clientHeight) {
+        container.addEventListener('scroll', handleScroll, { passive: true });
+      }
+    });
+
+    return () => {
+      document.removeEventListener('scroll', handleScroll, { capture: true });
+      scrollContainers.forEach(container => {
+        container.removeEventListener('scroll', handleScroll);
+      });
+    };
+  }, [showFilters]);
 
   const getCategoryNoun = (tab: string, count: number) => {
     const nouns: { [key: string]: { singular: string; plural: string } } = {
@@ -145,7 +201,7 @@ export default function Favorites() {
           <Heart className="w-4 h-4 fill-current" />
         </Button>
         <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
-          <Badge className="bg-black/60 text-white text-xs px-2 py-1 rounded-full">
+          <Badge className="bg-black/60 hover:bg-[#bb00aa] text-white text-xs px-2 py-1 rounded-full transition-colors duration-300">
             {event.category}
           </Badge>
         </div>
@@ -231,7 +287,7 @@ export default function Favorites() {
         <div className="flex items-start justify-between">
           <div>
             <h3 className="font-bold text-white text-base">{site.name}</h3>
-            <p className="text-sm text-gray-400">{site.type}</p>
+            <p className="text-sm text-gray-400 hover:text-[#bb00aa] transition-colors duration-300">{site.type}</p>
           </div>
           <div className="flex items-center gap-1 bg-[#bb00aa]/10 px-2 py-1 rounded-full">
             <Star className="w-3.5 h-3.5 fill-[#ffd700] text-[#ffd700]" />
@@ -298,7 +354,7 @@ export default function Favorites() {
         <Button size="icon" variant="ghost" className="absolute top-2 left-2 bg-black/60 hover:bg-black/80 text-white hover:text-red-400 h-8 w-8 rounded-full">
           <Heart className="w-4 h-4 fill-current" />
         </Button>
-        <Badge className="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-full">
+        <Badge className="absolute top-2 right-2 bg-black/60 hover:bg-[#bb00aa] text-white text-xs px-2 py-1 rounded-full transition-colors duration-300">
           {item.type}
         </Badge>
       </div>
@@ -352,6 +408,27 @@ export default function Favorites() {
     </Card>
   );
 
+  // Función para filtrar y ordenar los elementos
+  const getFilteredItems = (items: any[]) => {
+    // Filtrar por profesión si está seleccionada
+    if (selectedProfession) {
+      items = items.filter(item => 
+        item.profession === selectedProfession
+      );
+    }
+
+    // Ordenar por precio si está seleccionado
+    if (sortByPrice === 'asc') {
+      items.sort((a, b) => a.price - b.price);
+    } else if (sortByPrice === 'desc') {
+      items.sort((a, b) => b.price - a.price);
+    }
+
+    // Aquí puedes agregar más lógica de filtrado si es necesario
+
+    return items;
+  };
+
   return (
     <div className="min-h-screen bg-black text-white">
       <div className="bg-gray-900 border border-gray-700 rounded-lg mx-4 mt-4">
@@ -371,10 +448,135 @@ export default function Favorites() {
                   Comparar ({selectedForComparison.length})
                 </Button>
               )}
-              <Button variant="outline" onClick={() => setShowFilters(true)}>
-                <Filter className="w-4 h-4 mr-2" />
-                Filtros
-              </Button>
+              <div className="relative">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowFilters(!showFilters)}
+                  className={`w-32 justify-center ${showFilters ? 'bg-gray-800 border-[#bb00aa]' : ''} hover:bg-[#bb00aa]/10 hover:border-[#bb00aa] hover:text-[#bb00aa]`}
+                >
+                  <div className="flex items-center justify-center w-full">
+                    <Sliders className="w-4 h-4 mr-2" />
+                    <span className="w-20 text-left">Filtros</span>
+                  </div>
+                </Button>
+                
+                {showFilters && (
+                  <div className="fixed md:right-64 md:top-48 right-12 top-32 md:w-72 w-64 bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg shadow-lg z-50 flex flex-col max-h-[80vh] overflow-y-auto" style={{ transform: 'none', left: 'auto' }}>
+                    <div 
+                      className="flex justify-between items-center p-3 cursor-pointer hover:bg-gray-800/50 border-b border-gray-700"
+                      onClick={() => setShowFilters(false)}
+                    >
+                      <h2 className="flex items-center gap-2 text-sm font-medium text-white">
+                        <Sliders className="w-4 h-4" />
+                        Filtro Avanzado
+                      </h2>
+                      <span className="text-xs text-gray-400">Cerrar</span>
+                    </div>
+                    
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4 text-sm text-gray-300">
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-300 border-b border-gray-700 pb-1 mb-3">Filtrar por fecha</h3>
+                        <div className="space-y-2">
+                          <div 
+                            className={`flex items-center p-2 rounded cursor-pointer ${selectedFilter === 'recent' ? 'bg-[#bb00aa]/20 text-[#bb00aa]' : 'text-gray-300 hover:bg-gray-800'}`}
+                            onClick={() => setSelectedFilter('recent')}
+                          >
+                            <span>Agregados recientemente</span>
+                          </div>
+                          <div 
+                            className={`flex items-center p-2 rounded cursor-pointer ${selectedFilter === 'today' ? 'bg-[#bb00aa]/20 text-[#bb00aa]' : 'text-gray-300 hover:bg-gray-800'}`}
+                            onClick={() => setSelectedFilter('today')}
+                          >
+                            <span>Agregados hoy</span>
+                          </div>
+                          <div className="space-y-2">
+                            <div 
+                              className={`flex items-center p-2 rounded cursor-pointer ${selectedFilter === 'custom' ? 'bg-[#bb00aa]/20 text-[#bb00aa]' : 'text-gray-300 hover:bg-gray-800'}`}
+                              onClick={() => setSelectedFilter('custom')}
+                            >
+                              <span>Fecha específica</span>
+                            </div>
+                            {selectedFilter === 'custom' && (
+                              <div className="pl-2">
+                                <input
+                                  type="date"
+                                  className="w-full bg-gray-700 p-2 rounded text-sm focus:ring-2 focus:ring-[#bb00aa]"
+                                  value={customDate}
+                                  onChange={(e) => setCustomDate(e.target.value)}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-300 border-b border-gray-700 pb-1 mb-3">Filtrar por profesión</h3>
+                        <select
+                          value={selectedProfession}
+                          onChange={(e) => setSelectedProfession(e.target.value)}
+                          className="w-full bg-gray-800 border border-gray-700 rounded-md p-2 text-sm text-white focus:ring-2 focus:ring-[#bb00aa] focus:border-transparent"
+                        >
+                          <option value="">Todas las profesiones</option>
+                          {professions.map((profession) => (
+                            <option 
+                              key={profession} 
+                              value={profession}
+                              className="bg-gray-800 text-white"
+                            >
+                              {profession}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-300 border-b border-gray-700 pb-1 mb-3">Ordenar por precio</h3>
+                        <div className="space-y-2">
+                          <div 
+                            className={`flex items-center p-2 rounded cursor-pointer ${sortByPrice === 'asc' ? 'bg-[#bb00aa]/20 text-[#bb00aa]' : 'text-gray-300 hover:bg-gray-800'}`}
+                            onClick={() => setSortByPrice('asc')}
+                          >
+                            <span>Precio ascendente</span>
+                          </div>
+                          <div 
+                            className={`flex items-center p-2 rounded cursor-pointer ${sortByPrice === 'desc' ? 'bg-[#bb00aa]/20 text-[#bb00aa]' : 'text-gray-300 hover:bg-gray-800'}`}
+                            onClick={() => setSortByPrice('desc')}
+                          >
+                            <span>Precio descendente</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="pt-4 border-t border-gray-700">
+                        <div className="flex justify-between space-x-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="flex-1 text-xs h-8 bg-transparent hover:bg-gray-800"
+                            onClick={() => {
+                              setSelectedFilter(null);
+                              setCustomDate('');
+                              setSelectedProfession('');
+                              setSortByPrice('');
+                            }}
+                          >
+                            Limpiar filtros
+                          </Button>
+                          <Button 
+                            variant="default" 
+                            size="sm" 
+                            className="flex-1 text-xs h-8 bg-[#bb00aa] hover:bg-[#a00090]"
+                            onClick={() => setShowFilters(false)}
+                          >
+                            Aplicar
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -383,7 +585,52 @@ export default function Favorites() {
       <div className="w-full px-4 py-6">
         <div className="w-full max-w-full">
           <Tabs value={activeTab} onValueChange={(value) => { setActiveTab(value); setSelectedForComparison([]); }} className="w-full">
-            <TabsList className="w-auto inline-flex mb-6 bg-gray-900 border border-gray-700 rounded-lg p-1">
+            {/* Versión móvil - Menú desplegable */}
+            <div className="sm:hidden mb-6 relative">
+              <div 
+                className="relative w-1/2"
+                onClick={() => setShowMobileDropdown(!showMobileDropdown)}
+              >
+                <div className="w-full appearance-none bg-gray-900 border border-gray-700 text-white rounded-md pl-3 pr-8 py-2.5 text-sm cursor-pointer">
+                  {activeTab === 'artists' && `Artistas (${favoriteData.artists.length})`}
+                  {activeTab === 'events' && `Eventos (${favoriteData.events.length})`}
+                  {activeTab === 'sites' && `Sitios (${favoriteData.sites.length})`}
+                  {activeTab === 'gallery' && `Galería (${favoriteData.gallery.length})`}
+                </div>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+              
+              {/* Panel personalizado que se mostrará debajo */}
+              {showMobileDropdown && (
+                <div className="absolute left-0 top-full mt-1 w-[calc(50%)] bg-gray-900 border border-gray-700 rounded-md shadow-lg z-50">
+                  {['artists', 'events', 'sites', 'gallery'].map((tab) => (
+                    <div 
+                      key={tab}
+                      onClick={() => {
+                        setActiveTab(tab);
+                        setSelectedForComparison([]);
+                        setShowMobileDropdown(false);
+                      }}
+                      className={`px-4 py-2 text-sm cursor-pointer hover:bg-gray-800 ${
+                        activeTab === tab ? 'bg-gray-800 text-white' : 'text-gray-300'
+                      }`}
+                    >
+                      {tab === 'artists' && `Artistas (${favoriteData.artists.length})`}
+                      {tab === 'events' && `Eventos (${favoriteData.events.length})`}
+                      {tab === 'sites' && `Sitios (${favoriteData.sites.length})`}
+                      {tab === 'gallery' && `Galería (${favoriteData.gallery.length})`}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Versión escritorio - Pestañas */}
+            <TabsList className="hidden sm:inline-flex mb-6 bg-gray-900 border border-gray-700 rounded-lg p-1">
               <TabsTrigger 
                 value="artists"
                 className="px-6 data-[state=active]:bg-gray-800 data-[state=active]:text-white rounded-md hover:bg-gray-800/50 transition-colors"
@@ -428,25 +675,25 @@ export default function Favorites() {
 
             <TabsContent value="artists">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full">
-                {favoriteData.artists.map(renderArtistCard)}
+                {getFilteredItems(favoriteData.artists).map(renderArtistCard)}
               </div>
             </TabsContent>
 
             <TabsContent value="events">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full">
-                {favoriteData.events.map(renderEventCard)}
+                {getFilteredItems(favoriteData.events).map(renderEventCard)}
               </div>
             </TabsContent>
 
             <TabsContent value="sites">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full">
-                {favoriteData.sites.map(renderSiteCard)}
+                {getFilteredItems(favoriteData.sites).map(renderSiteCard)}
               </div>
             </TabsContent>
 
             <TabsContent value="gallery">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full">
-                {favoriteData.gallery.map(renderGalleryCard)}
+                {getFilteredItems(favoriteData.gallery).map(renderGalleryCard)}
               </div>
             </TabsContent>
           </Tabs>
