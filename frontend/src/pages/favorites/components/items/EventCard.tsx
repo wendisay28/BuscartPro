@@ -1,8 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Heart, MapPin, Calendar, Clock } from "lucide-react";
+import { Heart, MapPin, Users, Eye } from "lucide-react";
 
 interface EventCardProps {
   event: any;
@@ -18,89 +18,101 @@ export function EventCard({
   onToggleFavorite 
 }: EventCardProps) {
   return (
-    <Card className="relative overflow-hidden border border-gray-700 bg-gray-800 hover:border-[#bb00aa] transition-colors">
-      <CardHeader className="p-0">
-        <div className="relative">
-          <img 
-            src={event.image} 
-            alt={event.title}
-            className="w-full h-48 object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-          <div className="absolute bottom-0 left-0 p-4 w-full">
-            <CardTitle className="text-white text-xl">{event.title}</CardTitle>
-            <div className="flex items-center text-gray-300 text-sm mt-1">
-              <MapPin className="w-3 h-3 mr-1" />
-              {event.venue}, {event.city}
-            </div>
-          </div>
-          
-          <Button 
-            size="icon" 
-            variant="ghost" 
-            className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white"
-            onClick={() => onToggleFavorite(event.id)}
-          >
-            <Heart className={`w-5 h-5 ${event.isFavorite ? 'fill-[#bb00aa] text-[#bb00aa]' : 'text-white'}`} />
-          </Button>
-          
-          <div className="absolute top-2 left-2 flex items-center space-x-1">
-            <Checkbox 
-              id={`compare-event-${event.id}`}
-              checked={isSelected}
-              onCheckedChange={() => onToggleSelect(event.id)}
-              className="border-gray-600 data-[state=checked]:bg-[#bb00aa] data-[state=checked]:border-[#bb00aa]"
-            />
-          </div>
-        </div>
-      </CardHeader>
-      
-      <CardContent className="p-4">
-        <div className="flex justify-between items-start mb-3">
-          <div className="flex items-center space-x-2">
-            <div className="flex flex-col items-center bg-[#1e1e1e] p-2 rounded-lg">
-              <span className="text-sm font-medium text-white">{event.date.split(' ')[0]}</span>
-              <span className="text-xs text-gray-400">{event.date.split(' ')[1]}</span>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-white">{event.time}</p>
-              <p className="text-xs text-gray-400">{event.duration}</p>
-            </div>
-          </div>
-          
-          <Badge variant="secondary" className="text-xs bg-[#1e1e1e] text-white">
+    <Card className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-all duration-300 bg-gray-900 border-gray-800 hover:border-[#bb00aa]/30 hover:shadow-[#bb00aa]/10">
+      <div className="relative aspect-[4/3] overflow-hidden">
+        <img 
+          src={event.image} 
+          alt={event.title} 
+          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105" 
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+        <Button 
+          size="icon" 
+          variant="ghost" 
+          className="absolute top-2 left-2 bg-black/60 hover:bg-black/80 text-white hover:text-red-400 h-8 w-8 rounded-full"
+          onClick={() => onToggleFavorite(event.id)}
+        >
+          <Heart className={`w-4 h-4 ${isSelected ? 'fill-red-500 text-red-500' : 'fill-current'}`} />
+        </Button>
+        <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
+          <Badge className="bg-black/60 hover:bg-[#bb00aa] text-white text-xs px-2 py-1 rounded-full transition-colors duration-300">
             {event.category}
           </Badge>
         </div>
-        
-        <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+      </div>
+      <CardContent className="p-4 space-y-3 flex-1 flex flex-col">
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="font-bold text-white text-base">{event.title}</h3>
+            <p className="text-sm text-gray-400">{event.eventType || 'Presencial'}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-4 text-xs text-gray-400">
+          <div className="flex items-center gap-1">
+            <MapPin className="w-3.5 h-3.5" />
+            <span>{event.city}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Users className="w-3.5 h-3.5" />
+            <span>{event.attendees} asistentes</span>
+          </div>
+        </div>
+        <p className="text-sm text-gray-300 line-clamp-2 min-h-[2.5rem]">
           {event.description}
         </p>
-        
-        <div className="flex justify-between items-center">
-          <div>
-            {event.price.type === 'free' ? (
-              <p className="text-lg font-bold text-[#bb00aa]">Gratis</p>
-            ) : event.price.type === 'ticket' ? (
-              <p className="text-lg font-bold text-[#bb00aa]">
-                ${event.price.amount.toLocaleString()}
-                <span className="text-sm font-normal text-gray-400"> por entrada</span>
-              </p>
+        <div className="flex items-end justify-between pt-2 mt-auto">
+          <div className="flex flex-col min-h-[3rem] justify-center">
+            <span className="text-xs text-gray-400">Precio</span>
+            {event.price === 0 || (typeof event.price === 'object' && event.price?.type === 'free') ? (
+              <span className="text-base font-bold text-[#00bb00]">Entrada Libre</span>
+            ) : typeof event.price === 'object' ? (
+              <div className="flex items-baseline">
+                <span className="text-lg font-bold text-[#bb00aa]">
+                  ${(event.price?.value * 1000).toLocaleString('es-CO', { 
+                    style: 'decimal', 
+                    maximumFractionDigits: 0 
+                  })}
+                </span>
+                {event.price?.type === 'hourly' && (
+                  <span className="text-xs text-gray-400 ml-1">/hora</span>
+                )}
+                {event.price?.type === 'ticket' && (
+                  <span className="text-xs text-gray-400 ml-1">por entrada</span>
+                )}
+              </div>
             ) : (
-              <p className="text-lg font-bold text-[#bb00aa]">
-                Desde ${event.price.range.from.toLocaleString()}
-                <span className="text-sm font-normal text-gray-400"> hasta </span>
-                ${event.price.range.to.toLocaleString()}
-              </p>
+              <div className="flex items-baseline">
+                <span className="text-lg font-bold text-[#bb00aa]">
+                  ${(event.price * 1000).toLocaleString('es-CO', { 
+                    style: 'decimal', 
+                    maximumFractionDigits: 0 
+                  })}
+                </span>
+                {event.priceType === 'hourly' && (
+                  <span className="text-xs text-gray-400 ml-1">/hora</span>
+                )}
+                {event.priceType === 'ticket' && (
+                  <span className="text-xs text-gray-400 ml-1">por entrada</span>
+                )}
+              </div>
             )}
           </div>
-          
-          <Button 
-            size="sm" 
-            className="bg-[#bb00aa] hover:bg-[#9b0089]"
-          >
-            Ver más
-          </Button>
+          <div className="flex items-center gap-2">
+            <Checkbox 
+              id={`compare-${event.id}`}
+              checked={isSelected} 
+              onCheckedChange={() => onToggleSelect(event.id)}
+              className="border-gray-600 data-[state=checked]:bg-[#bb00aa] data-[state=checked]:border-[#bb00aa]" 
+            />
+            <Button 
+              size="sm" 
+              variant="outline"
+              className="bg-gray-800 hover:bg-gray-700 border-gray-700 text-white flex items-center justify-center gap-1.5"
+            >
+              <Eye className="w-4 h-4" />
+              <span>Detalle</span>
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>

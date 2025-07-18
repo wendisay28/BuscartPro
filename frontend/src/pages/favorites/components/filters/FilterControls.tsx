@@ -1,10 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { Sliders } from "lucide-react";
+import { Sliders, Scale } from "lucide-react";
 
 interface FilterControlsProps {
   showFilters: boolean;
   selectedForComparison: number[];
-  comparisonTab: string;
   onShowFilters: () => void;
   onShowComparison: () => void;
 }
@@ -12,7 +11,6 @@ interface FilterControlsProps {
 export function FilterControls({
   showFilters,
   selectedForComparison,
-  comparisonTab,
   onShowFilters,
   onShowComparison
 }: FilterControlsProps) {

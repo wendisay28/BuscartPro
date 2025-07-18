@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { X, Sliders } from "lucide-react";
+import { Sliders } from "lucide-react";
 
 interface FilterPanelProps {
   showFilters: boolean;

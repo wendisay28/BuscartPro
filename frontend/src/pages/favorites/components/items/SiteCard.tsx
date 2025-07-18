@@ -1,8 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Heart, MapPin, Star, Users } from "lucide-react";
+import { Heart, MapPin, Star, Building, Eye } from "lucide-react";
 
 interface SiteCardProps {
   site: any;
@@ -18,89 +17,96 @@ export function SiteCard({
   onToggleFavorite 
 }: SiteCardProps) {
   return (
-    <Card className="relative overflow-hidden border border-gray-700 bg-gray-800 hover:border-[#bb00aa] transition-colors">
-      <CardHeader className="p-0">
-        <div className="relative">
-          <img 
-            src={site.image} 
-            alt={site.name}
-            className="w-full h-48 object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-          <div className="absolute bottom-0 left-0 p-4 w-full">
-            <CardTitle className="text-white text-xl">{site.name}</CardTitle>
-            <div className="flex items-center text-gray-300 text-sm mt-1">
-              <MapPin className="w-3 h-3 mr-1" />
-              {site.location}
-            </div>
+    <Card className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-all duration-300 bg-gray-900 border-gray-800 hover:border-[#bb00aa]/30 hover:shadow-[#bb00aa]/10">
+      <div className="relative aspect-[4/3] overflow-hidden">
+        <img 
+          src={site.image} 
+          alt={site.name} 
+          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105" 
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+        <Button 
+          size="icon" 
+          variant="ghost" 
+          className="absolute top-2 left-2 bg-black/60 hover:bg-black/80 text-white hover:text-red-400 h-8 w-8 rounded-full"
+          onClick={() => onToggleFavorite(site.id)}
+        >
+          <Heart className={`w-4 h-4 ${isSelected ? 'fill-red-500 text-red-500' : 'fill-current'}`} />
+        </Button>
+      </div>
+      <CardContent className="p-4 space-y-3 flex-1 flex flex-col">
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="font-bold text-white text-base">{site.name}</h3>
+            <p className="text-sm text-gray-400 hover:text-[#bb00aa] transition-colors duration-300">
+              {site.type}
+            </p>
           </div>
-          
-          <Button 
-            size="icon" 
-            variant="ghost" 
-            className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white"
-            onClick={() => onToggleFavorite(site.id)}
-          >
-            <Heart className={`w-5 h-5 ${site.isFavorite ? 'fill-[#bb00aa] text-[#bb00aa]' : 'text-white'}`} />
-          </Button>
-          
-          <div className="absolute top-2 left-2 flex items-center space-x-1">
-            <Checkbox 
-              id={`compare-site-${site.id}`}
-              checked={isSelected}
-              onCheckedChange={() => onToggleSelect(site.id)}
-              className="border-gray-600 data-[state=checked]:bg-[#bb00aa] data-[state=checked]:border-[#bb00aa]"
-            />
+          <div className="flex items-center gap-1 bg-[#bb00aa]/10 px-2 py-1 rounded-full">
+            <Star className="w-3.5 h-3.5 fill-[#ffd700] text-[#ffd700]" />
+            <span className="text-sm font-medium text-white">{site.rating}</span>
           </div>
         </div>
-      </CardHeader>
-      
-      <CardContent className="p-4">
-        <div className="flex justify-between items-center mb-3">
-          <div className="flex items-center space-x-2">
-            <div className="flex items-center text-sm text-gray-300">
-              <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" />
-              {site.rating}
-              <span className="text-gray-500 ml-1">({site.reviews} reseñas)</span>
-            </div>
+        <div className="flex items-center gap-4 text-xs text-gray-400">
+          <div className="flex items-center gap-1">
+            <MapPin className="w-3.5 h-3.5" />
+            <span>{site.city}</span>
           </div>
-          
-          <Badge variant="secondary" className="text-xs bg-[#1e1e1e] text-white">
-            {site.category}
-          </Badge>
-        </div>
-        
-        <div className="space-y-2 mb-4">
-          <div className="flex items-center text-sm text-gray-400">
-            <Users className="w-4 h-4 mr-2 text-gray-500" />
-            Capacidad: {site.capacity} personas
-          </div>
-          <div className="flex items-center text-sm text-gray-400">
-            <MapPin className="w-4 h-4 mr-2 text-gray-500" />
-            Área: {site.area} m²
+          <div className="flex items-center gap-1">
+            <Building className="w-3.5 h-3.5" />
+            <span>{site.capacity} personas</span>
           </div>
         </div>
-        
-        <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+        <p className="text-sm text-gray-300 line-clamp-2 min-h-[2.5rem]">
           {site.description}
         </p>
-        
-        <div className="flex justify-between items-center">
-          <div>
-            <p className="text-2xl font-bold text-[#bb00aa]">
-              ${site.pricePerHour.toLocaleString()}
-              <span className="text-sm font-normal text-gray-400">/hora</span>
-            </p>
-            <p className="text-xs text-gray-500">Mínimo {site.minimumHours} horas</p>
+        <div className="flex items-end justify-between pt-2 mt-auto">
+          <div className="flex flex-col min-h-[3rem] justify-center">
+            <span className="text-xs text-gray-400">Precio</span>
+            {site.price?.type === 'free' ? (
+              <span className="text-base font-bold text-[#00bb00]">Entrada Libre</span>
+            ) : site.price?.type === 'ticket' ? (
+              <div className="flex items-baseline">
+                <span className="text-lg font-bold text-[#bb00aa]">
+                  ${(site.price.value * 1000).toLocaleString('es-CO', { 
+                    style: 'decimal', 
+                    maximumFractionDigits: 0 
+                  })}
+                </span>
+                <span className="text-xs text-gray-400 ml-1">por entrada</span>
+              </div>
+            ) : site.price?.type === 'hourly' ? (
+              <div className="flex items-baseline">
+                <span className="text-lg font-bold text-[#bb00aa]">
+                  ${(site.price.value * 1000).toLocaleString('es-CO', { 
+                    style: 'decimal', 
+                    maximumFractionDigits: 0 
+                  })}
+                </span>
+                <span className="text-xs text-gray-400 ml-1">/hora</span>
+              </div>
+            ) : (
+              <span className="text-sm font-medium text-gray-400">
+                Precio a consultar
+              </span>
+            )}
           </div>
-          
-          <Button 
-            size="sm" 
-            variant="outline"
-            className="bg-transparent border-[#bb00aa] text-[#bb00aa] hover:bg-[#bb00aa]/10 hover:border-[#bb00aa] hover:text-[#bb00aa]"
-          >
-            Ver disponibilidad
-          </Button>
+          <div className="flex items-center gap-2">
+            <Checkbox 
+              id={`compare-${site.id}`}
+              checked={isSelected} 
+              onCheckedChange={() => onToggleSelect(site.id)}
+              className="border-gray-600 data-[state=checked]:bg-[#bb00aa] data-[state=checked]:border-[#bb00aa]" 
+            />
+            <Button 
+              size="sm" 
+              variant="outline"
+              className="bg-gray-800 hover:bg-gray-700 border-gray-700 text-white flex items-center justify-center gap-1.5"
+            >
+              <Eye className="w-4 h-4" />
+              <span>Detalle</span>
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>

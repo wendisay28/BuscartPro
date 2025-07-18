@@ -22,16 +22,18 @@ export function GalleryTab({
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {galleryItems.map(item => (
-        <GalleryCard
-          key={item.id}
-          item={item}
-          isSelected={selectedForComparison.includes(item.id)}
-          onToggleSelect={onToggleSelect}
-          onToggleFavorite={onToggleFavorite}
-        />
-      ))}
+    <div className="w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-10">
+        {galleryItems.map(item => (
+          <GalleryCard
+            key={item.id}
+            item={item}
+            isSelected={selectedForComparison.includes(item.id)}
+            onToggleSelect={onToggleSelect}
+            onToggleFavorite={onToggleFavorite}
+          />
+        ))}
+      </div>
     </div>
   );
 }

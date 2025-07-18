@@ -4,14 +4,14 @@ import { ComparisonItem } from "./ComparisonItem";
 interface ComparisonDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  comparisonTab: string;
   comparisonData: any[];
+  comparisonTab?: 'artists' | 'events' | 'sites' | 'gallery';
 }
 
 export function ComparisonDialog({ 
   open, 
   onOpenChange, 
-  comparisonTab, 
+  comparisonTab = 'artists', 
   comparisonData 
 }: ComparisonDialogProps) {
   return (

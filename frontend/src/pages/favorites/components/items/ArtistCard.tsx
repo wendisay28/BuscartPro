@@ -1,8 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Heart, Star, MapPin, Users, MessageCircle } from "lucide-react";
+import { Heart, MapPin, Star, Users, MessageCircle } from "lucide-react";
 
 interface ArtistCardProps {
   artist: any;
@@ -18,91 +17,90 @@ export function ArtistCard({
   onToggleFavorite 
 }: ArtistCardProps) {
   return (
-    <Card className="relative overflow-hidden border border-gray-700 bg-gray-800 hover:border-[#bb00aa] transition-colors">
-      <CardHeader className="p-0">
-        <div className="relative">
-          <img 
-            src={artist.image} 
-            alt={artist.name}
-            className="w-full h-48 object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-          <div className="absolute bottom-0 left-0 p-4 w-full">
-            <div className="flex justify-between items-end">
-              <div>
-                <CardTitle className="text-white text-xl">{artist.name}</CardTitle>
-                <p className="text-gray-300 text-sm flex items-center">
-                  <MapPin className="w-3 h-3 mr-1" /> {artist.city}
-                </p>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                <span className="text-white text-sm">{artist.rating}</span>
-              </div>
-            </div>
-          </div>
-          
-          <Button 
-            size="icon" 
-            variant="ghost" 
-            className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white"
-            onClick={() => onToggleFavorite(artist.id)}
-          >
-            <Heart className={`w-5 h-5 ${artist.isFavorite ? 'fill-[#bb00aa] text-[#bb00aa]' : 'text-white'}`} />
-          </Button>
-          
-          <div className="absolute top-2 left-2 flex items-center space-x-1">
-            <Checkbox 
-              id={`compare-${artist.id}`}
-              checked={isSelected}
-              onCheckedChange={() => onToggleSelect(artist.id)}
-              className="border-gray-600 data-[state=checked]:bg-[#bb00aa] data-[state=checked]:border-[#bb00aa]"
-            />
-          </div>
-        </div>
-      </CardHeader>
-      
-      <CardContent className="p-4">
-        <div className="flex justify-between items-center mb-3">
-          <Badge variant="secondary" className="text-xs bg-[#1e1e1e] text-white">
-            {artist.category}
-          </Badge>
-          
-          <div className="flex items-center space-x-2">
-            <div className="flex items-center text-sm text-gray-400">
-              <Users className="w-4 h-4 mr-1" />
-              {artist.fans} fans
-            </div>
-            <Badge className={`text-xs px-2 py-0.5 rounded-full ${
-              artist.availability === "Disponible" 
-                ? "bg-[#bb00aa] hover:bg-[#a00090] text-white" 
-                : "bg-gray-600 text-white"
-            }`}>
-              {artist.availability}
+    <Card className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-all duration-300 bg-gray-900 border-gray-800 hover:border-[#bb00aa]/30 hover:shadow-[#bb00aa]/10">
+      <div className="relative aspect-[4/3] overflow-hidden">
+        <img 
+          src={artist.image} 
+          alt={artist.name} 
+          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105" 
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+        <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
+          {artist.verified && (
+            <Badge className="bg-gray-400 hover:bg-gray-500 text-gray-900 text-xs px-2 py-0.5 rounded-full">
+              Verificado
             </Badge>
+          )}
+          <Badge className={`text-xs px-2 py-0.5 rounded-full ${
+            artist.availability === "Disponible" 
+              ? "bg-[#bb00aa] hover:bg-[#a00090] text-white" 
+              : "bg-gray-700 hover:bg-gray-600 text-white"
+          }`}>
+            {artist.availability}
+          </Badge>
+        </div>
+        <Button 
+          size="icon" 
+          variant="ghost" 
+          className="absolute top-2 left-2 bg-black/60 hover:bg-black/80 text-white hover:text-red-400 h-8 w-8 rounded-full"
+          onClick={() => onToggleFavorite(artist.id)}
+        >
+          <Heart className={`w-4 h-4 ${isSelected ? 'fill-red-500 text-red-500' : 'fill-current'}`} />
+        </Button>
+      </div>
+      <CardContent className="p-4 space-y-3 flex-1 flex flex-col">
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="font-bold text-white text-base">{artist.name}</h3>
+            <p className="text-sm text-gray-400">{artist.type}</p>
+          </div>
+          <div className="flex items-center gap-1 bg-[#bb00aa]/10 px-2 py-1 rounded-full">
+            <Star className="w-3.5 h-3.5 fill-[#ffd700] text-[#ffd700]" />
+            <span className="text-sm font-medium text-white">{artist.rating}</span>
           </div>
         </div>
-        
-        <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+        <div className="flex items-center gap-4 text-xs text-gray-400">
+          <div className="flex items-center gap-1">
+            <MapPin className="w-3.5 h-3.5" />
+            <span>{artist.city}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Users className="w-3.5 h-3.5" />
+            <span>{artist.fans} fans</span>
+          </div>
+        </div>
+        <p className="text-sm text-gray-300 line-clamp-2 flex-1">
           {artist.description}
         </p>
-        
-        <div className="flex justify-between items-center">
-          <div>
-            <p className="text-2xl font-bold text-[#bb00aa]">
-              ${(artist.price * 1000).toLocaleString()}
-              <span className="text-sm font-normal text-gray-400">/hora</span>
-            </p>
+        <div className="flex items-center justify-between pt-2">
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-400">Desde</span>
+            <div className="flex items-baseline">
+              <span className="text-lg font-bold text-[#bb00aa]">
+                ${(artist.price * 1000).toLocaleString('es-CO', { 
+                  style: 'decimal', 
+                  maximumFractionDigits: 0 
+                })}
+              </span>
+              <span className="text-xs text-gray-400 ml-1">/hora</span>
+            </div>
           </div>
-          
-          <Button 
-            size="sm" 
-            variant="outline"
-            className="bg-transparent border-[#bb00aa] text-[#bb00aa] hover:bg-[#bb00aa]/10 hover:border-[#bb00aa] hover:text-[#bb00aa]"
-          >
-            <MessageCircle className="w-4 h-4 mr-2" />
-            Contactar
-          </Button>
+          <div className="flex items-center gap-2">
+            <Checkbox 
+              id={`compare-${artist.id}`}
+              checked={isSelected} 
+              onCheckedChange={() => onToggleSelect(artist.id)}
+              className="border-gray-600 data-[state=checked]:bg-[#bb00aa] data-[state=checked]:border-[#bb00aa]" 
+            />
+            <Button 
+              size="sm" 
+              variant="outline"
+              className="bg-gray-800 hover:bg-gray-700 border-gray-700 text-white flex items-center justify-center gap-1.5"
+            >
+              <MessageCircle className="w-4 h-4" />
+              <span>Contactar</span>
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>
