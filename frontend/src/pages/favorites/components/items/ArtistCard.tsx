@@ -39,14 +39,12 @@ export function ArtistCard({
             {artist.availability}
           </Badge>
         </div>
-        <Button 
-          size="icon" 
-          variant="ghost" 
-          className="absolute top-2 left-2 bg-black/60 hover:bg-black/80 text-white hover:text-red-400 h-8 w-8 rounded-full"
-          onClick={() => onToggleFavorite(artist.id)}
-        >
-          <Heart className={`w-4 h-4 ${isSelected ? 'fill-red-500 text-red-500' : 'fill-current'}`} />
-        </Button>
+        <Checkbox 
+          id={`compare-${artist.id}`}
+          checked={isSelected} 
+          onCheckedChange={() => onToggleSelect(artist.id)}
+          className="absolute top-2 left-2 h-5 w-5 border-2 border-white bg-black/60 data-[state=checked]:bg-[#bb00aa] data-[state=checked]:border-[#bb00aa]"
+        />
       </div>
       <CardContent className="p-4 space-y-3 flex-1 flex flex-col">
         <div className="flex items-start justify-between">
@@ -86,12 +84,14 @@ export function ArtistCard({
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Checkbox 
-              id={`compare-${artist.id}`}
-              checked={isSelected} 
-              onCheckedChange={() => onToggleSelect(artist.id)}
-              className="border-gray-600 data-[state=checked]:bg-[#bb00aa] data-[state=checked]:border-[#bb00aa]" 
-            />
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              className="h-9 w-9 bg-gray-800 hover:bg-gray-700 text-white hover:text-red-400 rounded-full"
+              onClick={() => onToggleFavorite(artist.id)}
+            >
+              <Heart className={`w-4 h-4 ${isSelected ? 'fill-red-500 text-red-500' : 'fill-current'}`} />
+            </Button>
             <Button 
               size="sm" 
               variant="outline"

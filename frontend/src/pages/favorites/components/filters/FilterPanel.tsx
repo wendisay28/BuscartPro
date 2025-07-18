@@ -3,15 +3,15 @@ import { Sliders } from "lucide-react";
 
 interface FilterPanelProps {
   showFilters: boolean;
-  selectedFilter: string | null;
+  selectedFilter: 'recent' | 'today' | 'custom' | null;
   customDate: string;
   selectedProfession: string;
-  sortByPrice: string;
+  sortByPrice: 'free' | 'price_asc' | 'price_desc' | '';
   professions: string[];
-  onFilterChange: (filter: string | null) => void;
+  onFilterChange: (filter: 'recent' | 'today' | 'custom' | null) => void;
   onCustomDateChange: (date: string) => void;
   onProfessionChange: (profession: string) => void;
-  onSortByPrice: (sort: string) => void;
+  onSortByPrice: (sort: 'free' | 'price_asc' | 'price_desc' | '') => void;
   onClearFilters: () => void;
   onClose: () => void;
 }
@@ -106,16 +106,22 @@ export function FilterPanel({
           <h3 className="text-sm font-medium text-gray-300 border-b border-gray-700 pb-1 mb-3">Ordenar por precio</h3>
           <div className="space-y-2">
             <div 
-              className={`flex items-center p-2 rounded cursor-pointer ${sortByPrice === 'asc' ? 'bg-[#bb00aa]/20 text-[#bb00aa]' : 'text-gray-300 hover:bg-gray-800'}`}
-              onClick={() => onSortByPrice('asc')}
+              className={`flex items-center p-2 rounded cursor-pointer ${sortByPrice === 'price_asc' ? 'bg-[#bb00aa]/20 text-[#bb00aa]' : 'text-gray-300 hover:bg-gray-800'}`}
+              onClick={() => onSortByPrice('price_asc')}
             >
-              <span>Precio ascendente</span>
+              <span>Menor precio</span>
             </div>
             <div 
-              className={`flex items-center p-2 rounded cursor-pointer ${sortByPrice === 'desc' ? 'bg-[#bb00aa]/20 text-[#bb00aa]' : 'text-gray-300 hover:bg-gray-800'}`}
-              onClick={() => onSortByPrice('desc')}
+              className={`flex items-center p-2 rounded cursor-pointer ${sortByPrice === 'price_desc' ? 'bg-[#bb00aa]/20 text-[#bb00aa]' : 'text-gray-300 hover:bg-gray-800'}`}
+              onClick={() => onSortByPrice('price_desc')}
             >
-              <span>Precio descendente</span>
+              <span>Mayor precio</span>
+            </div>
+            <div 
+              className={`flex items-center p-2 rounded cursor-pointer ${sortByPrice === 'free' ? 'bg-[#bb00aa]/20 text-[#bb00aa]' : 'text-gray-300 hover:bg-gray-800'}`}
+              onClick={() => onSortByPrice('free')}
+            >
+              <span>Entrada libre</span>
             </div>
           </div>
         </div>

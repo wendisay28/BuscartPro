@@ -7,12 +7,15 @@ import { favoriteData } from "@/data/mockFavorites";
 
 import { FilterControls } from "./components/filters/FilterControls";
 import { FilterPanel } from "./components/filters/FilterPanel";
+import { EventFilterPanel } from "./components/filters/EventFilterPanel";
 import { ComparisonDialog } from "./components/comparison/ComparisonDialog";
 import { ArtistsTab } from "./components/tabs/ArtistsTab";
 import { EventsTab } from "./components/tabs/EventsTab";
 import { SitesTab } from "./components/tabs/SitesTab";
 import { GalleryTab } from "./components/tabs/GalleryTab";
 import { Button } from "@/components/ui/button";
+import { SiteFilterPanel } from "./components/filters/SiteFilterPanel";
+import { GalleryFilterPanel } from "./components/filters/GalleryFilterPanel";
 
 export default function Favorites() {
   useAuth();
@@ -23,7 +26,7 @@ export default function Favorites() {
   const [selectedFilter, setSelectedFilter] = useState<'recent' | 'today' | 'custom' | null>(null);
   const [customDate, setCustomDate] = useState('');
   const [selectedProfession, setSelectedProfession] = useState<string>('');
-  const [sortByPrice, setSortByPrice] = useState<'asc' | 'desc' | ''>('');
+  const [sortByPrice, setSortByPrice] = useState<'free' | 'price_asc' | 'price_desc' | ''>('');
   const [showMobileDropdown, setShowMobileDropdown] = useState(false);
 
   // Lista de profesiones disponibles
@@ -39,6 +42,35 @@ export default function Favorites() {
     'Decorador',
     'Otro'
   ];
+
+  // Estados para los filtros de eventos
+  const [selectedEventCategory, setSelectedEventCategory] = useState<string>('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setSelectedModality] = useState<string>('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [__, setSelectedEventCity] = useState<string>('');
+
+  // Estados para filtros de sitios
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [selectedService, setSelectedService] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [selectedCapacity, setSelectedCapacity] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [selectedSiteCity, setSelectedSiteCity] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [selectedPrice, setSelectedPrice] = useState('');
+  
+  // Estados para los filtros de la galería
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [selectedCategory, setSelectedCategory] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [selectedBookType, setSelectedBookType] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [selectedStyle, setSelectedStyle] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [selectedTrend, setSelectedTrend] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000000]);
 
   // Efecto para cerrar el panel de filtros al hacer scroll
   useEffect(() => {
@@ -90,6 +122,16 @@ export default function Favorites() {
     );
   };
 
+  // Manejador para cambiar el filtro
+  const handleFilterChange = (filter: 'recent' | 'today' | 'custom' | null) => {
+    setSelectedFilter(filter);
+  };
+
+  // Manejador para cambiar el orden por precio
+  const handleSortByPrice = (sort: 'free' | 'price_asc' | 'price_desc' | '') => {
+    setSortByPrice(sort);
+  };
+
   // Función para alternar favorito
   const toggleFavorite = (id: number) => {
     console.log('Toggle favorite:', id);
@@ -101,6 +143,18 @@ export default function Favorites() {
     setCustomDate('');
     setSelectedProfession('');
     setSortByPrice('');
+    setSelectedEventCategory('');
+    setSelectedModality('');
+    setSelectedEventCity('');
+    setSelectedService('');
+    setSelectedCapacity('');
+    setSelectedSiteCity('');
+    setSelectedPrice('');
+    setSelectedCategory('');
+    setSelectedBookType('');
+    setSelectedStyle('');
+    setSelectedTrend('');
+    setPriceRange([0, 1000000]);
   };
 
   // Obtener el sustantivo correcto para la categoría
@@ -132,19 +186,74 @@ export default function Favorites() {
             />
           </div>
 
-          {/* Panel de filtros */}
-          {showFilters && (
+          {/* Panel de filtros para artistas */}
+          {showFilters && activeTab === 'artists' && (
             <FilterPanel
               showFilters={showFilters}
               selectedFilter={selectedFilter}
               customDate={customDate}
               selectedProfession={selectedProfession}
               sortByPrice={sortByPrice}
-              professions={professions}
-              onFilterChange={(filter) => setSelectedFilter(filter as 'recent' | 'today' | 'custom' | null)}
+              onFilterChange={handleFilterChange}
               onCustomDateChange={setCustomDate}
               onProfessionChange={setSelectedProfession}
-              onSortByPrice={(sort) => setSortByPrice(sort as 'asc' | 'desc' | '')}
+              onSortByPrice={handleSortByPrice}
+              onClearFilters={clearFilters}
+              onClose={() => setShowFilters(false)}
+              professions={professions}
+            />
+          )}
+
+          {/* Panel de filtros para eventos */}
+          {showFilters && activeTab === 'events' && (
+            <EventFilterPanel
+              showFilters={showFilters}
+              selectedFilter={selectedFilter}
+              customDate={customDate}
+              selectedCategory={selectedEventCategory}
+              sortByPrice={sortByPrice}
+              onFilterChange={handleFilterChange}
+              onCustomDateChange={setCustomDate}
+              onCategoryChange={setSelectedEventCategory}
+              onSortByPrice={handleSortByPrice}
+              onClearFilters={clearFilters}
+              onModalityChange={setSelectedModality}
+              onCityChange={setSelectedEventCity}
+              onClose={() => setShowFilters(false)}
+            />
+          )}
+
+          {/* Panel de filtros para sitios */}
+          {showFilters && activeTab === 'sites' && (
+            <SiteFilterPanel
+              showFilters={showFilters}
+              selectedService={selectedService}
+              selectedCapacity={selectedCapacity}
+              selectedCity={selectedSiteCity}
+              selectedPrice={selectedPrice}
+              onServiceChange={setSelectedService}
+              onCapacityChange={setSelectedCapacity}
+              onCityChange={setSelectedSiteCity}
+              onPriceChange={setSelectedPrice}
+              onClearFilters={clearFilters}
+              onClose={() => setShowFilters(false)}
+            />
+          )}
+
+          {/* Panel de filtros para la galería */}
+          {showFilters && activeTab === 'gallery' && (
+            <GalleryFilterPanel
+              showFilters={showFilters}
+              selectedCategory={selectedCategory}
+              selectedBookType={selectedBookType}
+              selectedStyle={selectedStyle}
+              selectedTrend={selectedTrend}
+              priceRange={priceRange}
+              onCategoryChange={setSelectedCategory}
+              onBookTypeChange={setSelectedBookType}
+              onStyleChange={setSelectedStyle}
+              onTrendChange={setSelectedTrend}
+              onPriceRangeChange={setPriceRange}
               onClearFilters={clearFilters}
               onClose={() => setShowFilters(false)}
             />

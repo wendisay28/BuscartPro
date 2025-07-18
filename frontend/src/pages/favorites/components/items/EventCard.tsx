@@ -26,14 +26,12 @@ export function EventCard({
           className="w-full h-full object-cover transition-transform duration-300 hover:scale-105" 
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-        <Button 
-          size="icon" 
-          variant="ghost" 
-          className="absolute top-2 left-2 bg-black/60 hover:bg-black/80 text-white hover:text-red-400 h-8 w-8 rounded-full"
-          onClick={() => onToggleFavorite(event.id)}
-        >
-          <Heart className={`w-4 h-4 ${isSelected ? 'fill-red-500 text-red-500' : 'fill-current'}`} />
-        </Button>
+        <Checkbox 
+          id={`compare-${event.id}`}
+          checked={isSelected} 
+          onCheckedChange={() => onToggleSelect(event.id)}
+          className="absolute top-2 left-2 h-5 w-5 border-2 border-white bg-black/60 data-[state=checked]:bg-[#bb00aa] data-[state=checked]:border-[#bb00aa]"
+        />
         <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
           <Badge className="bg-black/60 hover:bg-[#bb00aa] text-white text-xs px-2 py-1 rounded-full transition-colors duration-300">
             {event.category}
@@ -98,12 +96,14 @@ export function EventCard({
             )}
           </div>
           <div className="flex items-center gap-2">
-            <Checkbox 
-              id={`compare-${event.id}`}
-              checked={isSelected} 
-              onCheckedChange={() => onToggleSelect(event.id)}
-              className="border-gray-600 data-[state=checked]:bg-[#bb00aa] data-[state=checked]:border-[#bb00aa]" 
-            />
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              className="h-9 w-9 bg-gray-800 hover:bg-gray-700 text-white hover:text-red-400 rounded-full"
+              onClick={() => onToggleFavorite(event.id)}
+            >
+              <Heart className={`w-4 h-4 ${isSelected ? 'fill-red-500 text-red-500' : 'fill-current'}`} />
+            </Button>
             <Button 
               size="sm" 
               variant="outline"
