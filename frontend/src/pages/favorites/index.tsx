@@ -176,7 +176,7 @@ export default function Favorites() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-white">Mis Favoritos</h1>
-              <p className="text-gray-400">Artistas, eventos y sitios que te gustan</p>
+              <p className="text-gray-400 whitespace-nowrap">Busca, Compara y contrata lo que te gusta</p>
             </div>
             <FilterControls
               showFilters={showFilters}
@@ -262,8 +262,8 @@ export default function Favorites() {
       </div>
 
       {/* Contenido principal con scroll */}
-      <div className="w-full py-6 overflow-x-visible" style={{ height: 'calc(100vh - 220px)' }}>
-        <div className="max-w-[90rem] mx-auto w-full px-4 overflow-y-auto h-full">
+      <div className="w-full py-6 overflow-x-visible">
+        <div className="max-w-[90rem] mx-auto w-full px-4 overflow-y-visible">
           <Tabs value={activeTab} onValueChange={(value) => { setActiveTab(value); setSelectedForComparison([]); }} className="w-full">
             {/* Versión móvil - Menú desplegable */}
             <div className="sm:hidden mb-6 relative">
