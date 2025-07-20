@@ -29,6 +29,9 @@ interface FeatureItemProps {
   className?: string;
 }
 
+// Componente FeatureItem comentado ya que no se está utilizando actualmente
+// Se mantiene la interfaz por si es necesaria en el futuro
+/*
 const FeatureItem: React.FC<FeatureItemProps> = ({ icon, value, className }) => (
   <div className={"flex items-center gap-3 text-sm text-gray-100 leading-relaxed " + (className || '')}>
     <div className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center">
@@ -37,6 +40,7 @@ const FeatureItem: React.FC<FeatureItemProps> = ({ icon, value, className }) => 
     <span>{value}</span>
   </div>
 );
+*/
 
 interface Price {
   type: 'fixed' | 'free' | 'ticket' | 'hourly';
@@ -111,10 +115,9 @@ export const ComparisonItem: React.FC<ComparisonItemProps> = ({ item, type }) =>
   // Obtener el tipo de servicio basado en el precio
   const getServiceType = (): string => {
     if (!isSite) return '';
-    if (price.type === 'free') return 'Visita';
+    if (price.type === 'free' || price.type === 'ticket') return 'Visita';
     if (price.type === 'hourly') return 'Alquiler';
-    if (price.type === 'ticket') return 'Entrada con boleto';
-    return '';
+    return 'Visita';
   };
   
   // Función para formatear el precio
@@ -139,10 +142,13 @@ export const ComparisonItem: React.FC<ComparisonItemProps> = ({ item, type }) =>
   // Obtenemos el precio formateado
   const { display: priceDisplay, showCurrency } = getFormattedPrice();
   
+  // Estilos condicionales basados en el tipo
+  const isGallery = type === 'gallery';
+  
   return (
-    <div className="bg-neutral-900 p-2 rounded-2xl flex flex-col h-[460px]">
-      <Card className="flex flex-col border-none shadow-xl overflow-hidden rounded-2xl h-full">
-        <div className="relative flex-shrink-0 h-40">
+    <div className={`bg-neutral-900 p-2 rounded-2xl flex flex-col ${isGallery ? 'h-[580px]' : 'h-[520px]'}`}>
+      <Card className="flex flex-col border-none shadow-xl overflow-hidden rounded-2xl h-full group transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+        <div className={`relative flex-shrink-0 ${isGallery ? 'h-48' : 'h-40'} overflow-hidden`}>
           {item.image ? (
             <img
               src={item.image}
@@ -212,21 +218,31 @@ export const ComparisonItem: React.FC<ComparisonItemProps> = ({ item, type }) =>
               <div className="flex items-center gap-1 text-white/80 text-xs">
                 {isGalleryItem ? (
                   <>
-                    <span>{item.artist || 'Artista'}</span>
+                    <span className="font-medium">{item.artist || 'Artista'}</span>
                     <span>•</span>
-                    <span>{item.type || 'Sin tipo'}</span>
+                    <span className="text-gray-300">{item.type || 'Sin tipo'}</span>
+                    {item.condition && (
+                      <Badge variant="outline" className="ml-2 text-[10px] h-5 px-1.5 py-0 border-gray-600 text-gray-300">
+                        {item.condition}
+                      </Badge>
+                    )}
                   </>
                 ) : isEvent ? (
                   <>
-                    <span>{'venue' in item ? item.venue : ''}</span>
+                    <span className="font-medium">{'venue' in item ? item.venue : ''}</span>
                     <span>•</span>
-                    <span>{'city' in item ? item.city : ''}</span>
+                    <span className="text-gray-300">{'city' in item ? item.city : ''}</span>
                   </>
                 ) : (
-                  <>
-                    <Music className="w-3 h-3" />
-                    <span>{item.type || item.category}</span>
-                  </>
+                  <div className="flex items-center gap-2">
+                    <Music className="w-3.5 h-3.5 text-fuchsia-400" />
+                    <span className="font-medium">{item.type || item.category}</span>
+                    {item.verified && (
+                      <Badge variant="outline" className="h-4 px-1.5 text-[10px] border-blue-500 text-blue-400 bg-blue-500/10">
+                        Verificado
+                      </Badge>
+                    )}
+                  </div>
                 )}
               </div>
               {isEvent && 'mode' in item && (
@@ -243,66 +259,176 @@ export const ComparisonItem: React.FC<ComparisonItemProps> = ({ item, type }) =>
           </div>
         </div>
 
-        <div className="p-3 bg-neutral-950 flex-1 flex flex-col pb-4">
+        <div className="p-4 bg-neutral-950 flex-1 flex flex-col pb-4">
           {isEvent ? (
             <>
-              <div className="space-y-3 mb-4">
-                {item.date && (
-                  <div className="flex items-center gap-2">
-                    <CalendarDays className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                    <span className="text-sm font-medium text-gray-100">
-                      {format(new Date(item.date), "dd/MM/yyyy")}
-                      {item.time && (
-                        <>
-                          <Clock className="w-3.5 h-3.5 text-gray-400 mx-1.5 inline" />
-                          <span className="text-gray-100">
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                {/* Columna izquierda */}
+                <div className="space-y-3">
+                  <div className="bg-neutral-900/50 p-2 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <CalendarDays className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                      <div>
+                        <p className="text-xs text-gray-400">Fecha</p>
+                        <p className="text-sm font-medium text-white">
+                          {item.date ? format(new Date(item.date), "dd/MM/yyyy") : 'No especificada'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {item.type && (
+                    <div className="bg-neutral-900/50 p-2 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <Info className="w-4 h-4 text-purple-400 flex-shrink-0" />
+                        <div className="min-w-0">
+                          <p className="text-xs text-gray-400">Tipo</p>
+                          <p className="text-sm font-medium text-white truncate" title={item.type}>
+                            {item.type
+                              .replace('Concierto', 'Concierto ')
+                              .replace('Online', 'Online')
+                              .replace('Presencial', 'Pres.')
+                              .replace('Taller', 'Taller ')
+                              .replace('Conferencia', 'Conf.')}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Columna derecha */}
+                <div className="space-y-3">
+                  {item.time && (
+                    <div className="bg-neutral-900/50 p-2 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-yellow-400 flex-shrink-0" />
+                        <div>
+                          <p className="text-xs text-gray-400">Hora</p>
+                          <p className="text-sm font-medium text-white">
                             {new Date(`2000-01-01T${item.time}`).toLocaleTimeString('es-CO', { 
                               hour: '2-digit', 
                               minute: '2-digit',
                               hour12: true 
-                            }).toLowerCase()}
-                          </span>
-                        </>
-                      )}
-                    </span>
-                  </div>
-                )}
-                
-                {item.description && (
-                  <div className="relative -top-2">
-                    <p className="text-sm text-gray-300 line-clamp-2">{item.description}</p>
-                  </div>
-                )}
-
-                {item.tags && item.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 mt-2 mb-4">
-                    {item.tags.map((tag, index) => (
-                      <Badge key={index} variant="secondary" className="text-xs bg-neutral-800 text-gray-200 border-none">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {item.category && (
+                    <div className="bg-neutral-900/50 p-2 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-fuchsia-400">
+                          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                          <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                        </svg>
+                        <div>
+                          <p className="text-xs text-gray-400">Categoría</p>
+                          <p className="text-sm font-medium text-white">{item.category}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
+              
+              {/* Descripción */}
+              {item.description && (
+                <div className="mb-3">
+                  <p className="text-sm text-gray-300 line-clamp-2 leading-tight">
+                    {item.description}
+                  </p>
+                </div>
+              )}
+
+              {/* Tags */}
+              {item.tags && item.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {item.tags.map((tag, index) => (
+                    <Badge 
+                      key={index} 
+                      variant="secondary" 
+                      className="text-xs bg-neutral-800 text-gray-200 border-none"
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </>
           ) : isSite ? (
             <div className="space-y-4">
-              {/* Primera fila: Uso y ubicación */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-center gap-3 text-sm text-gray-100 leading-relaxed">
-                  <div className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center">
-                    <Info className="w-4 h-4" />
+              {/* Layout similar a eventos con dos columnas */}
+              <div className="grid grid-cols-2 gap-3">
+                {/* Columna izquierda */}
+                <div className="space-y-3">
+                  <div className="bg-neutral-900/50 p-2 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-blue-400">
+                          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-400">Visita</p>
+                        <p className="text-sm font-medium text-white">
+                          {getServiceType()}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium capitalize">{item.usage || getServiceType()}</p>
+                  
+                  <div className="bg-neutral-900/50 p-2 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-green-400">
+                          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-400">Ambiente</p>
+                        <p className="text-sm font-medium text-white">
+                          Libre de humo
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-gray-100 leading-relaxed">
-                  <div className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center">
-                    <MapPin className="w-4 h-4" />
+
+                {/* Columna derecha */}
+                <div className="space-y-3">
+                  <div className="bg-neutral-900/50 p-2 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center">
+                        <MapPin className="w-4 h-4 text-yellow-400" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-400">Ubicación</p>
+                        <p className="text-sm font-medium text-white">
+                          {item.city || 'No disponible'}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium">{item.city || 'Ubicación no disponible'}</p>
+                  
+                  <div className="bg-neutral-900/50 p-2 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-400 w-4 h-4">
+                          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                          <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-400">Mascotas</p>
+                        <p className="text-sm font-medium text-white">
+                          Pet Friendly
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -405,42 +531,81 @@ export const ComparisonItem: React.FC<ComparisonItemProps> = ({ item, type }) =>
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <FeatureItem
-                  icon={<Users className="w-4 h-4" />}
-                  value={`${item.members ?? 1} ${(item.members ?? 1) === 1 ? "miembro" : "miembros"}`}
-                />
-                <FeatureItem
-                  icon={item.verified ? <UserCheck className="w-4 h-4 text-blue-500" /> : <UserX className="w-4 h-4 text-gray-400" />}
-                  value={item.verified ? "Verificado" : "No verificado"}
-                />
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div className="bg-neutral-900/50 p-2 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Users className="w-4 h-4 text-fuchsia-400 flex-shrink-0" />
+                    <div>
+                      <p className="text-xs text-gray-400">Miembros</p>
+                      <p className="text-sm font-medium text-white">{item.members ?? 1} {(item.members ?? 1) === 1 ? "miembro" : "miembros"}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-neutral-900/50 p-2 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    {item.verified ? (
+                      <UserCheck className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    ) : (
+                      <UserX className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                    )}
+                    <div>
+                      <p className="text-xs text-gray-400">Estado</p>
+                      <p className={`text-sm font-medium ${item.verified ? 'text-green-400' : 'text-gray-400'}`}>
+                        {item.verified ? 'Verificado' : 'No verificado'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="grid grid-cols-2 gap-3 mb-3">
                 {item.equipment && (
-                  <FeatureItem
-                    icon={<Info className="w-4 h-4" />}
-                    value={item.equipment === "Sí" ? "Equipo incluido" : "Sin equipo"}
-                  />
+                  <div className="bg-neutral-900/50 p-2 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <Info className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                      <div>
+                        <p className="text-xs text-gray-400">Equipo</p>
+                        <p className="text-sm font-medium text-white">
+                          {item.equipment === "Sí" ? "Incluido" : "No incluido"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 )}
                 {item.specialties?.[0] && (
-                  <FeatureItem
-                    icon={<Award className="w-4 h-4" />}
-                    value={item.specialties[0]}
-                  />
+                  <div className="bg-neutral-900/50 p-2 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <Award className="w-4 h-4 text-yellow-400 flex-shrink-0" />
+                      <div>
+                        <p className="text-xs text-gray-400">Especialidad</p>
+                        <p className="text-sm font-medium text-white line-clamp-1">{item.specialties[0]}</p>
+                      </div>
+                    </div>
+                  </div>
                 )}
               </div>
+              
+              {item.description && (
+                <div className="mb-3">
+                  <p className="text-sm text-gray-300 line-clamp-2 leading-tight">
+                    {item.description}
+                  </p>
+                </div>
+              )}
 
               {item.instruments && item.instruments.length > 0 && (
-                <div className="mb-6">
-                  <div className="flex items-start gap-2 text-sm text-gray-100 leading-relaxed">
-                    <Music className="w-4 h-4 flex-shrink-0 text-white/70 mt-0.5" />
+                <div className="mb-4">
+                  <div className="flex items-start gap-2 text-sm text-gray-100">
+                    <Music className="w-4 h-4 flex-shrink-0 text-white/70 mt-1" />
                     <div className="flex flex-wrap gap-1.5">
                       {item.instruments.map((instrument, index) => (
-                        <span key={index} className="font-medium text-sm">
+                        <Badge 
+                          key={index} 
+                          variant="secondary" 
+                          className="text-xs bg-neutral-800 text-gray-200 border-none whitespace-nowrap"
+                        >
                           {instrument}
-                          {index < (item.instruments?.length || 0) - 1 ? "," : ""}
-                        </span>
+                        </Badge>
                       ))}
                     </div>
                   </div>
@@ -496,17 +661,29 @@ export const ComparisonItem: React.FC<ComparisonItemProps> = ({ item, type }) =>
           </div>
         </div>
 
-        <div className="flex justify-between items-center p-2 border-t border-neutral-800">
-          <div className="flex gap-1">
-            <Button variant="ghost" size="icon" className="w-6 h-6 rounded-full hover:bg-neutral-800">
-              <MessageSquare className="w-3.5 h-3.5" />
+        <div className="flex justify-between items-center p-3 border-t border-neutral-800 mt-auto">
+          <div className="flex gap-2">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="w-8 h-8 rounded-full hover:bg-neutral-800 transition-colors duration-200"
+            >
+              <MessageSquare className="w-4 h-4 text-gray-300" />
             </Button>
-            <Button variant="ghost" size="icon" className="w-6 h-6 rounded-full hover:bg-neutral-800">
-              <Phone className="w-3.5 h-3.5" />
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="w-8 h-8 rounded-full hover:bg-neutral-800 transition-colors duration-200"
+            >
+              <Phone className="w-4 h-4 text-gray-300" />
             </Button>
           </div>
-          <Button variant="ghost" size="icon" className="w-6 h-6 rounded-full hover:bg-neutral-800">
-            <Share2 className="w-3.5 h-3.5" />
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="w-8 h-8 rounded-full hover:bg-neutral-800 transition-colors duration-200"
+          >
+            <Share2 className="w-4 h-4 text-gray-300" />
           </Button>
         </div>
       </Card>
