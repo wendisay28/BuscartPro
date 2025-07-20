@@ -719,11 +719,12 @@ export const favoriteData = {
       rating: 4.8,
       capacity: 1600,
       price: { type: "ticket", value: 70000 },
-      image: "https://picsum.photos/id/1000/400/300", // Teatro
+      image: "https://picsum.photos/id/1000/400/300",
       description: "El principal teatro de Medellín para conciertos, obras y eventos culturales.",
       amenities: ["Parqueadero", "Accesible", "Bar"],
       available: true,
-      verified: true
+      verified: true,
+      usage: "visita"
     },
     {
       id: 2,
@@ -733,11 +734,12 @@ export const favoriteData = {
       rating: 4.6,
       capacity: 120,
       price: { type: "free" },
-      image: "https://picsum.photos/id/1001/400/300", // Centro Cultural
+      image: "https://picsum.photos/id/1001/400/300",
       description: "Espacio comunitario para talleres, exposiciones y presentaciones artísticas.",
       amenities: ["WiFi", "Accesible", "Cafetería"],
       available: true,
-      verified: true
+      verified: true,
+      usage: "visita"
     },
     {
       id: 3,
@@ -747,11 +749,12 @@ export const favoriteData = {
       rating: 4.7,
       capacity: 60,
       price: { type: "hourly", value: 150000 },
-      image: "https://picsum.photos/id/1002/400/300", // Café Cultural
+      image: "https://picsum.photos/id/1002/400/300",
       description: "Café que mezcla música en vivo, poesía y charlas culturales.",
       amenities: ["WiFi", "Cafetería", "Accesible"],
       available: true,
-      verified: true
+      verified: true,
+      usage: "alquiler"
     },
     {
       id: 4,
@@ -761,11 +764,12 @@ export const favoriteData = {
       rating: 4.8,
       capacity: 1200,
       price: { type: "ticket", value: 50000 },
-      image: "https://picsum.photos/id/1003/400/300", // Auditorio
+      image: "https://picsum.photos/id/1003/400/300",
       description: "Espacio para conciertos sinfónicos, graduaciones y obras de teatro.",
       amenities: ["Accesible", "Parqueadero"],
       available: true,
-      verified: true
+      verified: true,
+      usage: "visita"
     },
     {
       id: 5,
@@ -775,11 +779,12 @@ export const favoriteData = {
       rating: 4.5,
       capacity: 4000,
       price: { type: "ticket", value: 30000 },
-      image: "https://picsum.photos/id/1004/400/300", // Plaza Abierta
+      image: "https://picsum.photos/id/1004/400/300",
       description: "Escenario al aire libre para conciertos y ferias culturales.",
       amenities: ["Accesible", "Parqueadero"],
       available: true,
-      verified: false
+      verified: false,
+      usage: "visita"
     },
     {
       id: 6,
@@ -789,11 +794,12 @@ export const favoriteData = {
       rating: 4.6,
       capacity: 300,
       price: { type: "hourly", value: 250000 },
-      image: "https://picsum.photos/id/1005/400/300", // Sala de Conciertos
+      image: "https://picsum.photos/id/1005/400/300",
       description: "Sala versátil para ensayos y conciertos acústicos.",
       amenities: ["WiFi", "Accesible"],
       available: true,
-      verified: false
+      verified: false,
+      usage: "alquiler"
     },
     {
       id: 7,
@@ -803,11 +809,12 @@ export const favoriteData = {
       rating: 4.7,
       capacity: 200,
       price: { type: "hourly", value: 350000 },
-      image: "https://picsum.photos/id/1006/400/300", // Salón de Eventos
+      image: "https://picsum.photos/id/1006/400/300",
       description: "Salón con vista panorámica, ideal para recepciones y fiestas privadas.",
       amenities: ["Parqueadero", "Catering", "Decoración"],
       available: true,
-      verified: true
+      verified: true,
+      usage: "alquiler"
     },
     {
       id: 8,
@@ -817,11 +824,12 @@ export const favoriteData = {
       rating: 4.9,
       capacity: 500,
       price: { type: "ticket", value: 40000 },
-      image: "https://picsum.photos/id/1008/400/300", // Teatro
+      image: "https://picsum.photos/id/1008/400/300",
       description: "Reconocido teatro independiente de Bogotá para obras contemporáneas.",
       amenities: ["Accesible", "Bar"],
       available: true,
-      verified: true
+      verified: true,
+      usage: "visita"
     },
     {
       id: 9,
@@ -831,11 +839,12 @@ export const favoriteData = {
       rating: 4.5,
       capacity: 50,
       price: { type: "hourly", value: 100000 },
-      image: "https://picsum.photos/id/1009/400/300", // Espacio Coworking
+      image: "https://picsum.photos/id/1009/400/300",
       description: "Espacio cowork para talleres artísticos y reuniones creativas.",
       amenities: ["WiFi", "Cafetería", "Accesible"],
       available: true,
-      verified: true
+      verified: true,
+      usage: "alquiler"
     },
     {
       id: 10,
@@ -845,11 +854,12 @@ export const favoriteData = {
       rating: 4.8,
       capacity: 20,
       price: { type: "hourly", value: 120000 },
-      image: "https://picsum.photos/id/1010/400/300", // Estudio Fotográfico
+      image: "https://picsum.photos/id/1010/400/300",
       description: "Estudio de fotografía profesional para books y producciones editoriales.",
       amenities: ["WiFi", "Accesible"],
       available: true,
-      verified: true
+      verified: true,
+      usage: "alquiler"
     }
   ],
   gallery: [
@@ -864,10 +874,24 @@ export const favoriteData = {
       sales: 35,
       condition: "Nuevo",
       category: "Instrumentos Musicales",
-      image: "https://picsum.photos/id/100/400/300", // Guitarra
+      stock: 10,
+      usage: "venta",
+      tags: ["instrumento", "guitarra", "acústica"],
+      image: "https://picsum.photos/id/100/400/300",
       description: "Guitarra acústica ideal para principiantes y nivel intermedio. Excelente sonido y construcción.",
       available: true,
-      verified: true
+      verified: true,
+      weight: "2.5 kg",
+      dimensions: "100 x 40 x 10 cm",
+      certificate: null,
+      isbn: null,
+      publisher: "Yamaha",
+      pages: null,
+      language: null,
+      format: null,
+      medium: "Madera y cuerdas de acero",
+      framed: null,
+      signed: null
     },
     {
       id: 2,
@@ -880,10 +904,24 @@ export const favoriteData = {
       sales: 28,
       condition: "Nuevo",
       category: "Arte",
-      image: "https://picsum.photos/id/200/400/300", // Libro de Arte
+      stock: 20,
+      usage: "venta",
+      tags: ["arte", "historia", "gombrich"],
+      image: "https://picsum.photos/id/200/400/300",
       description: "Un clásico imprescindible para entender la evolución del arte a lo largo de la historia.",
       available: true,
-      verified: true
+      verified: true,
+      weight: "0.8 kg",
+      dimensions: "21 x 28 x 3 cm",
+      certificate: null,
+      isbn: "978-0714832470",
+      publisher: "Phaidon Press",
+      pages: 688,
+      language: "Español",
+      format: "Tapa blanda",
+      medium: null,
+      framed: null,
+      signed: null
     },
     {
       id: 3,
@@ -896,10 +934,24 @@ export const favoriteData = {
       sales: 12,
       condition: "Original",
       category: "Obra de Arte",
-      image: "https://picsum.photos/id/300/400/300", // Pintura al Óleo
-      description: "Obra original que captura la belleza de un atardecer. Medidas: 80x60cm.",
+      stock: 1,
+      usage: "venta",
+      tags: ["pintura", "óleo", "atardecer", "paisaje"],
+      image: "https://picsum.photos/id/300/400/300",
+      description: "Obra original que captura la belleza de un atardecer, pintura en oleo.",
       available: true,
-      verified: true
+      verified: true,
+      weight: "2 kg",
+      dimensions: "80 x 60 cm",
+      certificate: true,
+      isbn: null,
+      publisher: null,
+      pages: null,
+      language: null,
+      format: null,
+      medium: "Óleo sobre lienzo",
+      framed: true,
+      signed: true
     },
     {
       id: 4,
@@ -912,10 +964,24 @@ export const favoriteData = {
       sales: 8,
       condition: "Original",
       category: "Obra de Arte",
-      image: "https://picsum.photos/id/400/400/300", // Escultura
+      stock: 1,
+      usage: "venta",
+      tags: ["escultura", "bronce", "arte"],
+      image: "https://picsum.photos/id/400/400/300",
       description: "Escultura de bronce pulido sobre base de mármol. Edición limitada.",
       available: true,
-      verified: false
+      verified: false,
+      weight: "5 kg",
+      dimensions: "40 x 30 x 20 cm",
+      certificate: true,
+      isbn: null,
+      publisher: null,
+      pages: null,
+      language: null,
+      format: null,
+      medium: "Bronce y mármol",
+      framed: false,
+      signed: false
     },
     {
       id: 5,
@@ -928,10 +994,24 @@ export const favoriteData = {
       sales: 42,
       condition: "Nuevo",
       category: "Materiales de Arte",
-      image: "https://picsum.photos/id/500/400/300", // Pinceles
+      stock: 30,
+      usage: "venta",
+      tags: ["pinceles", "óleo", "arte"],
+      image: "https://picsum.photos/id/500/400/300",
       description: "Set profesional de 12 pinceles para óleo de diferentes tamaños y formas.",
       available: true,
-      verified: true
+      verified: true,
+      weight: "0.5 kg",
+      dimensions: "25 x 10 x 3 cm",
+      certificate: null,
+      isbn: null,
+      publisher: "Artisan Pro",
+      pages: null,
+      language: null,
+      format: null,
+      medium: "Madera y cerdas sintéticas",
+      framed: null,
+      signed: null
     },
     {
       id: 6,
@@ -944,10 +1024,24 @@ export const favoriteData = {
       sales: 60,
       condition: "Nuevo",
       category: "Negocios / Estrategia",
-      image: "https://picsum.photos/id/600/400/300", // Libro Estrategia
+      stock: 25,
+      usage: "venta",
+      tags: ["estrategia", "liderazgo", "sun tzu"],
+      image: "https://picsum.photos/id/600/400/300",
       description: "Edición revisada del clásico sobre estrategia y liderazgo.",
       available: true,
-      verified: true
+      verified: true,
+      weight: "0.3 kg",
+      dimensions: "19 x 13 x 2 cm",
+      certificate: null,
+      isbn: "978-6073159576",
+      publisher: "Penguin Random House",
+      pages: 320,
+      language: "Español",
+      format: "Tapa blanda",
+      medium: null,
+      framed: null,
+      signed: null
     },
     {
       id: 7,
@@ -960,10 +1054,24 @@ export const favoriteData = {
       sales: 5,
       condition: "Réplica",
       category: "Instrumentos Musicales",
-      image: "https://picsum.photos/id/700/400/300", // Violín
+      stock: 2,
+      usage: "venta",
+      tags: ["violín", "stradivarius", "réplica"],
+      image: "https://picsum.photos/id/700/400/300",
       description: "Réplica de violín inspirado en el legendario Stradivarius.",
       available: true,
-      verified: false
+      verified: false,
+      weight: "1.2 kg",
+      dimensions: "60 x 20 x 7 cm",
+      certificate: null,
+      isbn: null,
+      publisher: "Luthier Local",
+      pages: null,
+      language: null,
+      format: null,
+      medium: "Madera de arce y abeto",
+      framed: null,
+      signed: false
     },
     {
       id: 8,
@@ -976,10 +1084,24 @@ export const favoriteData = {
       sales: 7,
       condition: "Original",
       category: "Obra de Arte",
-      image: "https://picsum.photos/id/800/400/300", // Obra Gráfica
+      stock: 5,
+      usage: "venta",
+      tags: ["obra gráfica", "serigrafía", "urbano"],
+      image: "https://picsum.photos/id/800/400/300",
       description: "Obra gráfica firmada y numerada por el colectivo local.",
       available: true,
-      verified: true
+      verified: true,
+      weight: "0.7 kg",
+      dimensions: "50 x 70 cm",
+      certificate: true,
+      isbn: null,
+      publisher: null,
+      pages: null,
+      language: null,
+      format: null,
+      medium: "Serigrafía sobre papel",
+      framed: false,
+      signed: true
     },
     {
       id: 9,
@@ -992,10 +1114,24 @@ export const favoriteData = {
       sales: 18,
       condition: "Segunda mano",
       category: "Biografía",
-      image: "https://picsum.photos/id/900/400/300", // Libro Biografía
+      stock: 3,
+      usage: "venta",
+      tags: ["frida kahlo", "biografía", "arte"],
+      image: "https://picsum.photos/id/900/400/300",
       description: "Biografía ilustrada sobre la vida de la icónica artista mexicana.",
       available: true,
-      verified: true
+      verified: true,
+      weight: "0.9 kg",
+      dimensions: "23 x 15 x 3 cm",
+      certificate: null,
+      isbn: "978-0060923199",
+      publisher: "HarperCollins",
+      pages: 560,
+      language: "Español",
+      format: "Tapa blanda",
+      medium: null,
+      framed: null,
+      signed: null
     },
     {
       id: 10,
@@ -1008,10 +1144,24 @@ export const favoriteData = {
       sales: 15,
       condition: "Nuevo",
       category: "Equipos de Producción",
-      image: "https://picsum.photos/id/1000/400/300", // Micrófono
+      stock: 12,
+      usage: "venta",
+      tags: ["micrófono", "shure", "audio"],
+      image: "https://picsum.photos/id/1000/400/300",
       description: "Micrófono dinámico profesional ideal para presentaciones en vivo.",
       available: true,
-      verified: true
+      verified: true,
+      weight: "0.3 kg",
+      dimensions: "15 x 5 x 5 cm",
+      certificate: null,
+      isbn: null,
+      publisher: "Shure",
+      pages: null,
+      language: null,
+      format: null,
+      medium: "Metal y componentes electrónicos",
+      framed: null,
+      signed: null
     }
   ]
 };
