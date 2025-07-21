@@ -16,31 +16,12 @@ import {
   Ruler,
   Weight,
   Palette,
-  BookOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
-
-interface FeatureItemProps {
-  icon: React.ReactNode;
-  value: string | number | React.ReactNode;
-  className?: string;
-}
-
-// Componente FeatureItem comentado ya que no se está utilizando actualmente
-// Se mantiene la interfaz por si es necesaria en el futuro
-/*
-const FeatureItem: React.FC<FeatureItemProps> = ({ icon, value, className }) => (
-  <div className={"flex items-center gap-3 text-sm text-gray-100 leading-relaxed " + (className || '')}>
-    <div className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center">
-      {icon}
-    </div>
-    <span>{value}</span>
-  </div>
-);
-*/
+import { cn } from "@/lib/utils";
 
 interface Price {
   type: 'fixed' | 'free' | 'ticket' | 'hourly';
@@ -59,6 +40,7 @@ interface ComparisonItemProps {
     discount?: number;
     rating?: number;
     members?: number;
+    attendees?: number | null;
     equipment?: string;
     verified?: boolean;
     specialties?: string[];
@@ -69,6 +51,7 @@ interface ComparisonItemProps {
     date?: string;
     time?: string;
     location?: string;
+    city?: string;
     tags?: string[];
     description?: string;
     // Propiedades específicas de sitios
@@ -94,7 +77,7 @@ interface ComparisonItemProps {
   type?: 'artists' | 'events' | 'sites' | 'gallery';
 }
 
-export const ComparisonItem: React.FC<ComparisonItemProps> = ({ item, type }) => {
+export const ComparisonItem: React.FC<ComparisonItemProps> = ({ item, type, isExpanded = true }) => {
   // Type guard para verificar si es un evento
   const isEvent = 'date' in item && 'venue' in item;
   // Type guard para verificar si es un sitio
@@ -146,8 +129,8 @@ export const ComparisonItem: React.FC<ComparisonItemProps> = ({ item, type }) =>
   const isGallery = type === 'gallery';
   
   return (
-    <div className={`bg-neutral-900 p-2 rounded-2xl flex flex-col ${isGallery ? 'h-[580px]' : 'h-[520px]'}`}>
-      <Card className="flex flex-col border-none shadow-xl overflow-hidden rounded-2xl h-full group transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+    <div className="bg-neutral-900 p-2 rounded-2xl w-full h-auto">
+      <Card className="border-none shadow-xl rounded-2xl group transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 h-auto">
         <div className={`relative flex-shrink-0 ${isGallery ? 'h-48' : 'h-40'} overflow-hidden`}>
           {item.image ? (
             <img
@@ -197,7 +180,7 @@ export const ComparisonItem: React.FC<ComparisonItemProps> = ({ item, type }) =>
                     <span>{item.stock} {item.stock === 1 ? 'disponible' : 'disponibles'}</span>
                   </div>
                 )}
-                {isEvent && 'attendees' in item && item.attendees !== undefined && (
+                {isEvent && item.attendees !== undefined && item.attendees !== null && (
                   <div className="flex items-center gap-1 bg-black/60 text-white px-2 py-0.5 rounded-full text-xs">
                     <Users className="w-3 h-3" />
                     <span>{item.attendees.toLocaleString()}</span>
@@ -259,7 +242,7 @@ export const ComparisonItem: React.FC<ComparisonItemProps> = ({ item, type }) =>
           </div>
         </div>
 
-        <div className="p-4 bg-neutral-950 flex-1 flex flex-col pb-4">
+        <div className="p-4 bg-neutral-950 overflow-y-visible" style={{ WebkitOverflowScrolling: 'touch' }}>
           {isEvent ? (
             <>
               <div className="grid grid-cols-2 gap-3 mb-3">
@@ -705,7 +688,6 @@ export const ComparisonItem: React.FC<ComparisonItemProps> = ({ item, type }) =>
               {item.instruments && item.instruments.length > 0 && (
                 <div className="mb-4">
                   <div className="flex items-start gap-2 text-sm text-gray-100">
-                    <Music className="w-4 h-4 flex-shrink-0 text-white/70 mt-1" />
                     <div className="flex flex-wrap gap-1.5">
                       {item.instruments.map((instrument, index) => (
                         <Badge 
@@ -723,15 +705,24 @@ export const ComparisonItem: React.FC<ComparisonItemProps> = ({ item, type }) =>
             </>
           )}
 
-          <div className="relative mt-4">
+          <div className={cn(
+            "relative mt-4",
+            !isExpanded && "max-w-[calc(100%-70px)]"
+          )}>
             <div className="flex items-center">
-              <div className={`bg-white rounded-lg p-3 pr-32 border border-gray-200 flex-1 max-w-[calc(100%-65px)] ${!isEvent ? 'pr-28' : ''}`}>
+              <div className={cn(
+                "bg-white rounded-lg p-3 pr-32 border border-gray-200 flex-1",
+                isExpanded ? "max-w-[calc(100%-65px)]" : "max-w-[calc(100%-60px)] p-2"
+              )}>
                 <div className="flex flex-col">
                   <span className="text-gray-500 text-xs">
                     {isGalleryItem ? 'Precio' : (price.type === 'free' || (price.type === 'ticket' && price.value === 0) ? 'Entrada' : 'Precio desde')}
                   </span>
                   <div className="flex items-baseline">
-                    <span className="text-2xl font-bold text-fuchsia-700 whitespace-nowrap">
+                    <span className={cn(
+                      "font-bold text-fuchsia-700 whitespace-nowrap",
+                      !isExpanded ? "text-xs" : "text-2xl" // Invertida la lógica para que sea pequeño solo cuando NO está expandido
+                    )}>
                       {priceDisplay}
                     </span>
                     {showCurrency && (

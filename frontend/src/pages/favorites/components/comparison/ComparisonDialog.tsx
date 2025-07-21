@@ -56,9 +56,10 @@ export function ComparisonDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
         className={cn(
-          "max-w-6xl max-h-[90vh] overflow-hidden p-0 bg-white rounded-xl",
-          isExpanded ? "w-[95vw]" : "w-[90vw] md:w-[85vw]"
+          "max-w-6xl p-0 bg-white rounded-xl flex flex-col",
+          isExpanded ? "w-[95vw] h-[95vh]" : "w-[90vw] md:w-[85vw] h-[90vh]"
         )}
+        style={{ display: 'flex', flexDirection: 'column' }}
       >
         {/* Encabezado */}
         <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 py-4">
@@ -96,7 +97,7 @@ export function ComparisonDialog({
         </div>
         
         {/* Contenido */}
-        <div className="overflow-y-auto flex-1 p-6">
+        <div className="flex-1 overflow-y-auto p-6" style={{ WebkitOverflowScrolling: 'touch' }}>
           {comparisonData.length === 0 ? (
             <div className="h-40 flex flex-col items-center justify-center text-gray-500">
               <p className="text-lg font-medium mb-2">No hay elementos para comparar</p>
@@ -127,7 +128,7 @@ export function ComparisonDialog({
         </div>
         
         {/* Pie de página con navegación */}
-        <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-3 flex items-center justify-between">
+        <div className="mt-auto bg-white border-t border-gray-200 px-6 py-3 flex items-center justify-between">
           {totalPages > 1 && (
             <div className="flex items-center gap-4">
               <Button
