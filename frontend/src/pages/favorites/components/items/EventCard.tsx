@@ -42,7 +42,14 @@ export function EventCard({
         <div className="flex items-start justify-between">
           <div>
             <h3 className="font-bold text-white text-base">{event.title}</h3>
-            <p className="text-sm text-gray-400">{event.eventType || 'Presencial'}</p>
+            {event.mode && (
+              <Badge 
+                variant="outline" 
+                className={`text-xs mt-1 ${event.mode.toLowerCase() === 'online' ? 'border-blue-500 text-blue-400' : 'border-green-500 text-green-400'}`}
+              >
+                {event.mode.toLowerCase() === 'online' ? 'En línea' : 'Presencial'}
+              </Badge>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-4 text-xs text-gray-400">

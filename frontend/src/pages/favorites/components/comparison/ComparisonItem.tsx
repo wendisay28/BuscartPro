@@ -453,81 +453,190 @@ export const ComparisonItem: React.FC<ComparisonItemProps> = ({ item, type }) =>
             </div>
           ) : isGalleryItem ? (
             <div className="space-y-4">
-              {/* Detalles específicos */}
-              <div className="space-y-1.5 mt-2">
-                {/* Dimensiones y Peso en dos columnas */}
-                <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+              {/* Sección de información general para galería (no libros) */}
+              {item.type !== 'Libro' && (item.dimensions || item.weight) && (
+                <div className="grid grid-cols-2 gap-3">
                   {item.dimensions && (
-                    <div className="flex items-center text-xs text-gray-300">
-                      <Ruler className="w-3.5 h-3.5 mr-1.5 text-gray-400 flex-shrink-0" />
-                      <span className="truncate">{item.dimensions}</span>
+                    <div className="bg-neutral-900/50 p-2 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center">
+                          <Ruler className="w-4 h-4 text-blue-400" />
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-400">Medidas</p>
+                          <p className="text-xs font-medium text-white">
+                            {item.dimensions}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   )}
                   {item.weight && (
-                    <div className="flex items-center text-xs text-gray-300">
-                      <Weight className="w-3.5 h-3.5 mr-1.5 text-gray-400 flex-shrink-0" />
-                      <span className="truncate">{item.weight}</span>
+                    <div className="bg-neutral-900/50 p-2 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center">
+                          <Weight className="w-4 h-4 text-purple-400" />
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-400">Peso</p>
+                          <p className="text-xs font-medium text-white">
+                            {item.weight}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
-                
-                {/* Medio/Técnica en línea completa */}
-                {item.medium && (
-                  <div className="flex items-center text-xs text-gray-300 pt-0.5">
-                    <Palette className="w-3.5 h-3.5 mr-1.5 text-gray-400 flex-shrink-0" />
-                    <span className="truncate">{item.medium}</span>
-                  </div>
-                )}
-                
-                {/* Páginas solo si aplica */}
-                {item.pages && (
-                  <div className="flex items-center text-xs text-gray-300 pt-0.5">
-                    <BookOpen className="w-3.5 h-3.5 mr-1.5 text-gray-400 flex-shrink-0" />
-                    <span>{item.pages} páginas</span>
-                  </div>
-                )}
-              </div>
+              )}
               
-              {/* Descripción y etiquetas especiales */}
-              <div className="space-y-1">
-                {item.description && (
-                  <div className="relative -top-2">
-                    <p className="text-sm text-gray-300 line-clamp-2">{item.description}</p>
+              {/* Sección para Libros - Nuevo diseño */}
+              {item.type === 'Libro' && (
+                <div className="space-y-3">
+                  {/* Dos columnas */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {/* Columna izquierda */}
+                    <div className="space-y-2">
+                      {item.dimensions && (
+                        <div className="bg-neutral-900/50 p-2 rounded-lg">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center">
+                              <Ruler className="w-4 h-4 text-blue-400" />
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-400">Medidas</p>
+                              <p className="text-xs font-medium text-white">{item.dimensions}</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      {item.category && (
+                        <div className="bg-neutral-900/50 p-2 rounded-lg">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-green-400">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-400">Categoría</p>
+                              <p className="text-sm font-medium text-white">{item.category}</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Columna derecha */}
+                    <div className="space-y-2">
+                      {item.weight && (
+                        <div className="bg-neutral-900/50 p-2 rounded-lg">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center">
+                              <Weight className="w-4 h-4 text-yellow-400" />
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-400">Peso</p>
+                              <p className="text-xs font-medium text-white">{item.weight}</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      {item.pages && (
+                        <div className="bg-neutral-900/50 p-2 rounded-lg">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-400 w-4 h-4">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-400">Páginas</p>
+                              <p className="text-sm font-medium text-white">{item.pages}</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                )}
-                
-                {/* Etiquetas especiales */}
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {/* Badges para todos los items de galería */}
-                  {item.certificate && (
-                    <Badge variant="secondary" className="text-xs bg-green-900/50 text-green-300 border border-green-700/50">
-                      Certificado
-                    </Badge>
-                  )}
-                  {item.framed && (
-                    <Badge variant="secondary" className="text-xs bg-purple-900/50 text-purple-300 border border-purple-700/50">
-                      Con marco
-                    </Badge>
-                  )}
-                  
-                  {/* Badges específicos para libros */}
-                  {item.format && (
-                    <Badge variant="secondary" className="text-xs bg-amber-900/50 text-amber-300 border border-amber-700/50">
-                      {item.format}
-                    </Badge>
-                  )}
-                  {item.language && (
-                    <Badge variant="secondary" className="text-xs bg-cyan-900/50 text-cyan-300 border border-cyan-700/50">
-                      {item.language}
-                    </Badge>
-                  )}
-                  {item.category && item.category !== 'Libro' && (
-                    <Badge variant="secondary" className="text-xs bg-indigo-900/50 text-indigo-300 border border-indigo-700/50">
-                      {item.category}
-                    </Badge>
-                  )}
+
+                  {/* Descripción - Removed duplicate description to avoid redundancy */}
+
+                  {/* Etiquetas */}
+                  <div className="flex flex-wrap gap-2">
+                    {item.medium && item.medium.toLowerCase() !== 'tapa dura' && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-800 text-gray-200">
+                        {item.medium}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {/* Sección de etiquetas para Instrumentos */}
+              {item.type === 'Equipo de Sonido' && item.tags && item.tags.length > 0 && (
+                <div className="bg-neutral-900/50 p-2 rounded-lg">
+                  <div className="flex items-start gap-2">
+                    <div className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center mt-1 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-yellow-400">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                        <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-xs text-gray-400 mb-1">Etiquetas</p>
+                      <div className="flex flex-wrap gap-1">
+                        {item.tags.map((tag, index) => (
+                          <span key={index} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-800 text-gray-200">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Sección de Técnica para otros tipos de ítems */}
+              {item.type !== 'Libro' && item.type !== 'Equipo de Sonido' && item.medium && (
+                <div className="bg-neutral-900/50 p-2 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center">
+                      <Palette className="w-4 h-4 text-yellow-400" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-400">Técnica</p>
+                      <p className="text-sm font-medium text-white">{item.medium}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Descripción */}
+              {item.description && (
+                <div className="relative -top-2">
+                  <p className="text-sm text-gray-300 line-clamp-2">{item.description}</p>
+                </div>
+              )}
+              
+              {/* Etiquetas (máximo 3) */}
+              {item.tags && item.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {item.tags.slice(0, 3).map((tag, index) => (
+                    <Badge 
+                      key={index} 
+                      variant="secondary" 
+                      className="text-xs bg-neutral-800 text-gray-200 border-none"
+                    >
+                      {typeof tag === 'string' ? tag : String(tag)}
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
           ) : (
             <>
