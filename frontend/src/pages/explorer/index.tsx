@@ -17,10 +17,8 @@ export default function Explorer() {
   const [activeTab, setActiveTab] = useState<ExplorerTab>('artists');
   const [activeCardIndex, setActiveCardIndex] = useState(0);
 
-  // Estado del panel desplegable
   const [showFilters, setShowFilters] = useState(true);
 
-  // Estados de filtros avanzados
   const [distance, setDistance] = useState<number>(50);
   const [price, setPrice] = useState<number>(50000);
   const [category, setCategory] = useState<string>('');
@@ -30,7 +28,6 @@ export default function Explorer() {
   const [format, setFormat] = useState<string>('');
   const [sortBy, setSortBy] = useState<string>('popularity');
 
-  // Obtener items según pestaña activa
   const getCurrentItems = (): ExplorerItem[] => {
     switch (activeTab) {
       case 'artists':
@@ -49,26 +46,30 @@ export default function Explorer() {
   const currentItems = getCurrentItems();
   const currentItem = currentItems[activeCardIndex];
 
-  // Reset index al cambiar pestaña
   useEffect(() => {
     setActiveCardIndex(0);
   }, [activeTab]);
 
   const handleSwipe = (direction: 'left' | 'right') => {
     if (direction === 'right' && activeCardIndex > 0) {
-      setActiveCardIndex(prev => prev - 1);
+      setActiveCardIndex((prev) => prev - 1);
     } else if (direction === 'left' && activeCardIndex < currentItems.length - 1) {
-      setActiveCardIndex(prev => prev + 1);
+      setActiveCardIndex((prev) => prev + 1);
     }
   };
 
   const getCardType = (tab: ExplorerTab): CardType => {
     switch (tab) {
-      case 'artists': return 'artist';
-      case 'events': return 'event';
-      case 'venues': return 'venue';
-      case 'gallery': return 'gallery';
-      default: return 'artist';
+      case 'artists':
+        return 'artist';
+      case 'events':
+        return 'event';
+      case 'venues':
+        return 'venue';
+      case 'gallery':
+        return 'gallery';
+      default:
+        return 'artist';
     }
   };
 
@@ -98,29 +99,20 @@ export default function Explorer() {
   }
 
   return (
-    <div className="min-h-screen bg-black overflow-x-visible relative">
-      <div className="flex w-full relative">
+    <div className="min-h-screen bg-black text-white">
+      <div className="w-full max-w-7xl mx-auto grid grid-cols-[250px_1fr_250px] gap-8">
         {/* Sidebar */}
-        <div className="w-1/4 fixed left-45 top-28 bottom-[calc(4rem-9px)] z-50 overflow-y-auto">
-          <div className="h-full pr-6">
-            <Sidebar />
-          </div>
-        </div>
+        <aside className="sticky top-[4rem] self-start w-[250px]">
+          <Sidebar />
+        </aside>
 
-        {/* Contenido principal */}
-        <div className="w-[40%] mx-auto px-4 pt-2">
-          <div className="flex justify-center w-full mb-3">
-            <NavigationTabs
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-              className="md:mt-2"
-            />
+        {/* Main */}
+        <main className="py-6">
+          <div className="flex justify-center mb-4">
+            <NavigationTabs activeTab={activeTab} onTabChange={setActiveTab} />
           </div>
 
-          <div 
-            className="relative w-full max-w-md mx-auto"
-            {...swipeHandlers}
-          >
+          <div className="relative max-w-md mx-auto w-full" {...swipeHandlers}>
             <ContentCard
               type={getCardType(activeTab)}
               data={currentItem}
@@ -128,8 +120,7 @@ export default function Explorer() {
               activeTab={activeTab}
               onTabChange={setActiveTab}
             />
-            
-            {/* Botones de acción debajo de la tarjeta - Solo visibles en md y superiores */}
+
             <div className="hidden md:flex justify-center gap-6 -mt-2 -translate-y-1">
               <button
                 onClick={(e) => {
@@ -143,32 +134,17 @@ export default function Explorer() {
                 className="w-14 h-14 flex items-center justify-center rounded-full transition-all duration-300 transform bg-white/10 hover:bg-[#bb00aa] backdrop-blur-sm hover:scale-105 -rotate-2 hover:rotate-0"
                 aria-label="Descartar"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-7 w-7 text-white/80"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
 
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Aquí va la lógica de conectar
-                }}
+                onClick={(e) => e.stopPropagation()}
                 className="w-14 h-14 flex items-center justify-center rounded-full transition-all duration-300 transform bg-white/10 hover:bg-[#bb00aa] backdrop-blur-sm hover:scale-105 rotate-2 hover:rotate-0"
                 aria-label="Conectar"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-7 w-7 text-white/80"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -179,105 +155,102 @@ export default function Explorer() {
               </button>
             </div>
           </div>
-        </div>
+        </main>
 
-        {/* Panel de filtros */}
-        <div className="w-64 fixed right-32 top-28 bottom-[calc(4rem-9px)] overflow-y-auto z-50 transform -translate-x-[5.25rem]">
-          {showFilters ? (
-            <div className="bg-gray-900 border border-gray-800 rounded-lg p-3 h-full overflow-y-auto">
-              {activeTab === 'events' ? (
-                <EventFiltersPanel
-                  isOpen={true}
-                  onToggle={() => setShowFilters(false)}
-                  distance={distance}
-                  setDistance={setDistance}
-                  price={price}
-                  setPrice={setPrice}
-                  category={category}
-                  setCategory={setCategory}
-                  subCategory={subCategory}
-                  setSubCategory={setSubCategory}
-                  format={format}
-                  setFormat={setFormat}
-                  sortBy={sortBy}
-                  setSortBy={setSortBy}
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
-                  onResetFilters={handleResetFilters}
-                />
-              ) : activeTab === 'venues' ? (
-                <VenueFiltersPanel
-                  isOpen={true}
-                  onToggle={() => setShowFilters(false)}
-                  distance={distance}
-                  setDistance={setDistance}
-                  price={price}
-                  setPrice={setPrice}
-                  category={category}
-                  setCategory={setCategory}
-                  subCategory={subCategory}
-                  setSubCategory={setSubCategory}
-                  sortBy={sortBy}
-                  setSortBy={setSortBy}
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
-                  onResetFilters={handleResetFilters}
-                />
-              ) : activeTab === 'gallery' ? (
-                <GalleryFiltersPanel
-                  isOpen={true}
-                  onToggle={() => setShowFilters(false)}
-                  distance={distance}
-                  setDistance={setDistance}
-                  price={price}
-                  setPrice={setPrice}
-                  category={category}
-                  setCategory={setCategory}
-                  subCategory={subCategory}
-                  setSubCategory={setSubCategory}
-                  sortBy={sortBy}
-                  setSortBy={setSortBy}
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
-                  onResetFilters={handleResetFilters}
-                />
-              ) : activeTab === 'artists' ? (
-                <FiltersPanel
-                  isOpen={true}
-                  onToggle={() => setShowFilters(false)}
-                  distance={distance}
-                  setDistance={setDistance}
-                  price={price}
-                  setPrice={setPrice}
-                  category={category}
-                  setCategory={setCategory}
-                  subCategory={subCategory}
-                  setSubCategory={setSubCategory}
-                  profession={profession}
-                  setProfession={setProfession}
-                  sortBy={sortBy}
-                  setSortBy={setSortBy}
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
-                  onResetFilters={handleResetFilters}
-                />
-              ) : (
-                <div className="text-white p-2">No hay filtros disponibles para esta pestaña.</div>
-              )}
-            </div>
-          ) : (
-            <div className="bg-gray-900 border border-gray-800 rounded-lg p-2">
+        {/* Filters */}
+        <aside className="sticky top-[4rem] self-start w-[250px]">
+          <div className="bg-gray-900 border border-gray-800 rounded-lg p-4 transition-all duration-300">
+            {showFilters ? (
+              <>
+                {activeTab === 'events' ? (
+                  <EventFiltersPanel
+                    isOpen={true}
+                    onToggle={() => setShowFilters(false)}
+                    distance={distance}
+                    setDistance={setDistance}
+                    price={price}
+                    setPrice={setPrice}
+                    category={category}
+                    setCategory={setCategory}
+                    subCategory={subCategory}
+                    setSubCategory={setSubCategory}
+                    format={format}
+                    setFormat={setFormat}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                    onResetFilters={handleResetFilters}
+                  />
+                ) : activeTab === 'venues' ? (
+                  <VenueFiltersPanel
+                    isOpen={true}
+                    onToggle={() => setShowFilters(false)}
+                    distance={distance}
+                    setDistance={setDistance}
+                    price={price}
+                    setPrice={setPrice}
+                    category={category}
+                    setCategory={setCategory}
+                    subCategory={subCategory}
+                    setSubCategory={setSubCategory}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                    onResetFilters={handleResetFilters}
+                  />
+                ) : activeTab === 'gallery' ? (
+                  <GalleryFiltersPanel
+                    isOpen={true}
+                    onToggle={() => setShowFilters(false)}
+                    distance={distance}
+                    setDistance={setDistance}
+                    price={price}
+                    setPrice={setPrice}
+                    category={category}
+                    setCategory={setCategory}
+                    subCategory={subCategory}
+                    setSubCategory={setSubCategory}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                    onResetFilters={handleResetFilters}
+                  />
+                ) : (
+                  <FiltersPanel
+                    isOpen={true}
+                    onToggle={() => setShowFilters(false)}
+                    distance={distance}
+                    setDistance={setDistance}
+                    price={price}
+                    setPrice={setPrice}
+                    category={category}
+                    setCategory={setCategory}
+                    subCategory={subCategory}
+                    setSubCategory={setSubCategory}
+                    profession={profession}
+                    setProfession={setProfession}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                    onResetFilters={handleResetFilters}
+                  />
+                )}
+              </>
+            ) : (
               <button
                 onClick={() => setShowFilters(true)}
-                className="w-full bg-gray-900 hover:bg-gray-800 border border-gray-700 text-white py-2 px-4 rounded-lg text-sm flex items-center justify-center gap-2 transition-colors"
+                className="w-full bg-gray-800 hover:bg-gray-700 border border-gray-700 text-white py-2 px-4 rounded-lg text-sm flex items-center justify-center gap-2 transition-colors"
               >
-                <Sliders className="w-4 h-4 md:hidden" />
-                <span className="hidden md:inline">Filtros</span>
-                <Sliders className="hidden md:inline w-4 h-4" />
+                <Sliders className="w-4 h-4" />
+                <span>Mostrar filtros</span>
               </button>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        </aside>
       </div>
     </div>
   );

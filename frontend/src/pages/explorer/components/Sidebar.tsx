@@ -1,4 +1,11 @@
-import { Home, Bookmark, Users, BookOpen, Calendar, Settings, User, MapPin, Edit3 } from 'lucide-react';
+import {
+  Bookmark,
+  Users,
+  BookOpen,
+  Settings,
+  MapPin,
+  Edit3
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -21,7 +28,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="hidden lg:flex lg:flex-col w-72 space-y-6 pr-6 h-full">
+    <div className="hidden lg:flex lg:flex-col w-full space-y-6 h-full">
       {/* Tarjeta de perfil */}
       <Card className="bg-gray-900 border-gray-800">
         <CardContent className="p-6 text-center">
@@ -49,8 +56,10 @@ const Sidebar = () => {
       <div className="flex-1 flex flex-col">
         <Card className="bg-gray-900 border-gray-800 h-full flex flex-col">
           <CardContent className="p-4 flex-1 flex flex-col">
-            <h4 className="text-gray-400 uppercase text-xs font-semibold tracking-wider mb-4 px-2">Accesos Rápidos</h4>
-            <nav className="flex-1 flex flex-col justify-center">
+            <h4 className="text-gray-400 uppercase text-xs font-semibold tracking-wider mb-4 px-2">
+              Accesos Rápidos
+            </h4>
+            <nav className="flex-1 flex flex-col justify-start">
               <div className="space-y-2">
                 {quickLinks.map((link, index) => {
                   const Icon = link.icon;
@@ -63,7 +72,9 @@ const Sidebar = () => {
                       <div className="p-1.5 rounded-md group-hover:bg-pink-500/10 transition-colors">
                         <Icon className="h-4 w-4 text-gray-400 group-hover:text-pink-500 transition-colors" />
                       </div>
-                      <span className="ml-3 group-hover:text-white transition-colors">{link.name}</span>
+                      <span className="ml-3 group-hover:text-white transition-colors">
+                        {link.name}
+                      </span>
                     </a>
                   );
                 })}
