@@ -391,11 +391,12 @@ export const favoriteData = {
       type: "Concierto",
       city: "Medellín",
       venue: "Parque Explora",
+      mode: "Presencial",
       date: "2024-09-15",
       time: "19:00",
       price: { type: "ticket", value: 80000 },
       attendees: 2500,
-      image: "https://picsum.photos/400/300?random=21", // Festival de Jazz Medellín
+      image: "https://picsum.photos/400/300?random=21",
       description: "El festival de jazz más importante de la ciudad con artistas nacionales e internacionales.",
       available: true,
       tags: ["Jazz", "En Vivo", "Familia"]
@@ -407,11 +408,12 @@ export const favoriteData = {
       type: "Festival",
       city: "Bogotá",
       venue: "Parque Simón Bolívar",
+      mode: "Presencial",
       date: "2024-09-22",
       time: "14:00",
       price: { type: "free", value: 0 },
       attendees: 10000,
-      image: "https://picsum.photos/400/300?random=22", // Rock Al Parque
+      image: "https://picsum.photos/400/300?random=22",
       description: "El festival de rock gratuito más grande de Latinoamérica.",
       available: true,
       tags: ["Rock", "Festival", "Gratis"]
@@ -423,11 +425,12 @@ export const favoriteData = {
       type: "Obra de Teatro",
       city: "Medellín",
       venue: "Teatro Metropolitano",
+      mode: "Presencial",
       date: "2024-08-25",
       time: "20:00",
       price: { type: "ticket", value: 50000 },
       attendees: 400,
-      image: "https://picsum.photos/400/300?random=23", // Función Macbeth
+      image: "https://picsum.photos/400/300?random=23",
       description: "Obra clásica de Shakespeare presentada por Escena Viva.",
       available: true,
       tags: ["Drama", "Clásico"]
@@ -439,11 +442,12 @@ export const favoriteData = {
       type: "Proyección",
       city: "Bogotá",
       venue: "Parque de los Novios",
+      mode: "Presencial",
       date: "2024-09-05",
       time: "18:30",
       price: { type: "free", value: 0 },
       attendees: 800,
-      image: "https://picsum.photos/400/300?random=24", // Cinema Picnic
+      image: "https://picsum.photos/400/300?random=24",
       description: "Proyección de cine familiar bajo las estrellas, trae tu picnic.",
       available: true,
       tags: ["Familiar", "Cine", "Gratis"]
@@ -455,11 +459,12 @@ export const favoriteData = {
       type: "Conferencia",
       city: "Medellín",
       venue: "Plaza Mayor",
+      mode: "Presencial",
       date: "2024-10-01",
       time: "10:00",
       price: { type: "ticket", value: 100000 },
       attendees: 500,
-      image: "https://picsum.photos/400/300?random=25", // Charla Creatividad e Innovación
+      image: "https://picsum.photos/400/300?random=25",
       description: "Conferencia para potenciar ideas innovadoras en empresas y startups.",
       available: true,
       tags: ["Negocios", "Creatividad"]
@@ -471,11 +476,12 @@ export const favoriteData = {
       type: "Taller",
       city: "Bogotá",
       venue: "Museo de Arte Moderno",
+      mode: "Presencial",
       date: "2024-09-10",
       time: "09:00",
       price: { type: "ticket", value: 75000 },
       attendees: 20,
-      image: "https://picsum.photos/400/300?random=26", // Taller de Fotografía Urbana
+      image: "https://picsum.photos/400/300?random=26",
       description: "Explora la ciudad y aprende técnicas de fotografía callejera.",
       available: true,
       tags: ["Fotografía", "Práctico"]
@@ -487,11 +493,12 @@ export const favoriteData = {
       type: "Festival",
       city: "Medellín",
       venue: "Parque de los Deseos",
+      mode: "Presencial",
       date: "2024-09-20",
       time: "12:00",
       price: { type: "free", value: 0 },
       attendees: 1500,
-      image: "https://picsum.photos/400/300?random=27", // Festival Gastronómico Sabores
+      image: "https://picsum.photos/400/300?random=27",
       description: "Descubre los sabores locales en un festival con música y cultura.",
       available: true,
       tags: ["Comida", "Cultura", "Música"]
@@ -503,11 +510,12 @@ export const favoriteData = {
       type: "Proyección",
       city: "Bogotá",
       venue: "Cinemateca Distrital",
+      mode: "Presencial",
       date: "2024-10-15",
       time: "19:00",
       price: { type: "ticket", value: 25000 },
       attendees: 200,
-      image: "https://picsum.photos/400/300?random=28", // Ciclo de Cine Europeo
+      image: "https://picsum.photos/400/300?random=28",
       description: "Proyección de clásicos del cine europeo.",
       available: true,
       tags: ["Cine", "Europa", "Arte"]
@@ -519,11 +527,12 @@ export const favoriteData = {
       type: "Concierto",
       city: "Medellín",
       venue: "Café Teatro Pablo Tobón",
+      mode: "Presencial",
       date: "2024-09-25",
       time: "21:00",
       price: { type: "ticket", value: 60000 },
       attendees: 150,
-      image: "https://picsum.photos/400/300?random=29", // Jazz Sessions Live
+      image: "https://picsum.photos/400/300?random=29",
       description: "Noche de jazz con músicos locales.",
       available: true,
       tags: ["Jazz", "En Vivo"]
@@ -535,11 +544,12 @@ export const favoriteData = {
       type: "Stand Up",
       city: "Bogotá",
       venue: "Teatro Nacional",
+      mode: "Presencial",
       date: "2024-09-18",
       time: "20:00",
       price: { type: "ticket", value: 45000 },
       attendees: 250,
-      image: "https://picsum.photos/400/300?random=30", // Monólogos de Humor
+      image: "https://picsum.photos/400/300?random=30",
       description: "Monólogos de comedia para toda la familia.",
       available: true,
       tags: ["Comedia", "Teatro"]
@@ -551,11 +561,12 @@ export const favoriteData = {
       type: "Taller",
       city: "Medellín",
       venue: "Casa de la Cultura",
+      mode: "Presencial",
       date: "2024-09-12",
       time: "14:00",
       price: { type: "ticket", value: 55000 },
       attendees: 20,
-      image: "https://picsum.photos/400/300?random=31", // Taller de Pintura Mural
+      image: "https://picsum.photos/400/300?random=31",
       description: "Aprende técnicas de muralismo urbano.",
       available: true,
       tags: ["Arte Urbano", "Pintura"]
@@ -567,11 +578,12 @@ export const favoriteData = {
       type: "Conferencia",
       city: "Bogotá",
       venue: "Hotel Tequendama",
+      mode: "Presencial",
       date: "2024-09-22",
       time: "11:00",
       price: { type: "ticket", value: 90000 },
       attendees: 200,
-      image: "https://picsum.photos/400/300?random=32", // Charla Motivacional
+      image: "https://picsum.photos/400/300?random=32",
       description: "Charla para potenciar tu crecimiento personal.",
       available: true,
       tags: ["Motivación", "Emprendimiento"]
@@ -583,11 +595,12 @@ export const favoriteData = {
       type: "Foro",
       city: "Medellín",
       venue: "Cinemateca Municipal",
+      mode: "Presencial",
       date: "2024-10-05",
       time: "19:00",
       price: { type: "ticket", value: 20000 },
       attendees: 120,
-      image: "https://picsum.photos/400/300?random=33", // Cine Foro Clásicos del Terror
+      image: "https://picsum.photos/400/300?random=33",
       description: "Proyección y debate de películas de terror.",
       available: true,
       tags: ["Terror", "Cineforo"]
@@ -599,11 +612,12 @@ export const favoriteData = {
       type: "Festival",
       city: "Bogotá",
       venue: "Cine Tonalá",
+      mode: "Presencial",
       date: "2024-10-10",
       time: "16:00",
       price: { type: "ticket", value: 30000 },
       attendees: 300,
-      image: "https://picsum.photos/400/300?random=34", // Festival de Cine Independiente
+      image: "https://picsum.photos/400/300?random=34",
       description: "Descubre lo mejor del cine alternativo.",
       available: true,
       tags: ["Cine", "Independiente"]
@@ -615,11 +629,12 @@ export const favoriteData = {
       type: "Concierto",
       city: "Medellín",
       venue: "Parque de los Deseos",
+      mode: "Presencial",
       date: "2024-10-12",
       time: "19:00",
       price: { type: "free", value: 0 },
       attendees: 1200,
-      image: "https://picsum.photos/400/300?random=35", // Concierto Sinfónico al Aire Libre
+      image: "https://picsum.photos/400/300?random=35",
       description: "Presentación gratuita de la Orquesta Filarmónica de Medellín.",
       available: true,
       tags: ["Clásico", "Orquesta"]
@@ -724,7 +739,9 @@ export const favoriteData = {
       amenities: ["Parqueadero", "Accesible", "Bar"],
       available: true,
       verified: true,
-      usage: "visita"
+      usage: "visita",
+      smokeFree: true,
+      petFriendly: false
     },
     {
       id: 2,
@@ -739,7 +756,9 @@ export const favoriteData = {
       amenities: ["WiFi", "Accesible", "Cafetería"],
       available: true,
       verified: true,
-      usage: "visita"
+      usage: "visita",
+      smokeFree: true,
+      petFriendly: true
     },
     {
       id: 3,
@@ -754,7 +773,9 @@ export const favoriteData = {
       amenities: ["WiFi", "Cafetería", "Accesible"],
       available: true,
       verified: true,
-      usage: "alquiler"
+      usage: "alquiler",
+      smokeFree: false,
+      petFriendly: true
     },
     {
       id: 4,
@@ -769,7 +790,9 @@ export const favoriteData = {
       amenities: ["Accesible", "Parqueadero"],
       available: true,
       verified: true,
-      usage: "visita"
+      usage: "visita",
+      smokeFree: true,
+      petFriendly: false
     },
     {
       id: 5,
@@ -784,7 +807,9 @@ export const favoriteData = {
       amenities: ["Accesible", "Parqueadero"],
       available: true,
       verified: false,
-      usage: "visita"
+      usage: "visita",
+      smokeFree: false,
+      petFriendly: true
     },
     {
       id: 6,
@@ -799,7 +824,9 @@ export const favoriteData = {
       amenities: ["WiFi", "Accesible"],
       available: true,
       verified: false,
-      usage: "alquiler"
+      usage: "alquiler",
+      smokeFree: true,
+      petFriendly: false
     },
     {
       id: 7,
@@ -814,7 +841,9 @@ export const favoriteData = {
       amenities: ["Parqueadero", "Catering", "Decoración"],
       available: true,
       verified: true,
-      usage: "alquiler"
+      usage: "alquiler",
+      smokeFree: true,
+      petFriendly: false
     },
     {
       id: 8,
@@ -829,7 +858,9 @@ export const favoriteData = {
       amenities: ["Accesible", "Bar"],
       available: true,
       verified: true,
-      usage: "visita"
+      usage: "visita",
+      smokeFree: true,
+      petFriendly: false
     },
     {
       id: 9,
@@ -844,7 +875,9 @@ export const favoriteData = {
       amenities: ["WiFi", "Cafetería", "Accesible"],
       available: true,
       verified: true,
-      usage: "alquiler"
+      usage: "alquiler",
+      smokeFree: true,
+      petFriendly: true
     },
     {
       id: 10,
@@ -859,8 +892,11 @@ export const favoriteData = {
       amenities: ["WiFi", "Accesible"],
       available: true,
       verified: true,
-      usage: "alquiler"
+      usage: "alquiler",
+      smokeFree: true,
+      petFriendly: false
     }
+    
   ],
   gallery: [
     {
@@ -882,7 +918,7 @@ export const favoriteData = {
       available: true,
       verified: true,
       weight: "2.5 kg",
-      dimensions: "100 x 40 x 10 cm",
+      dimensions: "100 x 40 x 1 cm",
       certificate: null,
       isbn: null,
       publisher: "Yamaha",
@@ -1023,7 +1059,7 @@ export const favoriteData = {
       city: "Medellín",
       sales: 60,
       condition: "Nuevo",
-      category: "Negocios / Estrategia",
+      category: "Negocios",
       stock: 25,
       usage: "venta",
       tags: ["estrategia", "liderazgo", "sun tzu"],
@@ -1125,7 +1161,7 @@ export const favoriteData = {
       dimensions: "23 x 15 x 3 cm",
       certificate: null,
       isbn: "978-0060923199",
-      publisher: "HarperCollins",
+      publisher: "Phaidon Press",
       pages: 560,
       language: "Español",
       format: "Tapa blanda",

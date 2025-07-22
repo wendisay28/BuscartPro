@@ -28,7 +28,7 @@ export function FilterControls({
       <Button 
         variant="outline" 
         onClick={onShowFilters}
-        className={`h-10 px-4 ${showFilters ? 'bg-gray-800 border-[#bb00aa]' : ''} hover:bg-[#bb00aa]/10 hover:border-[#bb00aa] hover:text-[#bb00aa]`}
+        className={`h-10 px-4 bg-gray-900 border-gray-700 ${showFilters ? 'bg-gray-800 border-[#bb00aa]' : ''} hover:bg-gray-800/80 hover:border-gray-600`}
       >
         <Sliders className="w-4 h-4 mr-2" />
         <span className="text-sm">Filtros</span>

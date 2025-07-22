@@ -118,7 +118,7 @@ export function SiteFilterPanel({
 
   return (
     <div 
-      className="fixed md:right-64 md:top-48 right-12 top-32 md:w-72 w-64 bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg shadow-lg z-50 flex flex-col max-h-[80vh] overflow-y-auto" 
+      className="fixed md:right-56 md:top-40 right-8 top-32 md:w-72 w-64 bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-lg shadow-lg z-50 flex flex-col max-h-[80vh] overflow-y-auto" 
       style={{ transform: 'none', left: 'auto' }}
     >
       <div 

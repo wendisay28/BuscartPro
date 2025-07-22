@@ -1,9 +1,8 @@
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { X, ArrowLeft, ArrowRight, Maximize2, Minimize2 } from "lucide-react";
+import { X, ArrowLeft, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ComparisonItem } from "./ComparisonItem";
-import { cn } from "@/lib/utils";
 
 interface ComparisonDialogProps {
   open: boolean;
@@ -18,9 +17,8 @@ export function ComparisonDialog({
   comparisonTab = 'artists', 
   comparisonData 
 }: ComparisonDialogProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(3);
+  const itemsPerPage = 3; // Valor fijo ya que eliminamos la funcionalidad de expandir
   
   // Calcular el número total de páginas
   const totalPages = Math.ceil(comparisonData.length / itemsPerPage);
@@ -45,20 +43,12 @@ export function ComparisonDialog({
     setCurrentPage(prev => Math.min(totalPages - 1, prev + 1));
   };
   
-  // Alternar entre vista expandida y normal
-  const toggleExpand = () => {
-    const newExpanded = !isExpanded;
-    setIsExpanded(newExpanded);
-    setItemsPerPage(newExpanded ? 4 : 3);
-  };
+
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className={cn(
-          "max-w-6xl p-0 bg-white rounded-xl flex flex-col",
-          isExpanded ? "w-[95vw] h-[95vh]" : "w-[90vw] md:w-[85vw] h-[90vh]"
-        )}
+        className="max-w-6xl p-0 bg-white rounded-xl flex flex-col w-[90vw] md:w-[85vw] h-[90vh]"
         style={{ display: 'flex', flexDirection: 'column' }}
       >
         {/* Encabezado */}
@@ -66,7 +56,7 @@ export function ComparisonDialog({
           <div className="flex items-center justify-between">
             <div>
               <DialogTitle className="text-xl font-bold text-gray-900">
-                Comparar {comparisonTab.charAt(0).toUpperCase() + comparisonTab.slice(1)}
+                Comparar
               </DialogTitle>
               <p className="text-sm text-gray-500 mt-1">
                 Comparando {comparisonData.length} {comparisonData.length === 1 ? 'elemento' : 'elementos'}
@@ -74,17 +64,7 @@ export function ComparisonDialog({
             </div>
             
             <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={toggleExpand}
-                className="h-9 w-9 p-0"
-                title={isExpanded ? 'Contraer' : 'Expandir'}
-              >
-                {isExpanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
-              </Button>
-              
-              <Button
+<Button
                 variant="ghost"
                 size="sm"
                 onClick={() => onOpenChange(false)}
@@ -106,12 +86,7 @@ export function ComparisonDialog({
           ) : (
             <div className="relative">
               <div 
-                className={cn(
-                  "grid gap-6",
-                  isExpanded 
-                    ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" 
-                    : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-                )}
+                className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
               >
                 {currentItems.map((item) => (
                   <ComparisonItem 
