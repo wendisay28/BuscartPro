@@ -1,9 +1,10 @@
-import React, { useState, useEffect, createContext, useContext, ReactNode } from 'react';
-import { User, UserType } from '@/services/auth';
+import * as React from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { onAuthStateChanged, signOut, User as FirebaseUser } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { User, UserType } from '@/services/auth';
 
-// Definir el tipo del contexto
+// Tipo del contexto
 interface AuthContextType {
   user: User | null;
   loading: boolean;
@@ -12,55 +13,46 @@ interface AuthContextType {
   updateUserType: (userType: UserType) => Promise<void>;
 }
 
-// Crear el contexto
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+// Crear contexto
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Props del proveedor
 interface AuthProviderProps {
   children: ReactNode;
 }
 
-// Componente proveedor
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadUserData = async (firebaseUser: any) => {
+    let isMounted = true;
+
+    const loadUserData = async (firebaseUser: FirebaseUser) => {
+      const userData: User = {
+        id: firebaseUser.uid,
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        displayName: firebaseUser.displayName,
+        photoURL: firebaseUser.photoURL,
+        userType: "general",
+      };
+
+      if (isMounted) setUser(userData);
+
       try {
-        // Primero actualizamos el estado con los datos básicos de Firebase
-        // para que la autenticación se marque como exitosa rápidamente
-        const userData: any = {
-          id: firebaseUser.uid,
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          displayName: firebaseUser.displayName,
-          photoURL: firebaseUser.photoURL,
-          userType: 'general' // Valor por defecto
-        };
-        
-        setUser(userData);
-        
-        // Luego cargamos los datos adicionales de Firestore
-        try {
-          const { doc, getDoc, getFirestore } = await import('firebase/firestore');
-          const db = getFirestore();
-          const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
-          
-          if (userDoc.exists()) {
-            setUser({
-              ...userData,
-              ...userDoc.data(),
-              userType: userDoc.data()?.userType || 'general'
-            });
-          }
-        } catch (error) {
-          console.error('Error al cargar datos adicionales del usuario:', error);
-          // No hacemos nada aquí, ya que ya tenemos los datos básicos
+        const { doc, getDoc, getFirestore } = await import("firebase/firestore");
+        const db = getFirestore();
+        const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
+
+        if (userDoc.exists() && isMounted) {
+          setUser({
+            ...userData,
+            ...userDoc.data(),
+            userType: userDoc.data()?.userType || "general",
+          });
         }
       } catch (error) {
-        console.error('Error en la autenticación:', error);
-        setUser(null);
+        console.error("Error al cargar datos adicionales:", error);
       }
     };
 
@@ -68,12 +60,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (firebaseUser) {
         loadUserData(firebaseUser);
       } else {
-        setUser(null);
+        if (isMounted) setUser(null);
       }
-      setLoading(false);
+      if (isMounted) setLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
   }, []);
 
   const logout = async () => {
@@ -81,43 +76,35 @@ export function AuthProvider({ children }: AuthProviderProps) {
       await signOut(auth);
       setUser(null);
     } catch (error) {
-      console.error('Error al cerrar sesión:', error);
+      console.error("Error al cerrar sesión:", error);
       throw error;
     }
   };
 
-  const updateUserType = async (userType: UserType): Promise<void> => {
+  const updateUserType = async (userType: UserType) => {
     if (!user) return;
-    
+
     try {
-      // Actualizar en Firestore
-      const { doc, setDoc, getFirestore } = await import('firebase/firestore');
+      const { doc, setDoc, getFirestore } = await import("firebase/firestore");
       const db = getFirestore();
-      const userRef = doc(db, 'users', user.id);
-      
+      const userRef = doc(db, "users", user.id);
+
       await setDoc(userRef, { userType }, { merge: true });
-      
-      // Actualizar el usuario localmente
-      setUser({
-        ...user,
-        userType
-      });
-      
-      // No retornamos nada (void)
-      return;
+
+      setUser({ ...user, userType });
     } catch (error) {
-      console.error('Error al actualizar el tipo de usuario:', error);
+      console.error("Error al actualizar tipo de usuario:", error);
       throw error;
     }
   };
 
-  const value = {
+  const value: AuthContextType = {
     user,
     loading,
     isAuthenticated: !!user,
     logout,
     updateUserType,
-  } as const;
+  };
 
   return React.createElement(
     AuthContext.Provider,
@@ -126,15 +113,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   );
 }
 
-// Hook personalizado para usar el contexto
 export function useAuth() {
   const context = useContext(AuthContext);
-  
   if (context === undefined) {
-    throw new Error('useAuth debe usarse dentro de un AuthProvider');
+    throw new Error("useAuth debe usarse dentro de un AuthProvider");
   }
-  
   return context;
 }
-
-export default AuthContext;

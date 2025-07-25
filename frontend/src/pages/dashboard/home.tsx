@@ -21,7 +21,7 @@ import { usePosts } from "./hooks/usePosts";
 
 export default function Home() {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<"all" | "micro" | "blog">("all");
+  const [activeTab, setActiveTab] = useState<"post" | "nota" | "blog">("post");
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isBlogModalOpen, setIsBlogModalOpen] = useState(false);
 
@@ -38,14 +38,14 @@ export default function Home() {
       createdAt: new Date(),
       likes: 42,
       comments: 7,
-      type: "micro",
+      type: "nota",
     },
   ]);
 
   const handlePostCreated = (content: string, file?: File) => {
     const newPost: Omit<Post, "id" | "createdAt" | "likes" | "comments"> & { author: User } = {
       content,
-      type: activeTab === "blog" ? "blog" : "micro",
+      type: activeTab === "blog" ? "blog" : activeTab === "nota" ? "nota" : "post",
       author: {
         id: user?.id || "anonymous",
         firstName: user?.firstName || "Usuario",
@@ -64,7 +64,7 @@ export default function Home() {
 
   const openPostModal = () => {
     setIsPostModalOpen(true);
-    setActiveTab("all");
+    setActiveTab("post");
   };
 
   const openBlogModal = () => {
@@ -73,42 +73,100 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white py-6">
-      <div className="w-full px-4 sm:px-6 lg:px-0 grid grid-cols-1 lg:grid-cols-[250px_minmax(0,1fr)_250px] gap-8">
+    <div className="min-h-screen bg-black text-white py-4 sm:py-6">
+      <div className="w-full px-4 sm:px-6 lg:px-0 grid grid-cols-1 lg:grid-cols-[250px_minmax(0,1fr)_250px] gap-6">
         {/* LEFT SIDEBAR */}
-        <aside className="hidden lg:block space-y-6">
+        <aside className="hidden lg:block space-y-4">
           <UserProfileCard />
           <QuickAccessMenu />
         </aside>
 
         {/* MAIN CONTENT */}
-        <main className="space-y-8 w-full">
-          {/* Microespacios sin restricción interna */}
-          <Microspaces />
-
-          {/* Contenedor de Crear Publicación */}
-          <div className="w-full space-y-6">
-            {/* Desktop Post Composer - Hidden on mobile */}
-            <div className="hidden md:block">
-              <CreatePost 
-                onPostCreated={handlePostCreated} 
-                openPostModal={openPostModal}
-                openBlogModal={openBlogModal}
-              />
-            </div>
-            
-            {/* Mobile Post Composer - Only visible on mobile */}
-            <div className="md:hidden">
-              <MobilePostComposer 
-                onPostCreated={handlePostCreated}
-                onNoteCreated={handlePostCreated}
-                onBlogCreated={handlePostCreated}
-              />
+        <div className="relative">
+          <main className="space-y-0 w-full">
+            {/* Microespacios */}
+            <div className="mt-2">
+              <Microspaces />
             </div>
 
-            <PostList posts={posts} activeTab={activeTab} onTabChange={setActiveTab} />
-          </div>
-        </main>
+            {/* Contenedor de Crear Publicación */}
+            <div className="w-full">
+              {/* Desktop Post Composer - Hidden on mobile */}
+              <div className="hidden md:block">
+                <CreatePost 
+                  onPostCreated={handlePostCreated} 
+                  openPostModal={openPostModal}
+                  openBlogModal={openBlogModal}
+                />
+              </div>
+
+              {/* Pestañas de navegación para escritorio */}
+              <div className="hidden md:block w-full border-b border-gray-800 mt-4">
+                <div className="grid grid-cols-3">
+                  {[
+                    { label: "Post", value: "post" as const },
+                    { label: "Nota", value: "nota" as const },
+                    { label: "Blog", value: "blog" as const },
+                  ].map((tab) => (
+                    <button
+                      key={tab.value}
+                      onClick={() => setActiveTab(tab.value)}
+                      className={`relative py-3 text-sm font-medium transition-colors duration-200 ${
+                        activeTab === tab.value
+                          ? 'text-white'
+                          : 'text-gray-400 hover:text-gray-200'
+                      }`}
+                    >
+                      <div className="flex flex-col items-center">
+                        <span>{tab.label}</span>
+                        {activeTab === tab.value && (
+                          <div className="absolute bottom-0 w-1/3 h-0.5 bg-[#a020f0] rounded-full"></div>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Mobile Post Composer - Only visible on mobile */}
+              <div className="md:hidden">
+                <MobilePostComposer 
+                  onPostCreated={handlePostCreated}
+                  onNoteCreated={handlePostCreated}
+                  onBlogCreated={handlePostCreated}
+                />
+              </div>
+
+              {/* Barra de navegación móvil */}
+              <div className="md:hidden w-full border-b border-gray-800">
+                <div className="flex items-center justify-around py-2">
+                  {[
+                    { label: "Post", value: "post" as const },
+                    { label: "Nota", value: "nota" as const },
+                    { label: "Blog", value: "blog" as const },
+                  ].map((tab) => (
+                    <button
+                      key={tab.value}
+                      onClick={() => setActiveTab(tab.value)}
+                      className={`relative px-4 py-3 text-sm font-medium transition-colors duration-200 ${
+                        activeTab === tab.value
+                          ? 'text-white'
+                          : 'text-gray-400 hover:text-gray-200'
+                      }`}
+                    >
+                      {tab.label}
+                      {activeTab === tab.value && (
+                        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1/2 h-0.5 bg-[#a020f0] rounded-full"></div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <PostList posts={posts} activeTab={activeTab} onTabChange={setActiveTab} />
+            </div>
+          </main>
+        </div>
 
         {/* RIGHT SIDEBAR */}
         <aside className="hidden lg:block space-y-6">

@@ -1,4 +1,5 @@
 import { QueryClient, QueryFunction, QueryKey } from "@tanstack/react-query";
+import { auth } from "@/lib/firebase";
 
 export async function apiRequest<T = unknown>(
   method: string,
@@ -11,10 +12,14 @@ export async function apiRequest<T = unknown>(
 ): Promise<T> {
   const { headers = {}, noContentType = false } = options;
   
+  // Obtener el token de autenticación actual
+  const idToken = await auth.currentUser?.getIdToken();
+  
   const config: RequestInit = {
     method,
     headers: {
       ...(!noContentType && { 'Content-Type': 'application/json' }),
+      ...(idToken && { 'Authorization': `Bearer ${idToken}` }),
       ...headers,
     },
     credentials: 'include' as const,

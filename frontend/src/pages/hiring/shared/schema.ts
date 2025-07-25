@@ -1,78 +1,70 @@
-import { pgTable, text, serial, integer, boolean, timestamp, decimal, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, decimal } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
-});
-
-export const artists = pgTable("artists", {
+export const profiles = pgTable("profiles", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
-  type: text("type").notNull(), // musician, actor, photographer, designer, etc.
+  type: text("type").notNull(), // 'artist' | 'venue'
+  category: text("category").notNull(),
+  description: text("description").notNull(),
+  location: text("location").notNull(),
+  neighborhood: text("neighborhood").notNull(),
+  lat: decimal("lat", { precision: 10, scale: 7 }).notNull(),
+  lng: decimal("lng", { precision: 10, scale: 7 }).notNull(),
+  basePrice: integer("base_price").notNull(), // in COP
+  priceUnit: text("price_unit").notNull(), // 'hora', 'sesión', 'día', 'obra'
   rating: decimal("rating", { precision: 3, scale: 2 }).notNull(),
-  pricePerHour: integer("price_per_hour").notNull(),
-  latitude: decimal("latitude", { precision: 10, scale: 8 }).notNull(),
-  longitude: decimal("longitude", { precision: 11, scale: 8 }).notNull(),
-  isOnline: boolean("is_online").notNull().default(false),
-  profileImage: text("profile_image"),
-  specialties: text("specialties").array(),
-  description: text("description"),
+  reviewCount: integer("review_count").notNull(),
+  imageUrl: text("image_url").notNull(),
+  services: text("services").array().notNull(),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
 export const offers = pgTable("offers", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id),
-  artistType: text("artist_type").notNull(),
-  eventLocation: text("event_location").notNull(),
-  eventTime: timestamp("event_time").notNull(),
-  budget: integer("budget").notNull(),
-  notes: text("notes"),
-  status: text("status").notNull().default("active"), // active, completed, cancelled
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  category: text("category").notNull(),
+  budgetMin: integer("budget_min").notNull(), // in COP
+  budgetMax: integer("budget_max").notNull(), // in COP
+  modality: text("modality").notNull(), // 'presencial' | 'online' | 'ambas'
+  location: text("location"),
+  eventDate: timestamp("event_date").notNull(),
+  eventTime: text("event_time").notNull(),
+  status: text("status").notNull().default("active"), // 'active' | 'closed' | 'completed'
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const artistResponses = pgTable("artist_responses", {
+export const reviews = pgTable("reviews", {
   id: serial("id").primaryKey(),
-  offerId: integer("offer_id").references(() => offers.id),
-  artistId: integer("artist_id").references(() => artists.id),
-  proposedPrice: integer("proposed_price").notNull(),
-  message: text("message"),
-  status: text("status").notNull().default("pending"), // pending, accepted, rejected, negotiating
+  profileId: integer("profile_id").notNull().references(() => profiles.id),
+  reviewerName: text("reviewer_name").notNull(),
+  rating: integer("rating").notNull(),
+  comment: text("comment").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
-});
-
-export const insertArtistSchema = createInsertSchema(artists).omit({
+export const insertProfileSchema = createInsertSchema(profiles).omit({
   id: true,
+  createdAt: true,
 });
 
 export const insertOfferSchema = createInsertSchema(offers).omit({
   id: true,
   createdAt: true,
-}).extend({
-  eventTime: z.string().min(1, "La fecha y hora son requeridas"),
+  status: true,
 });
 
-export const insertArtistResponseSchema = createInsertSchema(artistResponses).omit({
+export const insertReviewSchema = createInsertSchema(reviews).omit({
   id: true,
   createdAt: true,
 });
 
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
-
-export type InsertArtist = z.infer<typeof insertArtistSchema>;
-export type Artist = typeof artists.$inferSelect;
-
-export type InsertOffer = z.infer<typeof insertOfferSchema>;
+export type Profile = typeof profiles.$inferSelect;
+export type InsertProfile = z.infer<typeof insertProfileSchema>;
 export type Offer = typeof offers.$inferSelect;
-
-export type InsertArtistResponse = z.infer<typeof insertArtistResponseSchema>;
-export type ArtistResponse = typeof artistResponses.$inferSelect;
+export type InsertOffer = z.infer<typeof insertOfferSchema>;
+export type Review = typeof reviews.$inferSelect;
+export type InsertReview = z.infer<typeof insertReviewSchema>;

@@ -1,28 +1,31 @@
 import { useState, useEffect } from 'react';
 
 export function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = useState<boolean>(false);
+  const [matches, setMatches] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return window.matchMedia(query).matches;
+    }
+    return false; // Valor por defecto para SSR
+  });
 
   useEffect(() => {
-    // Solo en el navegador
     if (typeof window === 'undefined') return;
 
     const media = window.matchMedia(query);
-    
-    // Actualizar el estado inicial
-    if (media.matches !== matches) {
-      setMatches(media.matches);
-    }
-    
-    // Listener para cambios en el tamaño de la pantalla
-    const listener = () => setMatches(media.matches);
-    
-    // Agregar listener
+
+    const listener = (event: MediaQueryListEvent) => {
+      setMatches(event.matches);
+    };
+
+    // Configurar listener
     media.addEventListener('change', listener);
-    
-    // Limpiar listener al desmontar
+
+    // Asegurar estado inicial
+    setMatches(media.matches);
+
+    // Limpiar
     return () => media.removeEventListener('change', listener);
-  }, [matches, query]);
+  }, [query]); // SOLO depende de query
 
   return matches;
 }

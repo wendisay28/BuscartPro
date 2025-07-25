@@ -98,11 +98,9 @@ export default function Login() {
       >
         
         {/* Columna izquierda - Formulario */}
-        <div className="w-full lg:w-[45%] flex flex-col p-4 sm:p-6 lg:p-8 xl:p-10 overflow-y-auto">
-          
-          {/* Logo en la parte superior */}
-          <div className="w-full flex justify-center mb-2 sm:mb-4">
-            <div className="relative w-40 sm:w-64 h-12 sm:h-20">
+        <div className="w-full lg:w-[45%] flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
+          <div className="w-full text-center mb-4">
+            <div className="relative w-48 h-14 mx-auto mb-2">
               <img 
                 src="/images/logo3.svg" 
                 alt="BuscArt"
@@ -113,17 +111,13 @@ export default function Login() {
                 }}
               />
             </div>
+            <h1 className="text-lg sm:text-xl font-bold text-white mb-1">Bienvenido a BuscArt</h1>
+            <p className="text-gray-400 text-xs">
+              Inicia sesión para continuar
+            </p>
           </div>
           
-          {/* Contenido centrado verticalmente */}
-          <div className="flex-1 flex flex-col items-center justify-center">
-            {/* Título y descripción */}
-            <div className="mb-6 sm:mb-8 w-full max-w-xs text-center">
-              <h1 className="text-lg sm:text-xl font-bold text-white mb-1">Bienvenido a BuscArt</h1>
-              <p className="text-gray-400 text-xs px-2 sm:px-0">
-                Descubre y conecta con artistas, encuentra eventos únicos y dale vida a tus ideas creativas.
-              </p>
-            </div>
+          <div className="w-full">
 
             {/* Formulario */}
             <motion.div 

@@ -10,7 +10,8 @@ const proxyConfig: Record<string, string | ProxyOptions> = {
     target: 'http://localhost:5001',
     changeOrigin: true,
     secure: false,
-    rewrite: (path: string) => path.replace(/^\/api/, ''), // Eliminar /api del path
+    // No eliminar /api del path para que el backend lo reciba correctamente
+    rewrite: (path: string) => path,
     configure: (proxy) => {
       proxy.on('error', (err, _req, res) => {
         console.error('Error de proxy:', err);
@@ -27,6 +28,13 @@ const proxyConfig: Record<string, string | ProxyOptions> = {
       proxy.on('proxyReq', (proxyReq, req) => {
         console.log('Enviando solicitud al backend:', req.method, req.url);
         console.log('Headers de la solicitud:', proxyReq.getHeaders());
+      });
+      proxy.on('proxyRes', (proxyRes, req, res) => {
+        console.log('Respuesta del backend:', {
+          statusCode: proxyRes.statusCode,
+          statusMessage: proxyRes.statusMessage,
+          headers: proxyRes.headers
+        });
       });
       proxy.on('proxyRes', (proxyRes, req) => {
         console.log('Respuesta del backend:', proxyRes.statusCode, req.url);

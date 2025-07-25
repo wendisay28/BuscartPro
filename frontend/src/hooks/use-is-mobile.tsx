@@ -1,24 +1,33 @@
 import { useState, useEffect } from 'react';
 
-const MOBILE_BREAKPOINT = 768; // md breakpoint in Tailwind
+const MOBILE_BREAKPOINT = 768;
 
 export function useIsMobile(): boolean {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < MOBILE_BREAKPOINT;
+    }
+    return false; // valor por defecto en SSR
+  });
 
   useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    if (typeof window === 'undefined') return;
+
+    const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsMobile(event.matches);
     };
 
-    // Check on initial load
-    checkScreenSize();
+    // Establecer valor inicial
+    setIsMobile(mediaQuery.matches);
 
-    // Add event listener for window resize
-    window.addEventListener('resize', checkScreenSize);
+    // Agregar listener
+    mediaQuery.addEventListener('change', handleChange);
 
-    // Cleanup event listener on component unmount
+    // Cleanup
     return () => {
-      window.removeEventListener('resize', checkScreenSize);
+      mediaQuery.removeEventListener('change', handleChange);
     };
   }, []);
 

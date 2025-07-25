@@ -1,21 +1,30 @@
 import { useState, useEffect } from 'react';
 
 export const useIsMobile = (): boolean => {
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 768;
+    }
+    return false; // Para SSR
+  });
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+    if (typeof window === 'undefined') return;
+
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsMobile(event.matches);
     };
 
-    // Verificar el tamaño inicial
-    checkMobile();
-    
-    // Escuchar cambios en el tamaño de la ventana
-    window.addEventListener('resize', checkMobile);
-    
-    // Limpiar el event listener al desmontar
-    return () => window.removeEventListener('resize', checkMobile);
+    // Valor inicial
+    setIsMobile(mediaQuery.matches);
+
+    mediaQuery.addEventListener('change', handleChange);
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleChange);
+    };
   }, []);
 
   return isMobile;

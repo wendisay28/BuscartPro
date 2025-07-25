@@ -87,5 +87,5 @@ export const authService = {
   getCurrentUser(): User | null {
     const user = auth.currentUser;
     return user ? mapFirebaseUserToUser(user) : null;
-  }
+  },
 };

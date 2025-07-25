@@ -6,14 +6,13 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from "@/hooks/useAuth";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
-import { ThemeProvider } from "./hooks/useTheme";
 import { initAnimations } from '@/lib/animations';
 import 'leaflet/dist/leaflet.css';
 import './styles/map-styles.css';
 import App from "./App";
 import "./index.css";
 
-// Inicializar animaciones
+// Initialize animations
 if (typeof window !== 'undefined') {
   initAnimations();
 }
@@ -36,14 +35,12 @@ createRoot(document.getElementById("root")!).render(
           v7_relativeSplatPath: true,
         }}
       >
-        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
           <AuthProvider>
             <TooltipProvider>
               <App />
               <Toaster />
             </TooltipProvider>
           </AuthProvider>
-        </ThemeProvider>
       </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>

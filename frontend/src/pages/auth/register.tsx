@@ -88,7 +88,18 @@ export default function Register() {
       await authService.signUp({ email, password, firstName: username, lastName: '', userType });
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.message || 'Error al registrar. Intenta nuevamente.');
+      console.error('Error en el registro:', err);
+      
+      // Manejar errores específicos de Firebase
+      if (err.code === 'auth/email-already-in-use') {
+        setError('Este correo electrónico ya está en uso. ¿Quieres iniciar sesión?');
+      } else if (err.code === 'auth/weak-password') {
+        setError('La contraseña es demasiado débil. Debe tener al menos 6 caracteres.');
+      } else if (err.code === 'auth/invalid-email') {
+        setError('El correo electrónico no es válido.');
+      } else {
+        setError('Error al registrar. Intenta nuevamente.');
+      }
     } finally {
       setLoading(false);
     }

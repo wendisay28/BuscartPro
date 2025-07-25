@@ -13,7 +13,7 @@ import Explorer from "./pages/explorer";
 import Profile from "./pages/user/UserProfile";
 import Favorites from "./pages/favorites";
 import CommunityBlog from "./pages/community/blog";
-import RealTimeHiring from "./pages/hiring/realtime";
+import Hiring from "./pages/hiring";
 import CreateEvent from "./pages/events/create";
 import NotFound from "./pages/not-found";
 
@@ -73,7 +73,7 @@ export default function App() {
           <Route path="user/profile" element={<Navigate to="/profile" replace />} />
           <Route path="favorites" element={<Favorites />} />
           <Route path="blog" element={<CommunityBlog />} />
-          <Route path="hiring/realtime" element={<RealTimeHiring />} />
+          <Route path="hiring" element={<Hiring />} />
           <Route path="events/create" element={<CreateEvent />} />
         </Route>
 
