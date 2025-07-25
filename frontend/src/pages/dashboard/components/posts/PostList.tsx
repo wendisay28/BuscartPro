@@ -1,97 +1,82 @@
-import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Heart, MessageCircle, Bookmark } from "lucide-react";
 import { Post } from "../../types";
+import PostCard3D from "./PostCard3D";
 
 type PostListProps = {
   posts: Post[];
-  // 'post' = 'Post', 'nota' = 'Nota', 'blog' = 'Blog'
   activeTab: 'post' | 'nota' | 'blog';
   onTabChange: (tab: 'post' | 'nota' | 'blog') => void;
 };
 
-export const PostList = ({ posts, activeTab, onTabChange }: PostListProps) => {
-  const [likedPosts, setLikedPosts] = useState<Record<string, boolean>>({});
-  const [savedPosts, setSavedPosts] = useState<Record<string, boolean>>({});
+export const PostList = ({ activeTab }: PostListProps) => {
+  // Datos de ejemplo para simular publicaciones
+  const mockPosts = [
+    {
+      id: '1',
+      content: '¡Acabo de terminar mi última obra de arte! ¿Qué opinan? 🎨✨ #Arte #Creatividad',
+      author: {
+        name: 'Martha Foster',
+        avatar: 'https://randomuser.me/api/portraits/women/44.jpg'
+      },
+      imageUrl: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=640',
+      likes: 1243,
+      comments: 87,
+      type: 'post' as const,
+      createdAt: new Date(2025, 6, 24, 14, 30)
+    },
+    {
+      id: '2',
+      content: 'Pensamiento del día: La creatividad es la inteligencia divirtiéndose. 🧠✨',
+      author: {
+        name: 'Carlos Ruiz',
+        avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
+      },
+      imageUrl: 'https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?w=640',
+      likes: 892,
+      comments: 45,
+      type: 'nota' as const,
+      createdAt: new Date(2025, 6, 23, 9, 15)
+    },
+    {
+      id: '3',
+      content: 'Nuevo artículo en mi blog: "Técnicas avanzadas de pintura digital" - Un viaje a través de mis métodos y herramientas favoritas para crear arte digital que realmente destaque. #ArteDigital #Tutorial',
+      author: {
+        name: 'Ana Martínez',
+        avatar: 'https://randomuser.me/api/portraits/women/63.jpg'
+      },
+      imageUrl: 'https://images.unsplash.com/photo-1554080351-a576cf803bda?w=640',
+      likes: 2456,
+      comments: 132,
+      type: 'blog' as const,
+      createdAt: new Date(2025, 6, 22, 16, 45)
+    }
+  ];
 
-  const handleLike = (postId: string) => {
-    setLikedPosts(prev => ({
-      ...prev,
-      [postId]: !prev[postId]
-    }));
-  };
-
-  const handleSave = (postId: string) => {
-    setSavedPosts(prev => ({
-      ...prev,
-      [postId]: !prev[postId]
-    }));
-  };
-
-  const getPostTitle = (type: string) => {
-    const titles = {
-      post: "Post multimedia con texto largo",
-      nota: "MicroPost estilo Twitter",
-      blog: "Entrada de Blog destacada"
-    };
-    return titles[type as keyof typeof titles] || "Publicación";
-  };
+  // Filtrar publicaciones según la pestaña activa
+  const filteredPosts = activeTab === 'post' || activeTab === 'nota' || activeTab === 'blog'
+    ? mockPosts.filter(post => post.type === activeTab)
+    : mockPosts;
 
   return (
-    <div className="space-y-0">
-      {/* Contenido principal */}
-      <div className="w-full">
-        {posts.length > 0 ? (
-          posts.map((post) => (
-            <Card key={post.id} className="bg-gray-900 border border-gray-800 w-full sm:mt-3">
-              <CardContent className="p-6">
-                <h4 className="font-semibold mb-2 text-white">
-                  {getPostTitle(activeTab)}
-                </h4>
-                <p className="text-gray-400 mb-4">
-                  {post.content}
-                </p>
-                {post.mediaUrl && (
-                  <div className="mb-4 rounded-lg overflow-hidden">
-                    <img 
-                      src={post.mediaUrl} 
-                      alt="Media content" 
-                      className="w-full h-auto rounded-lg"
-                    />
-                  </div>
-                )}
-                <div className="flex items-center gap-6 text-sm">
-                  <button 
-                    onClick={() => handleLike(post.id)}
-                    className={`flex items-center gap-1 ${likedPosts[post.id] ? 'text-red-500' : 'text-gray-300 hover:text-red-500'}`}
-                  >
-                    <Heart 
-                      className={`h-4 w-4 ${likedPosts[post.id] ? 'fill-current' : 'text-white'}`} 
-                    />{' '}
-                    {likedPosts[post.id] ? post.likes + 1 : post.likes}
-                  </button>
-                  <button className="flex items-center gap-1 text-gray-300 hover:text-blue-500">
-                    <MessageCircle className="h-4 w-4 text-white" /> {post.comments}
-                  </button>
-                  <button 
-                    onClick={() => handleSave(post.id)}
-                    className={`flex items-center gap-1 ${savedPosts[post.id] ? 'text-[#bb00aa]' : 'text-gray-300 hover:text-[#bb00aa]'}`}
-                  >
-                    <Bookmark 
-                      className={`h-4 w-4 ${savedPosts[post.id] ? 'fill-current' : 'text-white'}`} 
-                    />
-                    {savedPosts[post.id] ? 'Guardado' : 'Guardar'}
-                  </button>
-                </div>
-              </CardContent>
-            </Card>
-          ))
-        ) : (
-          <div className="text-center py-8 text-gray-400">
-            No hay publicaciones para mostrar. ¡Sé el primero en publicar algo!
-          </div>
-        )}
-      </div>
+    <div className="space-y-6 py-2">
+      {filteredPosts.map((post) => (
+        <PostCard3D
+          key={post.id}
+          id={post.id}
+          content={post.content}
+          author={post.author}
+          imageUrl={post.imageUrl}
+          likes={post.likes}
+          comments={post.comments}
+          type={post.type}
+          createdAt={post.createdAt}
+        />
+      ))}
+      
+      {filteredPosts.length === 0 && (
+        <div className="text-center py-10">
+          <p className="text-gray-400">No hay publicaciones para mostrar.</p>
+        </div>
+      )}
     </div>
   );
 };
